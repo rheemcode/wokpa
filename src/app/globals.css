@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    margin: 0;
+    text-align: left !important;
+    color: #F9FAFB;
+    /* overflow-x: hidden; */
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+*::-webkit-scrollbar {
+    width: 1px;
+    height: 2px;
+}
+
+*::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+*::-webkit-scrollbar-button,
+body:not(._native-scrollbars) *::-webkit-scrollbar-corner {
+    display: none;
+}
+
+*::-webkit-scrollbar-button,
+body:not(._native-scrollbars) *::-webkit-scrollbar-corner {
+    display: none;
+}
+
+
+*::-webkit-scrollbar-thumb {
+    min-height: 2rem;
+    background: rgb(236, 236, 236);
+    /* background-clip: padding-box; */
+    border: 5px solid transparent;
+    border-radius: 10px;
+}
+
+
+*::-webkit-scrollbar-track {
+    background: white;
+    border-radius: 10px;
+    border: 1px solid white;
+    filter: grayscale();
+}
+
+.pincode-input-text {
+    padding: 0 !important;
+    margin: 0 2px;
+    text-align: center;
+    border-bottom: 2px solid #5A5A5A !important;
+    background: transparent;
+    width: 50px;
+    height: 50px;
+}
+
+.swiper-pagination-bullets {
+    margin-top: 1rem;
+}
+
+.swiper-pagination-bullet {
+    color: #E5F5F4 !important;
+    opacity: 1 !important;
+    background: #E5F5F4 !important;
+
+}
+
+.swiper-pagination-bullet-active {
+    color: #36FFE8 !important;
+    opacity: 1 !important;
+    background: #36FFE8 !important;
+
+}
+
+.slider-track-0 {
+    /* color of the track before the thumb */
+    background-color: #F2F4F7 !important;
+}
