@@ -4,6 +4,7 @@ import Button from "@/components/button";
 import Input from "@/components/input";
 import { useAppSelector, useAppDispatch } from "@/hooks";
 import { Switch, Listbox, Tab } from "@headlessui/react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 
@@ -459,6 +460,7 @@ const EpisodesTable = () => {
 const EpisodesPage = () => {
     const user = useAppSelector(state => state.auth.user);
     const dispatch = useAppDispatch();
+    const router = useRouter();
 
 
     return (
@@ -487,7 +489,7 @@ const EpisodesPage = () => {
                 </div>
                 <div className="flex justify-end gap-2 mt-4">
                     <div>
-                        <Button className="!from-white !to-white !text-[#063150] text-sm font-semibold">
+                        <Button onClick={() => { router.push("/podcast/record-audio") }} className="!from-white !to-white !text-[#063150] text-sm font-semibold">
                             Record new episode
                         </Button>
                     </div>
