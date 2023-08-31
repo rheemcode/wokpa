@@ -20,7 +20,7 @@ export const updateKYC = async () => axios.post(`${API_URL}/publishers/kyc`, {
     }
 });
 export const getBanks = async () => axios.get(`${API_URL}/publishers/banks`);
-export const nameEnquiry = async (acct = "", bank_code = "") => axios.get(`${API_URL}/publishers/name-enquiry?account_number${acct}&bank_code=${bank_code}`);
+export const nameEnquiry = async (acct = "", bank_code = "") => axios.get(`${API_URL}/publishers/name-enquiry?account_number=${acct}&bank_code=${bank_code}`);
 
 
 export const createPodcast = async (data: any) => axios.post(`${API_URL}/publishers/podcasts`, data, {
