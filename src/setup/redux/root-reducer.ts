@@ -1,8 +1,8 @@
 "use client";
 
 import { combineReducers } from 'redux';
-import sidebarReducer from '@/redux/sidebar';
 import authReducer from '@/redux/auth';
+import sidebarReducer from '@/redux/sidebar';
 import playerReducer from '@/redux/player'
 import podcastsReducer from '@/redux/podcast'
 

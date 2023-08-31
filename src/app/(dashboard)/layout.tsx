@@ -3,8 +3,8 @@
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { FooterDark } from "@/partials/footer";
 import Navbar, { HomeNavbar } from "@/partials/navbar";
+import { FooterDark } from "@/partials/footer";
 import Sidebar from "@/partials/sidebar";
 import { PropsWithChildren, useEffect, useState } from "react";
 import ReduxProvider from '../redux-provider';
