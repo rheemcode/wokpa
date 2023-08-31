@@ -232,7 +232,7 @@ const Sidebar = () => {
                                                 <Disclosure.Panel>
                                                     <div className="space-y-1 mt-2">
                                                         <div>
-                                                            <Link href="/wallet" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
+                                                            <Link href="/monitize/wallet" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
                                                                 Wallet
                                                             </Link>
                                                         </div>

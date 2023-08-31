@@ -94,7 +94,7 @@ const PodcastSettingsPage
                                     </div>
                                 </div>
                                 <div className="flex gap-5">
-                                    <div className="w-6/12">
+                                    <div className="md:w-6/12">
                                         <label htmlFor="password" className="text-sm font-medium">
                                             Description
                                         </label>
@@ -105,13 +105,13 @@ const PodcastSettingsPage
                                     </div>
                                 </div>
                                 <div className="flex gap-5">
-                                    <div className="w-6/12">
+                                    <div className="md:w-6/12">
                                         <label htmlFor="password" className="text-sm font-medium">
                                             Language
                                         </label>
                                         <Input name="email" placeholder="Select language" />
                                     </div>
-                                    <div className="w-6/12">
+                                    <div className="md:w-6/12">
                                         <label htmlFor="email" className="text-sm font-medium">
                                             Category
                                         </label>
@@ -131,13 +131,13 @@ const PodcastSettingsPage
                                     </div>
                                 </div>
                                 <div className="flex gap-5">
-                                    <div className="w-6/12">
+                                    <div className="md:w-6/12">
                                         <label htmlFor="password" className="text-sm font-medium">
                                             Author name
                                         </label>
                                         <Input name="email" placeholder="Enter author's name" />
                                     </div>
-                                    <div className="w-6/12">
+                                    <div className="md:w-6/12">
                                         <label htmlFor="email" className="text-sm font-medium">
                                             Copyright
                                         </label>

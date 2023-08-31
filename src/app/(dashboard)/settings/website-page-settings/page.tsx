@@ -36,11 +36,11 @@ const WebsitePageSettings = () => {
         try {
             setSubmitting(true);
             const response = await updateWebsiteSettings(values);
-            toast(response.data.message, {type: "success"})
+            toast(response.data.message, { type: "success" })
             setSubmitting(false);
         } catch (error: any) {
             if (error.response) {
-                toast(error.response.data.message, {type: "error"})
+                toast(error.response.data.message, { type: "error" })
             }
             setSubmitting(false);
         }
@@ -114,14 +114,14 @@ const WebsitePageSettings = () => {
                                             </div>
                                         </div>
                                         <div className="flex gap-5">
-                                            <div className="w-6/12">
+                                            <div className="md:w-6/12">
                                                 <label htmlFor="password" className="text-sm font-medium">
                                                     Itunes
                                                 </label>
                                                 <Field name="itunes" placeholder="www.wokpa.com/emaxpodcast" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                 <ErrorMessage name="website" component={"div"} className="text-red-600 text-sm text-left" />
                                             </div>
-                                            <div className="w-6/12">
+                                            <div className="md:w-6/12">
                                                 <label htmlFor="email" className="text-sm font-medium">
                                                     Twitter
                                                 </label>
@@ -130,14 +130,14 @@ const WebsitePageSettings = () => {
                                             </div>
                                         </div>
                                         <div className="flex gap-5">
-                                            <div className="w-6/12">
+                                            <div className="md:w-6/12">
                                                 <label htmlFor="password" className="text-sm font-medium">
                                                     Facebook
                                                 </label>
                                                 <Field name="facebook" placeholder="www.wokpa.com/emaxpodcast" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                 <ErrorMessage name="facebook" component={"div"} className="text-red-600 text-sm text-left" />
                                             </div>
-                                            <div className="w-6/12">
+                                            <div className="md:w-6/12">
                                                 <label htmlFor="email" className="text-sm font-medium">
                                                     Youtube
                                                 </label>
@@ -146,14 +146,14 @@ const WebsitePageSettings = () => {
                                             </div>
                                         </div>
                                         <div className="flex gap-5">
-                                            <div className="w-6/12">
+                                            <div className="md:w-6/12">
                                                 <label htmlFor="password" className="text-sm font-medium">
                                                     Telephone number
                                                 </label>
                                                 <Field name="phone" placeholder="www.wokpa.com/emaxpodcast" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                 <ErrorMessage name="phone" component={"div"} className="text-red-600 text-sm text-left" />
                                             </div>
-                                            <div className="w-6/12">
+                                            <div className="md:w-6/12">
                                                 <label htmlFor="email" className="text-sm font-medium">
                                                     Others
                                                 </label>

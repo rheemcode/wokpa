@@ -8,6 +8,8 @@ import { Listbox, Tab } from '@headlessui/react';
 import { PodcastModel } from '@/models/podcast';
 import { getPodcasts } from '@/app/api/publishers';
 import moment from "moment"
+import { pushPodcasts } from '@/redux/podcast';
+import { APICall } from '@/utils';
 
 const GetPaidCard = () => {
     return (
@@ -87,7 +89,7 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel }> = 
                     <div className="w-full flex justify-between items-center py-6">
                         <div className="flex gap-4">
 
-                            <div>
+                            <div onClick={() => navigate.push(`/podcast/episode-view/${podcast.id}`)}>
                                 <img className="w-[120px] h-[120px] rounded-lg" src={podcast.picture_url} alt="" />
                             </div>
                             <div className="h-full">
@@ -212,7 +214,7 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel }> = 
                     </div>
                     :
                     <div className="">
-                        <div className="relative">
+                        <div className="relative" onClick={() => navigate.push(`/podcast/episode-view/${podcast.id}`)}>
                             <img className="w-[240px] h-[200px] rounded-xl" src={podcast.picture_url} alt="" />
                             <div className="absolute top-0 p-2">
                                 <div className="text-[8px] text-[#0D0D0D] font-semibold bg-white rounded-full py-2 px-4">
@@ -258,14 +260,28 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel }> = 
 const PodcastTable = () => {
     const [viewMode, setViewMode] = useState<"list" | "card">("list");
     const [podcasts, setPodcasts] = useState<PodcastModel[]>([]);
+
+    const [podcastLoaded, setPodcastLoaded] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const podcastsCache = useAppSelector(state => state.podcasts.podcasts);
+
+    const dispatch = useAppDispatch();
     const navigate = useRouter();
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalContent, setTotalContent] = useState(0);
 
 
     const handleGetPodcast = async () => {
         try {
-            const response = await getPodcasts();
+            const response = await APICall(getPodcasts);
             setPodcasts(response.data.data.data);
-            console.log(response.data.data.data);
+            setPodcastLoaded(true);
+
+            if (currentPage == 1)
+                dispatch(pushPodcasts({ podcasts: response.data.data.data }))
+
         } catch (error) {
             console.log(error);
         }
@@ -412,9 +428,15 @@ const PodcastTable = () => {
                 {
                     <div className={`${viewMode == "list" ? "divide-y pr-12" : "grid grid-cols-4 gap-y-8"}`}>
                         {
-                            podcasts.length ? podcasts.map(podcast => {
-                                return <PodcastItem key={"podcast" + podcast.id} podcast={podcast} mode={viewMode} />
-                            }) :
+                            (podcasts.length || podcastsCache.content.length) ? <>
+                                {
+                                    podcastLoaded ? podcasts.map(podcast => {
+                                        return <PodcastItem key={"podcast" + podcast.id} podcast={podcast} mode={viewMode} />
+                                    }) : podcastsCache.content.map(podcast => {
+                                        return <PodcastItem key={"podcast" + podcast.id} podcast={podcast} mode={viewMode} />
+                                    })
+                                }
+                            </> :
 
                                 <div className="text-center py-12">
                                     <svg className='inline' width="201" height="200" viewBox="0 0 201 200" fill="none" xmlns="http://www.w3.org/2000/svg">

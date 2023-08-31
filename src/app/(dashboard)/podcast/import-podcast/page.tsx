@@ -158,7 +158,7 @@ const ImportPodcast = () => {
                         </div>
                     </div>
                     <div className="mt-6">
-                        <div className="w-6/12">
+                        <div className="md:w-6/12">
                             <input value={link} onChange={(event) => {
                                 setLink(event.target.value);
                             }} type="text" name="link" placeholder="Paste here link of your rss feed" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />

@@ -140,7 +140,6 @@ const CreateEpisodePage = () => {
                                         {
                                             audioFile ? audioFile.name : "Drag and drop your audio file here or click to browse from your device. We support mp3, mp4, m4a, wav, 3gp, aac, amr, flac, ogg, ra, asf file. Maximum file size is 300 MB."
                                         }
-
                                     </div>
                                 </div>
 

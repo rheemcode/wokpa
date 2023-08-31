@@ -18,6 +18,7 @@ import { resetAuth, authLogin } from "@/redux/auth";
 import { PublishersCategory } from "@/models/publishers-category";
 import { getPublisherCategories } from "@/app/api/general";
 import PasswordInput from "@/components/password-input";
+import { getNames } from "country-list"
 
 
 const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
@@ -45,7 +46,8 @@ const signupValidationSchema = Yup.object().shape({
     password_confirmation: Yup.string()
         .oneOf([Yup.ref('password')], 'Passwords must match!')
         .required("Confirm password is required!"),
-    company_name: Yup.string()
+    company_name: Yup.string(),
+    terms: Yup.boolean().isTrue("Accept Terms & Conditions to continue registration")
 });
 
 
@@ -187,6 +189,8 @@ export default function SignUpPage() {
                                         password: "",
                                         password_confirmation: "",
                                         company_name: "",
+                                        terms: false,
+
                                     }}
                                     validationSchema={signupValidationSchema}
                                     onSubmit={(values, { setSubmitting }) => {
@@ -203,14 +207,14 @@ export default function SignUpPage() {
                                                             <label htmlFor="password" className="text-sm">
                                                                 First name *
                                                             </label>
-                                                            <Field type="text" name="first_name" placeholder="" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                            <Field type="text"  name="first_name" placeholder="Enter first name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                             <ErrorMessage name="first_name" component={"div"} className="text-red-600 text-sm text-left" />
                                                         </div>
                                                         <div className="flex-1">
                                                             <label htmlFor="last_name" className="text-sm">
                                                                 Last name *
                                                             </label>
-                                                            <Field type="text" name="last_name" placeholder="" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                            <Field type="text" name="last_name" placeholder="Enter last name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                             <ErrorMessage name="last_name" component={"div"} className="text-red-600 text-sm text-left" />
                                                         </div>
                                                     </div>
@@ -219,7 +223,7 @@ export default function SignUpPage() {
                                                             <label htmlFor="company_name" className="text-sm">
                                                                 Company name
                                                             </label>
-                                                            <Field type="text" name="company_name" placeholder="" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                            <Field type="text" name="company_name" placeholder="Enter comapany name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                             <ErrorMessage name="company_name" component={"div"} className="text-red-600 text-sm text-left" />
                                                         </div>
                                                         <div className="flex-1">
@@ -227,7 +231,7 @@ export default function SignUpPage() {
                                                                 Publisher category *
                                                             </label>
                                                             <Field as="select" type="text" name="publisher_category" placeholder="" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`}>
-                                                                <option value=""></option>
+                                                                <option value="">Choose publishers category</option>
                                                                 {
                                                                     publishersCategory.map((category) => {
                                                                         return <option key={category.id + "pub"} value={category.name}>{category.name}</option>
@@ -243,14 +247,21 @@ export default function SignUpPage() {
                                                             <label htmlFor="password" className="text-sm">
                                                                 Email *
                                                             </label>
-                                                            <Field type="text" name="email" placeholder="" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                            <Field type="text" name="email" placeholder="Enter email" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                             <ErrorMessage name="email" component={"div"} className="text-red-600 text-sm text-left" />
                                                         </div>
                                                         <div className="flex-1">
                                                             <label htmlFor="company_name" className="text-sm">
                                                                 Country *
                                                             </label>
-                                                            <Field type="text" name="country" placeholder="" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                            <Field as="select" name="country" placeholder="" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`}>
+                                                                <option value="">Select country</option>
+                                                                {
+                                                                    getNames().map((name) => {
+                                                                        return <option key={name} value={name}>{name}</option>
+                                                                    })
+                                                                }
+                                                            </Field>
                                                             <ErrorMessage name="country" component={"div"} className="text-red-600 text-sm text-left" />
                                                         </div>
                                                     </div>
@@ -259,7 +270,7 @@ export default function SignUpPage() {
                                                             <label htmlFor="phone" className="text-sm">
                                                                 Phone *
                                                             </label>
-                                                            <Field type="text" name="phone" placeholder="" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                            <Field type="text" name="phone" placeholder="Enter phone number" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                             <ErrorMessage name="phone" component={"div"} className="text-red-600 text-sm text-left" />
                                                         </div>
                                                     </div>
@@ -268,7 +279,7 @@ export default function SignUpPage() {
                                                             <label htmlFor="password" className="text-sm">
                                                                 Password *
                                                             </label>
-                                                            <PasswordInput name="password" placeholder=""
+                                                            <PasswordInput name="password" placeholder="Create a password"
                                                                 value={values.password}
                                                                 onChange={(e: any) => handleChange(e)}
                                                                 onBlur={handleBlur}
@@ -279,7 +290,7 @@ export default function SignUpPage() {
                                                             <label htmlFor="password" className="text-sm">
                                                                 Confirm Password *
                                                             </label>
-                                                            <PasswordInput name="password_confirmation" placeholder=""
+                                                            <PasswordInput name="password_confirmation" placeholder="Re-enter password"
                                                                 value={values.password_confirmation}
                                                                 onChange={(e: any) => handleChange(e)}
                                                                 onBlur={handleBlur}
@@ -290,10 +301,13 @@ export default function SignUpPage() {
                                                     </div>
                                                     <div className="">
                                                         <div className="flex-1">
-                                                            <input type="checkbox" name="" id="" />
+                                                            <Field  type="checkbox" name="terms" id="" />
                                                             <label htmlFor="password" className="text-sm ml-2">
                                                                 By signing up. you are agreeing to our <Link href="/" className=" text-[#25AEA4]"> Terms & Conditions </Link> and <Link href="/" className=" text-[#25AEA4]"> Privacy Policy.</Link>
                                                             </label>
+                                                            
+                                                            <ErrorMessage name="terms" component={"div"} className="text-red-600 text-sm text-left" />
+
                                                         </div>
 
                                                     </div>

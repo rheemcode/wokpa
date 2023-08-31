@@ -10,28 +10,28 @@ const MediaOrganizations = () => {
         <div className="relative mt-[80px]">
             <header className="relative">
                 <div className="py-16">
-                    <div className="mx-auto md:max-w-3xl lg:max-w-4xl">
+                    <div className="mx-auto md:max-w-3xl lg:max-w-4xl px-4">
                         <div className="">
                             <div className="">
                                 <div className="text-center">
-                                    <h1 className="font-raleway text-5xl font-bold leading-[1.1]">
+                                    <h1 className="font-raleway md:text-5xl text-2xl font-bold md:leading-[1.1]">
                                         Publishing and Distributing a Podcast Episode with Ad Integration
                                     </h1>
                                     <div className="mt-6">
-                                        <p className="text-[#EAECF0] text-lg md:px-24">
+                                        <p className="text-[#EAECF0] text-sm md:text-lg md:px-24">
                                             The individuals or systems that will be interacting with the system being described in each use case.
                                         </p>
                                     </div>
                                     <div className="mt-6">
-                                        <div className="flex justify-center gap-6">
+                                        <div className="md:flex justify-center gap-6 space-y-4  md:px-0 px-4">
 
                                             <div>
-                                                <Button className="font-medium">
+                                                <Button className="font-medium md:w-auto w-full">
                                                     Get Started
                                                 </Button>
                                             </div>
                                             <div>
-                                                <Button className="font-medium !from-transparent !to-transparent border bg-gradient-to-r bg-clip-text !border-[#083F62]">
+                                                <Button className="font-medium !from-transparent !to-transparent border bg-gradient-to-r bg-clip-text !border-[#083F62] md:w-auto w-full">
                                                     Join waitlist
                                                 </Button>
                                             </div>
@@ -47,7 +47,7 @@ const MediaOrganizations = () => {
                                     Join 4,000+ radio stations already using with Wokpa
                                 </p>
                             </div>
-                            <div className="mt-6 flex gap-4 items-center justify-center">
+                            <div className="mt-6 md:flex grid grid-cols-2 gap-4 items-center justify-center">
                                 <svg width="170" height="48" viewBox="0 0 170 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fillRule="evenodd" clipRule="evenodd" d="M22 46C34.1503 46 44 36.1503 44 24C44 11.8497 34.1503 2 22 2C9.84971 2 0 11.8497 0 24C0 36.1503 9.84971 46 22 46ZM28.8632 12.2485C29.1973 11.0619 28.0457 10.3601 26.994 11.1094L12.3124 21.5685C11.1718 22.3811 11.3512 24 12.5819 24H16.448V23.9701H23.9828L17.8433 26.1363L15.1368 35.7515C14.8027 36.9382 15.9542 37.6399 17.006 36.8906L31.6876 26.4315C32.8282 25.619 32.6487 24 31.4181 24H25.5553L28.8632 12.2485Z" fill="white" />
                                     <path d="M55.3809 33.9093V30.4293H58.1409V16.3893H55.3809V12.9093H66.1809C67.4609 12.9093 68.5709 13.1293 69.5109 13.5693C70.4709 13.9893 71.2109 14.5993 71.7309 15.3993C72.2709 16.1793 72.5409 17.1193 72.5409 18.2193V18.5193C72.5409 19.4793 72.3609 20.2693 72.0009 20.8893C71.6409 21.4893 71.2109 21.9593 70.7109 22.2993C70.2309 22.6193 69.7709 22.8493 69.3309 22.9893V23.5293C69.7709 23.6493 70.2509 23.8793 70.7709 24.2193C71.2909 24.5393 71.7309 25.0093 72.0909 25.6293C72.4709 26.2493 72.6609 27.0593 72.6609 28.0593V28.3593C72.6609 29.5193 72.3909 30.5193 71.8509 31.3593C71.3109 32.1793 70.5609 32.8093 69.6009 33.2493C68.6609 33.6893 67.5609 33.9093 66.3009 33.9093H55.3809ZM62.1009 30.3093H65.8209C66.6809 30.3093 67.3709 30.0993 67.8909 29.6793C68.4309 29.2593 68.7009 28.6593 68.7009 27.8793V27.5793C68.7009 26.7993 68.4409 26.1993 67.9209 25.7793C67.4009 25.3593 66.7009 25.1493 65.8209 25.1493H62.1009V30.3093ZM62.1009 21.5493H65.7609C66.5809 21.5493 67.2509 21.3393 67.7709 20.9193C68.3109 20.4993 68.5809 19.9193 68.5809 19.1793V18.8793C68.5809 18.1193 68.3209 17.5393 67.8009 17.1393C67.2809 16.7193 66.6009 16.5093 65.7609 16.5093H62.1009V21.5493Z" fill="white" />
@@ -158,8 +158,8 @@ const MediaOrganizations = () => {
                         </p>
                     </div>
                     <div className="mt-16 container  mx-auto px-4">
-                        <div className="flex gap-8 justify-center">
-                            <div className="rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center">
+                        <div className="flex md:flex-row flex-col gap-8 justify-center">
+                            <div className="md:block flex rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center w-full items-center gap-6">
                                 <svg className="inline text-center" width="73" height="72" viewBox="0 0 73 72" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g filter="url(#filter0_b_2977_88960)">
                                         <rect x="0.5" width="72" height="72" rx="8" fill="white" fill-opacity="0.2" />
@@ -180,7 +180,7 @@ const MediaOrganizations = () => {
                                     Distribute
                                 </div>
                             </div>
-                            <div className="rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center">
+                            <div className="md:block flex rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center w-full items-center gap-6">
                                 <svg className="inline text-center" width="73" height="72" viewBox="0 0 73 72" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g filter="url(#filter0_b_2978_89527)">
                                         <rect x="0.5" width="72" height="72" rx="8" fill="white" fill-opacity="0.2" />
@@ -205,7 +205,7 @@ const MediaOrganizations = () => {
                                     Record
                                 </div>
                             </div>
-                            <div className="rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center">
+                            <div className="md:block flex rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center w-full items-center gap-6">
                                 <svg className="inline text-center" width="73" height="72" viewBox="0 0 73 72" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g filter="url(#filter0_b_2977_89347)">
                                         <rect x="0.5" width="72" height="72" rx="8" fill="white" fill-opacity="0.2" />
@@ -225,7 +225,7 @@ const MediaOrganizations = () => {
                                     Monetize
                                 </div>
                             </div>
-                            <div className="rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center">
+                            <div className="md:block flex rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center w-full items-center gap-6">
                                 <svg className="inline text-center" width="73" height="72" viewBox="0 0 73 72" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g filter="url(#filter0_b_2977_89354)">
                                         <rect x="0.5" width="72" height="72" rx="8" fill="white" fill-opacity="0.2" />
@@ -263,7 +263,7 @@ const MediaOrganizations = () => {
                         <img src={("/images/celebrate.png")} alt="" className="w-full" />
                     </div>
                     <div className="mt-12 text-center">
-                        <Button className="text-lg font-semibold font-inter from-white to-white !text-secondary py-4">Try Wokpa for free</Button>
+                        <Button className="text-lg font-semibold font-inter from-white to-white !text-secondary py-4 md:text-base text-sm">Try Wokpa for free</Button>
 
                     </div>
                 </div>
@@ -294,8 +294,8 @@ const MediaOrganizations = () => {
 
                     <div className="mt-10  mx-auto px-4 text-[#101828]">
                         <div className="space-y-16 mt-16">
-                            <div className="flex flex-row-reverse gap-24 items-center">
-                                <div className="w-6/12">
+                            <div className="flex md:flex-row-reverse flex-col-reverse gap-24 items-center">
+                                <div className="md:w-6/12">
                                     <div className="text-left">
                                         <h2 className="md:text-4xl text-2xl font-raleway font-bold">
                                             Build your audience at any stage
@@ -312,8 +312,8 @@ const MediaOrganizations = () => {
                                     <img src={("/images/media-audience-1.png")} alt="" />
                                 </div>
                             </div>
-                            <div className="flex gap-24 items-center">
-                                <div className="w-6/12">
+                            <div className="flex md:flex-row flex-col gap-24 items-center">
+                                <div className="md:w-6/12">
                                     <div className="text-left">
                                         <h2 className="md:text-4xl text-2xl font-raleway font-bold">
                                             Build your audience at any stage
@@ -338,7 +338,7 @@ const MediaOrganizations = () => {
             <section className="relative bg-[#18181B]">
                 <div className="container  px-4 mx-auto py-24">
                     <div className="flex items-center gap-16">
-                        <div className="w-6/12">
+                        <div className="md:w-6/12">
                             <div className="">
                                 <svg width="116" height="20" viewBox="0 0 116 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g clipPath="url(#clip0_4100_49327)">
@@ -405,7 +405,7 @@ const MediaOrganizations = () => {
                                     </defs>
                                 </svg>
 
-                                <h2 className="text-5xl font-raleway mt-8 leading-tight">
+                                <h2 className="md:text-5xl  text-3xl font-raleway mt-8 leading-tight">
                                     Wokpa has saved us thousands of hours of <br />work. We’re able to spin up projects and features <br /> faster.
                                 </h2>
                                 <div className="mt-12">
@@ -449,7 +449,7 @@ const MediaOrganizations = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="w-6/12">
+                        <div className="md:block hidden md:w-6/12">
                             <img src={("/images/alister.png")} alt="" />
                         </div>
                     </div>

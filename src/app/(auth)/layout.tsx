@@ -20,5 +20,4 @@ function AuthLayout({ children }: PropsWithChildren) {
         </div>
     )
 }
-
 export default AuthLayout;

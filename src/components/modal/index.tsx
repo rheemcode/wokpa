@@ -6,7 +6,7 @@ import React from 'react';
 export interface ModalProps extends React.PropsWithChildren {
     open: boolean;
     onClose: (val: boolean) => void;
-    size: "sm" | "md" | "lg" | "xs"
+    size: "sm" | "md" | "md2" | "lg" | "xs"
 }
 
 const Modal: React.FC<ModalProps> = ({ open, onClose, size, children }) => {
@@ -36,7 +36,7 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, size, children }) => {
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <Dialog.Panel className={`${size == "lg" ? "md:w-[70vw]" : size == "md" ? "md:w-[55vw]" : size == "sm" ? "md:w-[32vw]" : "md:w-[25vw]"} w-[90vw] overflow-hidden rounded-xl bg-[#26272B] transition-all`}>
+                            <Dialog.Panel className={`${size == "lg" ? "md:w-[70vw]" : size == "md" ? "md:w-[55vw]" : size == "md2" ? "md:w-[45vw]"  :  size == "sm" ? "md:w-[32vw]" : "md:w-[25vw]" } w-[90vw] overflow-hidden rounded-xl bg-[#26272B] transition-all`}>
                                 <div className=''>
                                     {
                                         children

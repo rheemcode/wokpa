@@ -144,7 +144,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                 <div>
                                     <div className="space-y-8">
                                         <div className="flex">
-                                            <div className="w-6/12">
+                                            <div className="md:w-6/12">
                                                 <label htmlFor="password" className="text-sm font-medium">
                                                     Podcast Title*
                                                 </label>
@@ -157,7 +157,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                             </div>
                                         </div>
                                         <div className="flex gap-5">
-                                            <div className="w-6/12">
+                                            <div className="md:w-6/12">
                                                 <label htmlFor="password" className="text-sm font-medium">
                                                     Language
                                                 </label>
@@ -165,7 +165,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                                 <ErrorMessage name="language" component={"div"} className="text-red-600 text-sm text-left" />
 
                                             </div>
-                                            <div className="w-6/12">
+                                            <div className="md:w-6/12">
                                                 <label htmlFor="email" className="text-sm font-medium">
                                                     Category
                                                 </label>
@@ -217,7 +217,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                             </div>
                                         </div>
                                         <div className="flex gap-5">
-                                            <div className="w-6/12">
+                                            <div className="md:w-6/12">
                                                 <label htmlFor="password" className="text-sm font-medium">
                                                     Description
                                                 </label>
@@ -230,7 +230,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                             </div>
                                         </div>
                                         <div className="flex gap-5">
-                                            <div className="w-6/12">
+                                            <div className="md:w-6/12">
                                                 <label htmlFor="password" className="text-sm font-medium">
                                                     Tips
                                                 </label>
@@ -253,7 +253,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                             </div>
                                         </div>
                                         <div className="flex">
-                                            <div className="w-6/12">
+                                            <div className="md:w-6/12">
                                                 <label htmlFor="tips_and_donations_amount" className="text-sm font-medium">
                                                     Set amount
                                                 </label>
@@ -265,7 +265,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                             </div>
                                         </div>
                                         <div className="flex">
-                                            <div className="w-6/12">
+                                            <div className="md:w-6/12">
                                                 <label htmlFor="email" className="text-sm font-medium">
                                                     Email
                                                 </label>
@@ -277,7 +277,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                             </div>
                                         </div>
                                         <div className="flex gap-5">
-                                            <div className="w-6/12">
+                                            <div className="md:w-6/12">
                                                 <label htmlFor="password" className="text-sm font-medium">
                                                     Explicit
                                                 </label>

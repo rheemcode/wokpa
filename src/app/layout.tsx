@@ -3,7 +3,7 @@ import './globals.css'
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useEffect, useState, Suspense } from "react";
 import { Inter, Raleway, Poppins } from 'next/font/google'
 import axios from "axios";
 import store from '@/setup/redux/store';
@@ -11,6 +11,7 @@ import * as _redux from "@/setup"
 import { Provider } from 'react-redux';
 import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
 import React from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 
 export const loadingBarRef = React.createRef<LoadingBarRef | null>();
 
@@ -39,6 +40,13 @@ const poppins = Poppins({
 })
 
 function RootLayout({ children, ...rest }: PropsWithChildren) {
+    const [loading, setLoading] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+
+
+    })
     // const { store, props } = wrapper.useWrappedStore(rest);
 
     return (

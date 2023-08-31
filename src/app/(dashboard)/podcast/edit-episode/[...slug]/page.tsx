@@ -601,7 +601,7 @@ const EditPodcastPage = ({ params }: { params: { slug: string[] } }) => {
                                                         </div>
                                                     </div>
                                                     <div className="flex gap-5">
-                                                        <div className="w-6/12">
+                                                        <div className="md:w-6/12">
                                                             <label htmlFor="password" className="text-sm font-medium">
                                                                 Description
                                                             </label>
@@ -628,7 +628,7 @@ const EditPodcastPage = ({ params }: { params: { slug: string[] } }) => {
                                                         </div>
                                                     </div>
                                                     <div className="flex gap-5">
-                                                        <div className="w-6/12">
+                                                        <div className="md:w-6/12">
                                                             <label htmlFor="password" className="text-sm font-medium">
                                                                 Transcript type
                                                             </label>
@@ -642,7 +642,7 @@ const EditPodcastPage = ({ params }: { params: { slug: string[] } }) => {
                                                             </Field>
                                                             <ErrorMessage name="transcript_type" component={"div"} className="text-red-600 text-sm text-left" />
                                                         </div>
-                                                        <div className="w-6/12">
+                                                        <div className="md:w-6/12">
                                                             <label htmlFor="email" className="text-sm font-medium">
                                                                 Transcript URL
                                                             </label>
@@ -651,7 +651,7 @@ const EditPodcastPage = ({ params }: { params: { slug: string[] } }) => {
                                                         </div>
                                                     </div>
                                                     <div className="flex gap-5">
-                                                        <div className="w-6/12">
+                                                        <div className="md:w-6/12">
                                                             <label htmlFor="password" className="text-lg font-medium">
                                                                 Explicit content
                                                             </label>

@@ -23,7 +23,7 @@ const TransactionsTable = () => {
                             </thead>
                             <tbody className="bg-[#141414]">
                                 {
-                                    [1, 2, 3, 4, 5,].map(() => {
+                                    [].map(() => {
                                         return <tr>
                                             <td className="py-4 border-b pl-10 text-xs font-medium border-t border-[#667085]">
                                                 <div className="">

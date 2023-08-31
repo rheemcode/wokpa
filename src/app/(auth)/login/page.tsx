@@ -15,9 +15,9 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 
 const loginValidationSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email').required('Email Required!'),
+    email: Yup.string().email('Invalid email').required('Email is required!'),
     password: Yup.string()
-        .required('Password is required'),
+        .required('Password is required!'),
 });
 
 
@@ -120,7 +120,7 @@ export default function Login() {
                                                             Email
                                                         </label>
                                                         {/* <Input name="email" placeholder="" /> */}
-                                                        <Field type="text" name="email" placeholder="email" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                        <Field type="text" name="email" placeholder="Enter email" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                         <ErrorMessage name="email" component={"div"} className="text-red-600 text-sm text-left" />
 
                                                     </div>
@@ -128,7 +128,7 @@ export default function Login() {
                                                         <label htmlFor="password" className="text-sm">
                                                             Password
                                                         </label>
-                                                        <PasswordInput name="password" placeholder=""
+                                                        <PasswordInput name="password" placeholder="Enter password"
                                                             value={values.password}
                                                             onChange={(e: any) => handleChange(e)}
                                                             onBlur={handleBlur}
@@ -144,12 +144,26 @@ export default function Login() {
                                                             </label>
                                                         </div>
                                                         <div>
-                                                            <a href="" className="text-sm font-slate-300">Forgot password</a>
+                                                            <Link href="/forgot-password" className="text-sm font-slate-300">Forgot password</Link>
                                                         </div>
                                                     </div>
                                                     <div className="space-y-4">
                                                         <Button type="submit" className="w-full">
-                                                            Sign in
+                                                            {
+                                                                isSubmitting ? <svg className="w-5 h-5" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                                    viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
+                                                                    <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                                                                        <animateTransform
+                                                                            attributeName="transform"
+                                                                            attributeType="XML"
+                                                                            type="rotate"
+                                                                            dur="1s"
+                                                                            from="0 50 50"
+                                                                            to="360 50 50"
+                                                                            repeatCount="indefinite" />
+                                                                    </path>
+                                                                </svg> : "Sign In"
+                                                            }
                                                         </Button>
                                                         <Button onClick={() => loginWithGoogle()} type="button" className="w-full !bg-white from-white to-white">
                                                             <div className="flex justify-center items-center gap-2">

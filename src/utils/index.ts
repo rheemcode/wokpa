@@ -47,7 +47,7 @@ export const handleRequestAnimationFrame = (callback: (timestamp: number) => voi
 export const APICall = async (fn: (...args: any) => Promise<any>, args?: any, showSuccessToast?: boolean) => {
     try {
         loadingBarRef.current?.continuousStart();
-        const response = args !== null && typeof args[Symbol.iterator] === 'function' ? await fn(...args) : await fn(args)
+        const response = args && typeof args[Symbol.iterator] === 'function' ? await fn(...args) : await fn(args)
         if (showSuccessToast)
             toast(response.data.message, { type: "success" });
         loadingBarRef.current?.complete();

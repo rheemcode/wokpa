@@ -8,11 +8,11 @@ const Features = () => {
     return (
         <div className="relative mt-[80px]">
 
-            <header className="relative bg-gradient-to-tr from-[#083F62] to-[#07211F ]">
+            <header className="relative bg-gradient-to-tr from-[#083F62] to-[#07211F]">
                 <div className="container  px-4 mx-auto py-24">
                     <div className="text-center">
                         <h2 className="md:text-4xl text-2xl font-raleway font-bold">
-                            Easiest way to start podcasting
+                            The easiest way to start podcasting
                         </h2>
                         <p className="md:text-lg text-sm max-w-4xl mx-auto mt-6 text-[#EAECF0]">
                             Wokpa gives you everything yoyu need to host, provide and track your podcast.
@@ -35,8 +35,8 @@ const Features = () => {
                         </p>
                     </div>
                     <div className="mt-16 container  mx-auto px-4">
-                        <div className="flex gap-8 justify-center">
-                            <div className="rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center">
+                        <div className="flex md:flex-row flex-col gap-8 justify-center">
+                            <div className="md:block flex rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center w-full items-center gap-6">
                                 <svg className="inline text-center" width="73" height="72" viewBox="0 0 73 72" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g filter="url(#filter0_b_2977_88960)">
                                         <rect x="0.5" width="72" height="72" rx="8" fill="white" fill-opacity="0.2" />
@@ -57,7 +57,7 @@ const Features = () => {
                                     Distribute
                                 </div>
                             </div>
-                            <div className="rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center">
+                            <div className="md:block flex rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center w-full items-center gap-6">
                                 <svg className="inline text-center" width="73" height="72" viewBox="0 0 73 72" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g filter="url(#filter0_b_2978_89527)">
                                         <rect x="0.5" width="72" height="72" rx="8" fill="white" fill-opacity="0.2" />
@@ -82,7 +82,7 @@ const Features = () => {
                                     Record
                                 </div>
                             </div>
-                            <div className="rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center">
+                            <div className="md:block flex rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center w-full items-center gap-6">
                                 <svg className="inline text-center" width="73" height="72" viewBox="0 0 73 72" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g filter="url(#filter0_b_2977_89347)">
                                         <rect x="0.5" width="72" height="72" rx="8" fill="white" fill-opacity="0.2" />
@@ -102,7 +102,7 @@ const Features = () => {
                                     Monetize
                                 </div>
                             </div>
-                            <div className="rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center">
+                            <div className="md:block flex rounded-xl bg-[#18181B] py-12 px-10 w-56 text-center w-full items-center gap-6">
                                 <svg className="inline text-center" width="73" height="72" viewBox="0 0 73 72" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g filter="url(#filter0_b_2977_89354)">
                                         <rect x="0.5" width="72" height="72" rx="8" fill="white" fill-opacity="0.2" />
@@ -140,7 +140,7 @@ const Features = () => {
                         <img src={("/images/celebrate.png")} alt="" className="w-full" />
                     </div>
                     <div className="mt-12 text-center">
-                        <Button className="text-lg font-semibold font-inter from-white to-white !text-secondary py-4">Try Wokpa for free</Button>
+                        <Button className="text-lg font-semibold font-inter from-white to-white !text-secondary py-4 md:text-base text-sm">Try Wokpa for free</Button>
 
                     </div>
                 </div>
@@ -171,8 +171,8 @@ const Features = () => {
 
                     <div className="mt-10  mx-auto px-4 text-[#101828]">
                         <div className="space-y-16 mt-16">
-                            <div className="flex flex-row-reverse gap-24 items-center">
-                                <div className="w-6/12">
+                            <div className="flex md:flex-row-reverse flex-col-reverse gap-24 items-center">
+                                <div className="md:w-6/12">
                                     <div className="text-left">
                                         <h2 className="md:text-4xl text-2xl font-raleway font-bold">
                                             Build your audience at any stage
@@ -189,8 +189,8 @@ const Features = () => {
                                     <img src={("/images/podcaster-1.png")} alt="" />
                                 </div>
                             </div>
-                            <div className="flex gap-24 items-center">
-                                <div className="w-6/12">
+                            <div className="flex md:flex-row flex-col gap-24 items-center">
+                                <div className="md:w-6/12">
                                     <div className="text-left">
                                         <h2 className="md:text-4xl text-2xl font-raleway font-bold">
                                             Build your audience at any stage
@@ -215,7 +215,7 @@ const Features = () => {
             <section className="relative bg-[#18181B]">
                 <div className="container  px-4 mx-auto py-24">
                     <div className="flex items-center gap-16">
-                        <div className="w-6/12">
+                        <div className="md:w-6/12">
                             <div className="">
                                 <svg width="116" height="20" viewBox="0 0 116 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <g clipPath="url(#clip0_4100_49327)">
@@ -282,7 +282,7 @@ const Features = () => {
                                     </defs>
                                 </svg>
 
-                                <h2 className="text-5xl font-raleway mt-8 leading-tight">
+                                <h2 className="md:text-5xl text-3xl font-raleway mt-8 leading-tight">
                                     Wokpa has saved us thousands of hours of <br />work. We’re able to spin up projects and features <br /> faster.
                                 </h2>
                                 <div className="mt-12">
@@ -326,7 +326,7 @@ const Features = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="w-6/12">
+                        <div className="md:block hidden md:w-6/12">
                             <img src={("/images/alister.png")} alt="" />
                         </div>
                     </div>
