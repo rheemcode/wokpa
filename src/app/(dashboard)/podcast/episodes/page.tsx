@@ -206,7 +206,7 @@ const EpisodeItem: React.FC<{ mode: "list" | "card" }> = ({ mode }) => {
                     :
                     <div className="">
                         <div className="relative">
-                            <img className="w-[240px] h-[200px] rounded-xl" src={("/images/product.jpeg")} alt="" />
+                            <img className="w-[240px] h-[240px] rounded-xl" src={("/images/product.jpeg")} alt="" />
                             <div className="absolute top-0 p-2">
                                 <div className="text-[8px] text-[#0D0D0D] font-semibold bg-white rounded-full py-2 px-4">
                                     20 Episodes

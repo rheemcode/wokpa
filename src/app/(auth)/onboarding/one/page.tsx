@@ -107,13 +107,13 @@ export default function OnboardingOne() {
                                                         <label htmlFor="password" className="text-sm">
                                                             Number of shows
                                                         </label>
-                                                        <input name="show" value={shows} onChange={(e) => setShows(e.target.value)} placeholder="Enter number of shows" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                        <input name="show" value={shows} onChange={(e) => Number(e.target.value) && setShows(e.target.value)} placeholder="Enter number of shows" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                     </div>
                                                     <div>
                                                         <label htmlFor="password" className="text-sm">
                                                             Number of presenters
                                                         </label>
-                                                        <input name="presenters" value={presenters} onChange={(e) => setPresenters(e.target.value)} placeholder="Enter number of presenters" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                        <input name="presenters" value={presenters} onChange={(e) => Number(e.target.value) && setPresenters(e.target.value)} placeholder="Enter number of presenters" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                     </div>
 
                                                 </div>

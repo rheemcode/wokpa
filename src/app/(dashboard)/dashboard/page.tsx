@@ -1,5 +1,6 @@
 
 "use client";
+
 import { useRouter } from 'next/navigation';
 import Button from '@/components/button';
 import { useAppSelector, useAppDispatch } from '@/hooks';
@@ -10,6 +11,7 @@ import { getPodcasts } from '@/app/api/publishers';
 import moment from "moment"
 import { pushPodcasts } from '@/redux/podcast';
 import { APICall } from '@/utils';
+import Link from 'next/link';
 
 const GetPaidCard = () => {
     return (
@@ -100,9 +102,9 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel }> = 
                                         </div>
                                     </div>
                                     <div>
-                                        <div onClick={() => navigate.push(`/podcast/episode-view/${podcast.id}`)} className="font-semibold text-lg cursor-pointer">
+                                        <Link href={`/podcast/episode-view/${podcast.id}`} className="font-semibold text-lg cursor-pointer">
                                             {podcast.title}
-                                        </div>
+                                        </Link>
                                     </div>
                                     <div className="flex gap-2 items-center text-[#D0D5DD]">
                                         <div className="flex gap-1 items-center">
@@ -174,7 +176,7 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel }> = 
                         {/* action buttons */}
                         <div className="flex gap-4">
                             <div className="text-center">
-                                <button onClick={() => navigate.push(`/podcast/create-podcast/${podcast.id}`)}>
+                                <button onClick={() => navigate.push(`/podcast/edit-podcast/${podcast.id}`)}>
                                     <div>
                                         <svg className="inline" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M11 4.00023H6.8C5.11984 4.00023 4.27976 4.00023 3.63803 4.32721C3.07354 4.61483 2.6146 5.07377 2.32698 5.63826C2 6.27999 2 7.12007 2 8.80023V17.2002C2 18.8804 2 19.7205 2.32698 20.3622C2.6146 20.9267 3.07354 21.3856 3.63803 21.6732C4.27976 22.0002 5.11984 22.0002 6.8 22.0002H15.2C16.8802 22.0002 17.7202 22.0002 18.362 21.6732C18.9265 21.3856 19.3854 20.9267 19.673 20.3622C20 19.7205 20 18.8804 20 17.2002V13.0002M7.99997 16.0002H9.67452C10.1637 16.0002 10.4083 16.0002 10.6385 15.945C10.8425 15.896 11.0376 15.8152 11.2166 15.7055C11.4184 15.5818 11.5914 15.4089 11.9373 15.063L21.5 5.50023C22.3284 4.6718 22.3284 3.32865 21.5 2.50023C20.6716 1.6718 19.3284 1.6718 18.5 2.50022L8.93723 12.063C8.59133 12.4089 8.41838 12.5818 8.29469 12.7837C8.18504 12.9626 8.10423 13.1577 8.05523 13.3618C7.99997 13.5919 7.99997 13.8365 7.99997 14.3257V16.0002Z" stroke="#EAECF0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -215,7 +217,7 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel }> = 
                     :
                     <div className="">
                         <div className="relative" onClick={() => navigate.push(`/podcast/episode-view/${podcast.id}`)}>
-                            <img className="w-[240px] h-[200px] rounded-xl" src={podcast.picture_url} alt="" />
+                            <img className="w-[240px] h-[240px] rounded-xl" src={podcast.picture_url} alt="" />
                             <div className="absolute top-0 p-2">
                                 <div className="text-[8px] text-[#0D0D0D] font-semibold bg-white rounded-full py-2 px-4">
                                     {podcast.episode_count} Episodes
@@ -260,6 +262,7 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel }> = 
 const PodcastTable = () => {
     const [viewMode, setViewMode] = useState<"list" | "card">("list");
     const [podcasts, setPodcasts] = useState<PodcastModel[]>([]);
+    const [podcasts2, setPodcasts2] = useState<PodcastModel[]>([]);
 
     const [podcastLoaded, setPodcastLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -271,6 +274,14 @@ const PodcastTable = () => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [totalContent, setTotalContent] = useState(0);
+
+    const filters = [
+        { id: 1, name: 'By date published' },
+        { id: 2, name: 'By podcast title' },
+        { id: 3, name: 'By listens' },
+    ]
+
+    const [selectedFilter, setSelectedFilter] = useState(filters[0])
 
 
     const handleGetPodcast = async () => {
@@ -287,6 +298,34 @@ const PodcastTable = () => {
         }
     }
 
+    const handleRedorder = (v: any) => {
+        try {
+            switch (v.id) {
+                case 1:
+                    {
+                        const _podcasts = [...podcasts]
+                        setPodcasts(_podcasts.sort((a, b) => new Date(a.created_at).valueOf() - new Date(b.created_at).valueOf()));
+                    }
+                case 2:
+                    {
+                        console.log(podcasts)
+                        // const _podcasts = [...podcasts]
+                        // const n = _podcasts.sort((a, b) => a.title.localeCompare(b.title))
+                        setPodcasts([]);
+                    }
+                case 3:
+                    {
+                        const _podcasts = [...podcasts]
+                        setPodcasts(_podcasts.sort((a, b) => Number(a.play_count) - Number(b.play_count)));
+                    }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+
     useEffect(() => { handleGetPodcast() }, []);
 
     return (
@@ -300,29 +339,29 @@ const PodcastTable = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                             </svg>
                         </Listbox.Button>
-                        <Listbox.Options className="absolute mt-1 w-[205px] overflow-auto bg-[#141414] p-2 rounded-lg text-sm font-medium">
+                        <Listbox.Options className="absolute mt-1 w-[205px] overflow-auto bg-[#141414] p-2 rounded-lg text-sm font-medium z-20">
                             <Listbox.Option value={"1"}>
-                                {({ active }) => (
+                                {({ active, selected }) => (
                                     <div
-                                        className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active ? 'bg-[#1D2939]' : ""}`}
+                                        className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
                                     >
                                         All
                                     </div>
                                 )}
                             </Listbox.Option>
                             <Listbox.Option value={"1"}>
-                                {({ active }) => (
+                                {({ active, selected }) => (
                                     <div
-                                        className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active ? 'bg-[#1D2939]' : ""}`}
+                                        className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
                                     >
                                         Active
                                     </div>
                                 )}
                             </Listbox.Option>
                             <Listbox.Option value={"1"}>
-                                {({ active }) => (
+                                {({ active, selected }) => (
                                     <div
-                                        className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active ? 'bg-[#1D2939]' : ""}`}
+                                        className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
                                     >
                                         Archive
                                     </div>
@@ -331,58 +370,47 @@ const PodcastTable = () => {
 
                         </Listbox.Options>
                     </Listbox>
-                    <Listbox as={"div"} className="relative">
+                    <Listbox value={selectedFilter} onChange={(v) => {
+                        setSelectedFilter(v);
+                        handleRedorder(v)
+                    }} as={"div"} className="relative">
                         <Listbox.Button className="inline-flex w-full justify-center text-sm font-medium gap-2 items-center">
-                            By date published
+                            {selectedFilter.name}
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                             </svg>
                         </Listbox.Button>
-                        <Listbox.Options className="absolute mt-1 w-[205px] overflow-auto bg-[#141414] rounded-lg text-sm font-medium">
+                        <Listbox.Options className="absolute mt-1 w-[205px] overflow-auto bg-[#141414] rounded-lg text-sm font-medium z-20">
                             <div className="p-2">
-                                <Listbox.Option value={"1"}>
-                                    {({ active }) => (
-                                        <div
-                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active ? 'bg-[#1D2939]' : ""}`}
-                                        >
-                                            By podccast title
-                                        </div>
-                                    )}
-                                </Listbox.Option>
-                                <Listbox.Option value={"1"}>
-                                    {({ active }) => (
-                                        <div
-                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active ? 'bg-[#1D2939]' : ""}`}
-                                        >
-                                            By date published
-                                        </div>
-                                    )}
-                                </Listbox.Option>
-                                <Listbox.Option value={"1"}>
-                                    {({ active }) => (
-                                        <div
-                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active ? 'bg-[#1D2939]' : ""}`}
-                                        >
-                                            By listens
-                                        </div>
-                                    )}
-                                </Listbox.Option>
+                                {
+                                    filters.map(filter => {
+                                        return <Listbox.Option className={"cursor-pointer"} key={filter.name} value={filter}>
+                                            {({ active, selected }) => (
+                                                <div
+                                                    className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
+                                                >
+                                                    {filter.name}
+                                                </div>
+                                            )}
+                                        </Listbox.Option>
+                                    })
+                                }
                             </div>
                             <hr />
                             <div className="p-2">
                                 <Listbox.Option value={"1"}>
-                                    {({ active }) => (
+                                    {({ active, selected }) => (
                                         <div
-                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active ? 'bg-[#1D2939]' : ""}`}
+                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
                                         >
                                             Ascending
                                         </div>
                                     )}
                                 </Listbox.Option>
                                 <Listbox.Option value={"1"}>
-                                    {({ active }) => (
+                                    {({ active, selected }) => (
                                         <div
-                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active ? 'bg-[#1D2939]' : ""}`}
+                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
                                         >
                                             Descending
                                         </div>

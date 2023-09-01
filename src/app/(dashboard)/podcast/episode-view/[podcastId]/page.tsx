@@ -511,7 +511,7 @@ const EpisodeTableView: React.FC<{ episodes: EpisodeModel[] }> = ({ episodes }) 
     )
 }
 
-const EpisodeViewPage = ({ params }: { params: { podcastId: string } }) => {
+const PodcastView = ({ params }: { params: { podcastId: string } }) => {
     const user = useAppSelector(state => state.auth.user);
     const dispatch = useAppDispatch();
 
@@ -544,10 +544,12 @@ const EpisodeViewPage = ({ params }: { params: { podcastId: string } }) => {
                 <div className="pl-12 flex-1 py-6">
                     <div className="flex gap-4">
 
-                        <div className="relative -top-16">
-                            <img className="w-[206px] h-[206px] rounded-lg border-2 border-[#BEE7E4] object-cover" src={podcast?.picture_url} alt="" />
-                        </div>
                         <div className="flex-1">
+                            <div className="!w-[206px] !h-[206px] relative -top-16">
+                                <img className="!w-[206px] !h-[206px] rounded-lg border-2 border-[#BEE7E4] object-cover" src={podcast?.picture_url} alt="" />
+                            </div>
+                        </div>
+                        <div className="">
                             <div className="flex gap-4 items-center">
                                 <div className="text-sm font-medium">
                                     All Podcasts
@@ -639,7 +641,7 @@ const EpisodeViewPage = ({ params }: { params: { podcastId: string } }) => {
                                         </div>
                                     </div>
                                     <div className="flex gap-4">
-                                        <Button className="!from-transparent !to-transparent text-sm !text-white border !border-[#042946] !py-2">Edit podcast</Button>
+                                        <Link href={`/podcast/edit-podcast/${podcast?.id}`} className="rounded-[40px] px-5 font-medium inline-block bg-transparent text-sm !text-white border !border-[#042946] !py-2">Edit podcast</Link>
                                         <Button className="!from-white !to-white text-sm !text-[#042946] !py-2 font-semibold">Copy tipping link</Button>
                                         <Button className="text-sm !border-[#042946] !py-2">View live</Button>
                                     </div>
@@ -676,4 +678,4 @@ const EpisodeViewPage = ({ params }: { params: { podcastId: string } }) => {
     )
 }
 
-export default EpisodeViewPage
+export default PodcastView

@@ -100,16 +100,16 @@ const Sidebar = () => {
                                                 </svg>
                                             </div>
 
-                                            <div className="flex">
+                                            {user?.current_subscription && <div className="flex">
                                                 <div className="bg-[#344054] px-2 py-[1px] border rounded-3xl">
                                                     <div className="justify-start items-center gap-1 inline-flex">
                                                         <div className="w-2 h-2 relative">
                                                             <div className="w-1.5 h-1.5 left-[1px] top-[1px] absolute bg-emerald-500 rounded-full" />
                                                         </div>
-                                                        <div className="text-center text-gray-50 text-xs font-normal leading-[18px]">Solo</div>
+                                                        <div className="text-center text-gray-50 text-xs font-normal leading-[18px]">{user?.current_subscription?.name}</div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>}
                                         </Disclosure.Button>
                                         <Disclosure.Panel>
                                             <div className="flex mt-5">
@@ -138,7 +138,7 @@ const Sidebar = () => {
                         </div>
                     </div>
                     <div className="mt-12 px-4 md:px-6">
-                        <div className="">
+                        <div className="space-y-1">
                             <div>
                                 <Disclosure>
                                     {({ open }) => (

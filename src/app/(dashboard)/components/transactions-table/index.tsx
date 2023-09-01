@@ -1,9 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { getTransactions } from "@/app/api/publishers";
+import { TransactionModel } from "@/models/transaction";
+import { APICall, formatToCurrency } from "@/utils";
+import moment from "moment";
+import { useEffect, useState } from "react";
 
 const TransactionsTable = () => {
     const [viewMode, setViewMode] = useState<"list" | "card">("list");
+    const [transactions, setTransactions] = useState<TransactionModel[]>([]);
+
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const response = await APICall(getTransactions);
+                setTransactions(response.data.data.results);
+            } catch (error) {
+
+            }
+        })()
+    }, [])
+
+
     return (
         <div className="mt-4">
             <div className="mt-8">
@@ -23,32 +42,36 @@ const TransactionsTable = () => {
                             </thead>
                             <tbody className="bg-[#141414]">
                                 {
-                                    [].map(() => {
-                                        return <tr>
+                                    transactions?.map((transaction) => {
+                                        return <tr key={transaction.reference_number}>
                                             <td className="py-4 border-b pl-10 text-xs font-medium border-t border-[#667085]">
                                                 <div className="">
                                                     <input className="rounded-md border-[#D0D5DD] bg-white" type="checkbox" name="" id="" />
-                                                    <span className="ml-2">Package subscription</span>
+                                                    <span className="ml-2">{transaction.narration}</span>
                                                 </div>
                                             </td>
                                             <td className="py-4 border-b pl-6 text-xs border-t border-[#667085] ">
                                                 <div className="">
-                                                    <span className="inline-flex gap-1 text-sm font-medium rounded-full py-1 px-3 border-2 text-red-500 border-red-500 items-center">
-                                                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M6 9.5V2.5M6 2.5L2.5 6M6 2.5L9.5 6" stroke="#F04438" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                                    <span className={`inline-flex gap-1 text-sm font-medium rounded-full py-1 px-3 border-2 ${transaction.type.toLowerCase() == "credit" ? "text-green-500 border-green-500" : "text-red-500 border-red-500"}  items-center`}>
+                                                        <svg className={`${transaction.type.toLowerCase() == "credit" ? "rotate-180 text-600" : "text-[#F04438]"}`} width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M6 9.5V2.5M6 2.5L2.5 6M6 2.5L9.5 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                                         </svg>
                                                         <span>
-                                                            Debit
+                                                            {
+                                                                transaction.type
+                                                            }
                                                         </span>
                                                     </span>
                                                 </div>
                                             </td>
                                             <td className="py-4 border-b pl-6 text-xs font-medium border-t border-[#667085] ">
-                                                <div>June 10,2023 9:23AM</div>
+                                                <div>
+                                                    {moment(transaction.transaction_time).format("MMM DD, YYYY h:mm a")}
+                                                </div>
                                             </td>
                                             <td className="py-4 border-b pl-6 text-xs font-medium border-t border-[#667085] ">
                                                 <div className="">
-                                                    #202310412
+                                                    #{transaction.reference_number}
                                                 </div>
                                             </td>
                                             <td className="py-4 border-b pl-6 text-xs border-t border-[#667085] ">
@@ -56,7 +79,7 @@ const TransactionsTable = () => {
                                                     <span className="">
                                                         ₦
                                                     </span>
-                                                    <span className="ml-1">10,000</span>
+                                                    <span className="ml-1">{formatToCurrency(transaction.amount / 100)}</span>
                                                 </div>
                                             </td>
                                             <td className="py-4 border-b pl-6 text-xs border-t border-[#667085] ">

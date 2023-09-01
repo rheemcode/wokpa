@@ -6,8 +6,12 @@ import { Popover, Transition, Disclosure } from "@headlessui/react";
 import React from "react";
 import Link from "next/link";
 import { getImage } from "@/utils";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { resetAuth } from "@/redux/auth";
 
 const Navbar = () => {
+    const user = useAppSelector(state => state.auth.user);
+    const dispatch = useAppDispatch();
 
     return (
         <nav className="inset-0 z-10 bg-grayTrue">
@@ -26,27 +30,128 @@ const Navbar = () => {
 
 
                     <div className="md:block hidden">
+
                         <div className="flex gap-4">
                             <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect width="40" height="40" rx="20" fill="#141414" />
                                 <path d="M27.5 27.5L24.5834 24.5833M26.6667 19.5833C26.6667 23.4954 23.4954 26.6667 19.5833 26.6667C15.6713 26.6667 12.5 23.4954 12.5 19.5833C12.5 15.6713 15.6713 12.5 19.5833 12.5C23.4954 12.5 26.6667 15.6713 26.6667 19.5833Z" stroke="#D0D5DD" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
-                            <div className="bg-white rounded-full px-3 py-2 font-inter text-sm text-[#042946] flex items-center">
-                                <div className="font-semibold">
-                                    Account
-                                </div>
-                                <div>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                    </svg>
-                                </div>
-                            </div>
+                            <Popover className="md:block hidden relative">
+                                {({ open }) => (
+                                    <>
+                                        <Popover.Button className="bg-white rounded-full px-3 py-2 font-inter text-sm text-[#042946] flex items-center">
+
+                                            <div className="font-semibold">
+                                                Account
+                                            </div>
+                                            <div>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                                </svg>
+                                            </div>
+
+                                        </Popover.Button>
+                                        <Transition
+                                            as={React.Fragment}
+                                            enter="transition ease-out duration-200"
+                                            enterFrom="opacity-0 translate-y-1"
+                                            enterTo="opacity-100 translate-y-0"
+                                            leave="transition ease-in duration-150"
+                                            leaveFrom="opacity-100 translate-y-0"
+                                            leaveTo="opacity-0 translate-y-1"
+                                        >
+                                            <Popover.Panel className="absolute right-0 z-10 mt-3 w-[240px] bg-dark border border-slate-600 rounded">
+                                                <div className="px-4 py-3 border-b border-slate-600">
+                                                    <div className="flex items-center gap-3">
+                                                        <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <rect width="40" height="40" rx="20" fill="#F2F4F7" />
+                                                            <path d="M28 29C28 27.6044 28 26.9067 27.8278 26.3389C27.44 25.0605 26.4395 24.06 25.1611 23.6722C24.5933 23.5 23.8956 23.5 22.5 23.5H17.5C16.1044 23.5 15.4067 23.5 14.8389 23.6722C13.5605 24.06 12.56 25.0605 12.1722 26.3389C12 26.9067 12 27.6044 12 29M24.5 15.5C24.5 17.9853 22.4853 20 20 20C17.5147 20 15.5 17.9853 15.5 15.5C15.5 13.0147 17.5147 11 20 11C22.4853 11 24.5 13.0147 24.5 15.5Z" stroke="#475467" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                                            <rect x="29.25" y="29.25" width="11.5" height="11.5" rx="5.75" fill="#12B76A" />
+                                                            <rect x="29.25" y="29.25" width="11.5" height="11.5" rx="5.75" stroke="white" stroke-width="1.5" />
+                                                        </svg>
+
+                                                        <div className="text-xs">
+                                                            <div className="font-semibold">
+                                                                {user?.first_name}podcast
+                                                            </div>
+                                                            <div className="">
+                                                                {user?.email}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="px-1">
+                                                    <Link href="/podcast/record-episode" className="py-[0.58rem] px-[0.61rem] flex items-center gap-4">
+                                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <g clip-path="url(#clip0_2034_57088)">
+                                                                <path d="M4.00065 7.33334V8.66668M6.66732 6.00001V10M9.33398 4.66668V11.3333M12.0007 7.33334V8.66668M14.6673 8.00001C14.6673 11.6819 11.6826 14.6667 8.00065 14.6667C4.31875 14.6667 1.33398 11.6819 1.33398 8.00001C1.33398 4.31811 4.31875 1.33334 8.00065 1.33334C11.6826 1.33334 14.6673 4.31811 14.6673 8.00001Z" stroke="#F9FAFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                            </g>
+                                                            <defs>
+                                                                <clipPath id="clip0_2034_57088">
+                                                                    <rect width="16" height="16" fill="white" />
+                                                                </clipPath>
+                                                            </defs>
+                                                        </svg>
+                                                        <div className="text-sm font-medium">Record episode</div>
+                                                    </Link>
+                                                    <Link href="/podcast/create-podcast" className="py-[0.58rem] px-[0.61rem] flex items-center gap-4">
+                                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M8 5.33333V10.6667M5.33333 8H10.6667M5.2 14H10.8C11.9201 14 12.4802 14 12.908 13.782C13.2843 13.5903 13.5903 13.2843 13.782 12.908C14 12.4802 14 11.9201 14 10.8V5.2C14 4.0799 14 3.51984 13.782 3.09202C13.5903 2.71569 13.2843 2.40973 12.908 2.21799C12.4802 2 11.9201 2 10.8 2H5.2C4.0799 2 3.51984 2 3.09202 2.21799C2.71569 2.40973 2.40973 2.71569 2.21799 3.09202C2 3.51984 2 4.0799 2 5.2V10.8C2 11.9201 2 12.4802 2.21799 12.908C2.40973 13.2843 2.71569 13.5903 3.09202 13.782C3.51984 14 4.0799 14 5.2 14Z" stroke="#F9FAFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                        </svg>
+
+                                                        <div className="text-sm font-medium">Create new podcast</div>
+                                                    </Link>
+                                                    <Link href="/podcast/import-podcast" className="py-[0.58rem] px-[0.61rem] flex items-center gap-4">
+                                                        <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M5 9.66667L7.66667 7M7.66667 7L10.3333 9.66667M7.66667 7V13M13 10.1619C13.8143 9.48936 14.3333 8.47196 14.3333 7.33333C14.3333 5.30829 12.6917 3.66667 10.6667 3.66667C10.521 3.66667 10.3847 3.59066 10.3107 3.46516C9.44137 1.98989 7.83629 1 6 1C3.23858 1 1 3.23858 1 6C1 7.3774 1.55696 8.62472 2.45797 9.52902" stroke="#F9FAFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                        </svg>
+
+                                                        <div className="text-sm font-medium">Import podcast</div>
+                                                    </Link>
+                                                    <Link href="/podcast/import-podcast" className="py-[0.58rem] px-[0.61rem] flex items-center gap-4">
+                                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M6.26271 12.9141L6.65234 13.7904C6.76817 14.0512 6.95719 14.2728 7.19649 14.4284C7.43579 14.5839 7.71508 14.6667 8.00049 14.6666C8.2859 14.6667 8.56519 14.5839 8.80449 14.4284C9.04378 14.2728 9.23281 14.0512 9.34864 13.7904L9.73827 12.9141C9.87696 12.6031 10.1103 12.3439 10.4049 12.1733C10.7015 12.0023 11.0445 11.9294 11.3849 11.9652L12.3383 12.0666C12.622 12.0967 12.9084 12.0437 13.1627 11.9142C13.417 11.7847 13.6283 11.5842 13.7709 11.337C13.9136 11.09 13.9817 10.8068 13.9667 10.5219C13.9517 10.237 13.8543 9.96251 13.6864 9.73183L13.122 8.95628C12.921 8.67807 12.8136 8.34319 12.8153 7.99998C12.8152 7.65771 12.9236 7.32421 13.1249 7.04739L13.6894 6.27183C13.8573 6.04115 13.9547 5.76669 13.9696 5.48176C13.9846 5.19683 13.9166 4.91367 13.7738 4.66665C13.6312 4.41947 13.42 4.21897 13.1657 4.08946C12.9114 3.95996 12.625 3.907 12.3412 3.93702L11.3879 4.0385C11.0474 4.07425 10.7044 4.00139 10.4079 3.83035C10.1126 3.65881 9.87928 3.39822 9.74123 3.08591L9.34864 2.20961C9.23281 1.94876 9.04378 1.72712 8.80449 1.57158C8.56519 1.41603 8.2859 1.33327 8.00049 1.33331C7.71508 1.33327 7.43579 1.41603 7.19649 1.57158C6.95719 1.72712 6.76817 1.94876 6.65234 2.20961L6.26271 3.08591C6.12466 3.39822 5.89129 3.65881 5.59604 3.83035C5.29952 4.00139 4.95649 4.07425 4.61604 4.0385L3.65975 3.93702C3.37597 3.907 3.08957 3.95996 2.83529 4.08946C2.58101 4.21897 2.36976 4.41947 2.22715 4.66665C2.08437 4.91367 2.01634 5.19683 2.03133 5.48176C2.04632 5.76669 2.14368 6.04115 2.3116 6.27183L2.87604 7.04739C3.07734 7.32421 3.18574 7.65771 3.18567 7.99998C3.18574 8.34225 3.07734 8.67575 2.87604 8.95257L2.3116 9.72813C2.14368 9.95881 2.04632 10.2333 2.03133 10.5182C2.01634 10.8031 2.08437 11.0863 2.22715 11.3333C2.3699 11.5804 2.58117 11.7808 2.83542 11.9102C3.08967 12.0397 3.37599 12.0928 3.65975 12.0629L4.61308 11.9615C4.95353 11.9257 5.29656 11.9986 5.59308 12.1696C5.88943 12.3407 6.12389 12.6013 6.26271 12.9141Z" stroke="#F9FAFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                            <path d="M7.9993 9.99998C9.10387 9.99998 9.9993 9.10455 9.9993 7.99998C9.9993 6.89541 9.10387 5.99998 7.9993 5.99998C6.89473 5.99998 5.9993 6.89541 5.9993 7.99998C5.9993 9.10455 6.89473 9.99998 7.9993 9.99998Z" stroke="#F9FAFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                        </svg>
+
+                                                        <div className="text-sm font-medium">Account settings</div>
+                                                    </Link>
+                                                    <Link href="/podcast/import-podcast" className="py-[0.58rem] px-[0.61rem] rounded flex items-center gap-4 bg-[#1D2939]">
+                                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <g clip-path="url(#clip0_5024_6455)">
+                                                                <path d="M6.06065 5.99998C6.21739 5.55442 6.52675 5.17872 6.93395 4.9394C7.34116 4.70009 7.81991 4.61261 8.28544 4.69245C8.75096 4.7723 9.1732 5.01433 9.47737 5.37567C9.78154 5.737 9.94802 6.19433 9.94732 6.66665C9.94732 7.99998 7.94732 8.66665 7.94732 8.66665M8.00065 11.3333H8.00732M14.6673 7.99998C14.6673 11.6819 11.6826 14.6666 8.00065 14.6666C4.31875 14.6666 1.33398 11.6819 1.33398 7.99998C1.33398 4.31808 4.31875 1.33331 8.00065 1.33331C11.6826 1.33331 14.6673 4.31808 14.6673 7.99998Z" stroke="#F9FAFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                            </g>
+                                                            <defs>
+                                                                <clipPath id="clip0_5024_6455">
+                                                                    <rect width="16" height="16" fill="white" />
+                                                                </clipPath>
+                                                            </defs>
+                                                        </svg>
+
+                                                        <div className="text-sm font-medium">Help</div>
+                                                    </Link>
+                                                </div>
+                                                <div onClick={() => {
+                                                    dispatch(resetAuth());
+                                                }} className="border-t px-3 py-3 flex items-center gap-4 mt-2">
+                                                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M10.6667 11.3333L14 8M14 8L10.6667 4.66667M14 8H6M6 2H5.2C4.0799 2 3.51984 2 3.09202 2.21799C2.7157 2.40973 2.40973 2.71569 2.21799 3.09202C2 3.51984 2 4.07989 2 5.2V10.8C2 11.9201 2 12.4802 2.21799 12.908C2.40973 13.2843 2.71569 13.5903 3.09202 13.782C3.51984 14 4.0799 14 5.2 14H6" stroke="#F9FAFB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                                                    </svg>
+                                                    <div className="text-sm font-medium">Logout</div>
+
+                                                </div>
+                                            </Popover.Panel>
+                                        </Transition>
+                                    </>
+                                )}
+                            </Popover>
+
                         </div>
                     </div>
 
                 </div>
             </div>
-        </nav>
+        </nav >
     )
 }
 
@@ -194,9 +299,23 @@ export const HomeNavbar = () => {
 
                             </div>
                         </div>
+                        <div>
 
+                            <div className="flex gap-2">
+                                <div>
+                                    <Link href={"/login"} className="rounded-[40px] py-3 px-5 inline-block font-medium !from-transparent !to-transparent border bg-gradient-to-r bg-clip-text !border-[#083F62] w-full">
+                                        Login
+                                    </Link>
+                                </div>
+                                <div>
+                                    <Link href={"/signup"} className="inline-block font-medium w-full rounded-[40px] py-3 px-5 bg-gradient-to-r from-[#083F62] to-[#25AEA4] text-white">
+                                        Sign up
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
 
-                        <div className="md:block">
+                        <div className="md:block hidden">
                             <div>
                                 <div className="md:hidden block">
                                     <button onClick={() => setShowNav(true)}>
@@ -206,7 +325,7 @@ export const HomeNavbar = () => {
 
                                     </button>
                                 </div>
-                                     </div>
+                            </div>
                         </div>
 
                     </div>

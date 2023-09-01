@@ -3,15 +3,16 @@
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { FooterDark } from "@/partials/Footer";
-import Navbar, { HomeNavbar } from "@/partials/Navbar";
-import Sidebar from "@/partials/Sidebar";
+import Navbar, { HomeNavbar } from "@/partials/navbar";
+import { FooterDark } from "@/partials/footer";
+import Sidebar from "@/partials/sidebar";
 import { PropsWithChildren, useEffect, useState } from "react";
 import ReduxProvider from '../redux-provider';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useAppSelector } from '@/hooks';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const AuthValidator = () => {
     const navigate = useRouter();

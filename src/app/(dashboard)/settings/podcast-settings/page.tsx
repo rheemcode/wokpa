@@ -109,7 +109,16 @@ const PodcastSettingsPage
                                         <label htmlFor="password" className="text-sm font-medium">
                                             Language
                                         </label>
-                                        <Input name="email" placeholder="Select language" />
+                                        <select name="language" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`}>
+                                            <option value="">Select preferred language</option>
+                                            <option value="English">English</option>
+                                            <option value="Yoruba">Yoruba</option>
+                                            <option value="Igbo">Igbo</option>
+                                            <option value="Hausa">Hausa</option>
+
+
+                                        </select>
+                                        {/* <Input name="language" placeholder="Select language" /> */}
                                     </div>
                                     <div className="md:w-6/12">
                                         <label htmlFor="email" className="text-sm font-medium">

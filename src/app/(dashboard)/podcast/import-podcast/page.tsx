@@ -51,7 +51,7 @@ const ImportPodcast = () => {
         } catch (error: any) {
             setLoading(false);
             if (error.response) {
-                toast(error.response, { type: "error" })
+                toast(error.response.message    , { type: "error" })
             }
         }
     }
@@ -101,7 +101,7 @@ const ImportPodcast = () => {
                         </div>
                     </div>
                     <div className="mt-8">
-                        <Button onClick={handleImport} className="!text-sm !py-[0.63rem] text-center">
+                        <Button disabled={otp.length < 6} onClick={handleImport} className="!text-sm !py-[0.63rem] text-center disabled:opacity-80 disabled:cursor-not-allowed">
                             {loading ? <svg className="w-5 h-5 inline" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                 viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
                                 <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
