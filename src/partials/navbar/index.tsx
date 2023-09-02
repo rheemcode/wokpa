@@ -301,7 +301,7 @@ export const HomeNavbar = () => {
                         </div>
                         <div>
 
-                            <div className="flex gap-2">
+                            <div className="md:flex gap-2 hidden">
                                 <div>
                                     <Link href={"/login"} className="rounded-[40px] py-3 px-5 inline-block font-medium !from-transparent !to-transparent border bg-gradient-to-r bg-clip-text !border-[#083F62] w-full">
                                         Login
@@ -313,20 +313,21 @@ export const HomeNavbar = () => {
                                     </Link>
                                 </div>
                             </div>
-                        </div>
+                            <div className="md:block hidden">
+                                <div>
+                                    <div className="md:hidden block">
+                                        <button onClick={() => setShowNav(true)}>
+                                            <svg width="25" height="22" viewBox="0 0 25 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M17.4036 18.9999V21.6666H2.73698V18.9999H17.4036ZM24.0703 9.66658V12.3333H0.0703125V9.66658H24.0703ZM21.4036 0.333252V2.99992H6.73698V0.333252H21.4036Z" fill="#36FFE8" />
+                                            </svg>
 
-                        <div className="md:block hidden">
-                            <div>
-                                <div className="md:hidden block">
-                                    <button onClick={() => setShowNav(true)}>
-                                        <svg width="25" height="22" viewBox="0 0 25 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M17.4036 18.9999V21.6666H2.73698V18.9999H17.4036ZM24.0703 9.66658V12.3333H0.0703125V9.66658H24.0703ZM21.4036 0.333252V2.99992H6.73698V0.333252H21.4036Z" fill="#36FFE8" />
-                                        </svg>
-
-                                    </button>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
+                      
 
                     </div>
                 </div>
