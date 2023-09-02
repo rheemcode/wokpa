@@ -15,6 +15,8 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useDropzone } from "react-dropzone";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { toast } from "react-toastify";
+import { useEffectOnce } from "react-use";
+import { KYCModel } from "@/models/kyc";
 
 const WalletPage = () => {
     const user = useAppSelector(state => state.auth.user);
@@ -26,7 +28,7 @@ const WalletPage = () => {
     const [showTransferModal, setShowTransferModal] = useState(false);
 
     const [virtualAccount, setVirtualAccount] = useState<VirtualAccountModel | null>(null);
-    const [kyc, setKYC] = useState<null>(null);
+    const [kyc, setKYC] = useState<KYCModel | null>(null);
 
     const [utilityBill, setUtilityBill] = useState<File | null>(null);
     const [idFile, setIdFile] = useState<File | null>(null);
@@ -100,7 +102,9 @@ const WalletPage = () => {
                 identification: idFile
             };
 
-            const response = APICall(updateKYC, data, true)
+            const response = await APICall(updateKYC, data, true);
+            handleGetKYC()
+            setEditShowAccountModal(false);
 
             setSubmitting(false);
 
@@ -111,10 +115,11 @@ const WalletPage = () => {
     }
 
 
-    useEffect(() => {
+    useEffectOnce(() => {
         handleGetVirtualAccount();
         handleGetBanks();
-    }, [])
+        handleGetKYC();
+    })
 
     return (
         <div id="dashboard">
@@ -132,21 +137,21 @@ const WalletPage = () => {
                                 <label htmlFor="name" className="text-sm">
                                     Account number
                                 </label>
-                                <input readOnly value={virtualAccount?.number} name="name" placeholder="Enter full name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                <input readOnly value={kyc?.account_number} name="name" placeholder="Enter full name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                             </div>
 
                             <div className="flex-1 text-left">
                                 <label htmlFor="name" className="text-sm">
                                     Account name
                                 </label>
-                                <input readOnly value={virtualAccount?.name} name="name" placeholder="Enter full name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                <input readOnly value={kyc?.account_name} name="name" placeholder="Enter full name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                             </div>
 
                             <div className="flex-1 text-left">
                                 <label htmlFor="name" className="text-sm">
                                     BVN number
                                 </label>
-                                <input readOnly value={""} name="name" placeholder="Enter full name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                <input readOnly value={kyc?.bvn} name="name" placeholder="Enter full name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                             </div>
                         </div>
                         <div className="space-y-4 mt-6">
@@ -155,16 +160,9 @@ const WalletPage = () => {
                             </div>
                             <div className="flex-1 text-left">
                                 <label htmlFor="name" className="text-sm">
-                                    Proof of address
-                                </label>
-                                <input readOnly value={virtualAccount?.number} name="name" placeholder="Enter full name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
-                            </div>
-
-                            <div className="flex-1 text-left">
-                                <label htmlFor="name" className="text-sm">
                                     Address
                                 </label>
-                                <input readOnly value={virtualAccount?.name} name="name" placeholder="Enter full name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                <input readOnly value={kyc?.address} name="name" placeholder="Enter full name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                             </div>
                         </div>
                         <div className="space-y-4 mt-6">
@@ -175,7 +173,7 @@ const WalletPage = () => {
                                 <label htmlFor="name" className="text-sm">
                                     Id type
                                 </label>
-                                <input readOnly value={virtualAccount?.number} name="name" placeholder="Enter full name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                <input readOnly value={kyc?.identification_type} name="name" placeholder="Enter full name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                             </div>
                         </div>
                     </div>
@@ -256,13 +254,13 @@ const WalletPage = () => {
                 </div>
                 <Formik
                     initialValues={{
-                        account_number: "",
-                        account_name: "",
-                        bvn: "",
-                        bank_code: "",
+                        account_number: kyc?.account_number || "",
+                        account_name: kyc?.account_name || "",
+                        bvn: kyc?.bvn || "",
+                        bank_code: kyc?.bank_code || "",
                         //  "",
-                        address: "",
-                        identification_type: "",
+                        address: kyc?.address || "",
+                        identification_type: kyc?.identification_type || "",
                         identification_number: "",
                     }}
                     validationSchema={validationSchema}
@@ -270,7 +268,7 @@ const WalletPage = () => {
                         handleEditKYC(values, setSubmitting)
                     }}
                 >
-                    {({ isSubmitting, values, handleChange, handleBlur, setFieldValue }) => (
+                    {({ isSubmitting, values, errors, handleChange, handleBlur, setFieldValue }) => (
                         <Form>
                             <div className="py-10 text-center">
                                 <div className="px-8">
@@ -288,19 +286,12 @@ const WalletPage = () => {
 
                                         <div className="flex-1 text-left">
                                             <label htmlFor="name" className="text-sm">
-                                                Account name
-                                            </label>
-                                            <Field readOnly type="text" name="account_name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
-                                            <ErrorMessage name="account_name" component={"div"} className="text-red-600 text-sm text-left" />
-                                        </div>
-
-                                        <div className="flex-1 text-left">
-                                            <label htmlFor="name" className="text-sm">
                                                 Bank
                                             </label>
                                             <select disabled={values.account_number.length < 10} onChange={async (e) => {
                                                 setFieldValue("bank_code", e.target.value);
-                                                const response = nameEnquiry(values.account_number, e.target.value)
+                                                const response = await nameEnquiry(values.account_number, e.target.value);
+                                                setFieldValue("account_name", response.data.data.name)
                                             }} name="bank_code" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`}>
                                                 <option value="">Select Bank</option>
                                                 {
@@ -310,6 +301,21 @@ const WalletPage = () => {
                                                 }
                                             </select>
                                             <ErrorMessage name="bank_code" component={"div"} className="text-red-600 text-sm text-left" />
+                                        </div>
+
+                                        <div className="flex-1 text-left">
+                                            <label htmlFor="name" className="text-sm">
+                                                Account name
+                                            </label>
+                                            <Field readOnly type="text" name="account_name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                            <ErrorMessage name="account_name" component={"div"} className="text-red-600 text-sm text-left" />
+                                        </div>
+                                        <div className="flex-1 text-left">
+                                            <label htmlFor="name" className="text-sm">
+                                                BVN
+                                            </label>
+                                            <Field type="text" name="bvn" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                            <ErrorMessage name="bvn" component={"div"} className="text-red-600 text-sm text-left" />
                                         </div>
                                     </div>
                                     <div className="space-y-4 mt-6">
@@ -321,7 +327,7 @@ const WalletPage = () => {
                                             <label htmlFor="name" className="text-sm">
                                                 Address
                                             </label>
-                                            <Field readOnly type="text" name="address" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                            <Field type="text" name="address" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                             <ErrorMessage name="address" component={"div"} className="text-red-600 text-sm text-left" />
                                         </div>
                                         <div className="mt-4">
@@ -332,7 +338,7 @@ const WalletPage = () => {
                                                 <div   {...getUtilityRootProps({ className: 'dropzone border-2 rounded-lg bg-dark border-[#98A2B3] px-10 py-2 text-center' })}>
                                                     <input {...getUtilityInputProps()} />
                                                     {
-                                                        idFile ? idFile.name : <div className="text-center space-y-4">
+                                                        utilityBill ? utilityBill.name : <div className="text-center space-y-4">
 
                                                             <svg className="inline" width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <rect x="3" y="3" width="40" height="40" rx="20" fill="#F5F5F5" />
@@ -415,7 +421,21 @@ const WalletPage = () => {
                                             Cancel
                                         </Button>
                                         <Button type="submit" className="!text-sm !py-[0.63rem] text-center">
-                                            Edit details
+                                            {
+                                                isSubmitting ? <svg className="w-5 h-5 inline" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                    viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
+                                                    <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                                                        <animateTransform
+                                                            attributeName="transform"
+                                                            attributeType="XML"
+                                                            type="rotate"
+                                                            dur="1s"
+                                                            from="0 50 50"
+                                                            to="360 50 50"
+                                                            repeatCount="indefinite" />
+                                                    </path>
+                                                </svg> : "Submit"
+                                            }
                                         </Button>
                                     </div>
                                 </div>

@@ -29,7 +29,8 @@ const ImportPodcast = () => {
     const handleInitiateImport = async () => {
         try {
             setLoading(true);
-            const response = await initiatePodcastImport(link);
+            console.log(link)
+            const response = await APICall(initiatePodcastImport, link);
             setShowOtpModal(true);
             setLoading(false);
         } catch (error: any) {
@@ -51,20 +52,32 @@ const ImportPodcast = () => {
         } catch (error: any) {
             setLoading(false);
             if (error.response) {
-                toast(error.response.message    , { type: "error" })
+                toast(error.response.message, { type: "error" })
             }
         }
     }
 
     const handleResendOtp = async () => {
         try {
-            const response = await APICall(resendUserOTP, { link }, true);
+            if (timer != 0)
+                return;
+            const response = await handleInitiateImport();
             setTimer(60);
-            toast(response.data.message);
         } catch (error) {
-
+            console.log(error)
         }
     }
+
+    useEffect(() => {
+        const _timer = setInterval(() => {
+            if (timer > 0) {
+                setTimer(timer - 1);
+            }
+        }, 1000);
+
+        // Clean up the timer when the component unmounts
+        return () => clearInterval(_timer);
+    }, [timer]);
 
 
     return (
@@ -96,7 +109,7 @@ const ImportPodcast = () => {
                             {timer !== 0 ? <div className="text-center mt-4">
                                 resend otp in {timer} seconds
                             </div> :
-                                <div onClick={handleResendOtp} className="text-blue-600 underline cursor-pointe mt-4">resend to email</div>
+                                <div onClick={handleResendOtp} className="text-blue-600 underline cursor-pointe mt-4 cursor-pointer">resend to email</div>
                             }
                         </div>
                     </div>

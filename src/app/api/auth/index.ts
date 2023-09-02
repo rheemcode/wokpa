@@ -11,6 +11,8 @@ export const createPin = async (pin: string, pin_confirmation: string) => axios.
 export const verifyUser = async (data: any) => axios.put(`${API_URL}/verify-user`, data);
 export const resendUserOTP = async (data: any) => axios.post(`${API_URL}/register`, data);
 export const forgotPassword = async (data: any) => axios.post(`${API_URL}/publishers/forgot-password`, data);
+export const verifyEmail = async (token: string) => axios.post(`${API_URL}/publishers/verify`, token);
+
 export const resetPassword = async (data: any) => axios.put(`${API_URL}/publishers/reset-password`, data);
 export const changePassword = async (data: any) => axios.put(`${API_URL}/change-password`, data);
 export const changePin = async (data: any) => axios.put(`${API_URL}/pin`, data);

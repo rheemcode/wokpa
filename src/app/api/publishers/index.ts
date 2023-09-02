@@ -1,7 +1,7 @@
 import { API_URL } from "@/utils";
 import axios from "axios";
 
-export const getPodcasts = async (page = 1, perPage = 10) => axios.get(`${API_URL}/publishers/podcasts?page=${page}&per_page=${perPage}`);
+export const getPodcasts = async (page = 1, perPage = 15) => axios.get(`${API_URL}/publishers/podcasts?page=${page}&per_page=${perPage}`);
 export const getPodcastsById = async (id: number | string) => axios.get(`${API_URL}/publishers/podcasts/${id}`);
 export const getPodcastEpisodes = async (id: number | string, page = 1, perPage = 10) => axios.get(`${API_URL}/publishers/podcasts/${id}/episodes?page=${page}&per_page=${perPage}`);
 export const getPodcastEpisode = async (podcastId: number | string, episodeId: number | string) => axios.get(`${API_URL}/publishers/podcasts/${podcastId}/episodes/${episodeId}`);
@@ -16,7 +16,7 @@ export const getVirtualAccount = async () => axios.get(`${API_URL}/publishers/vi
 export const getTransactions = async () => axios.get(`${API_URL}/publishers/virtual-accounts/transactions`);
 
 export const getKYC = async () => axios.get(`${API_URL}/publishers/kyc`);
-export const updateKYC = async () => axios.post(`${API_URL}/publishers/kyc`, {
+export const updateKYC = async (data: any) => axios.post(`${API_URL}/publishers/kyc`, data, {
     headers: {
         "Content-Type": "multipart/form-data",
     }

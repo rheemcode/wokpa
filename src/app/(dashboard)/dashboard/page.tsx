@@ -12,6 +12,7 @@ import moment from "moment"
 import { pushPodcasts } from '@/redux/podcast';
 import { APICall } from '@/utils';
 import Link from 'next/link';
+import ReactPaginate from 'react-paginate';
 
 const GetPaidCard = () => {
     return (
@@ -284,10 +285,11 @@ const PodcastTable = () => {
     const [selectedFilter, setSelectedFilter] = useState(filters[0])
 
 
-    const handleGetPodcast = async () => {
+    const handleGetPodcast = async (page?: number) => {
         try {
-            const response = await APICall(getPodcasts);
+            const response = await APICall(getPodcasts, page ? page : currentPage);
             setPodcasts(response.data.data.data);
+            setTotalContent(response.data.data.total);
             setPodcastLoaded(true);
 
             if (currentPage == 1)
@@ -297,6 +299,12 @@ const PodcastTable = () => {
             console.log(error);
         }
     }
+
+    const handlePageClick = (event: any) => {
+        console.log(event)
+        setCurrentPage(++event.selected + 1);
+        handleGetPodcast((event.selected + 1))
+    };
 
     const handleRedorder = (v: any) => {
         try {
@@ -322,8 +330,9 @@ const PodcastTable = () => {
         } catch (error) {
             console.log(error)
         }
-
     }
+
+
 
 
     useEffect(() => { handleGetPodcast() }, []);
@@ -454,17 +463,60 @@ const PodcastTable = () => {
             </div>
             <div className="mt-8">
                 {
-                    <div className={`${viewMode == "list" ? "divide-y pr-12" : "grid grid-cols-4 gap-y-8"}`}>
+                    <div>
                         {
-                            (podcasts.length || podcastsCache.content.length) ? <>
-                                {
-                                    podcastLoaded ? podcasts.map(podcast => {
-                                        return <PodcastItem key={"podcast" + podcast.id} podcast={podcast} mode={viewMode} />
-                                    }) : podcastsCache.content.map(podcast => {
-                                        return <PodcastItem key={"podcast" + podcast.id} podcast={podcast} mode={viewMode} />
-                                    })
-                                }
-                            </> :
+                            (podcasts.length || podcastsCache.content.length) ?
+                                <>
+                                    <div className={`${viewMode == "list" ? "divide-y pr-12" : "grid grid-cols-4 gap-y-8"}`}>
+                                    {
+                                        podcastLoaded ? podcasts.map(podcast => {
+                                            return <PodcastItem key={"podcast" + podcast.id} podcast={podcast} mode={viewMode} />
+                                        }) : podcastsCache.content.map(podcast => {
+                                            return <PodcastItem key={"podcast" + podcast.id} podcast={podcast} mode={viewMode} />
+                                        })
+                                    }
+                                    </div> 
+                                    <div>
+                                        <div className="py-5 px-4 mt-6">
+                                            <ReactPaginate
+                                                breakLabel="..."
+                                                containerClassName='flex items-center justify-between'
+                                                nextClassName='flex-1 flex justify-end'
+                                                pageClassName='flex items-center justify-center w-[40px] h-[40px]'
+                                                pageLinkClassName='font-inter text-sm font-medium'
+                                                activeClassName='bg-white text-dark rounded-full'
+                                                previousClassName='flex-1 '
+                                                previousLabel={
+                                                    <div className='flex items-center gap-2'>
+                                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M15.8332 10.0003H4.1665M4.1665 10.0003L9.99984 15.8337M4.1665 10.0003L9.99984 4.16699" stroke="#EAECF0" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+                                                        </svg>
+                                                        <span className="text-sm font-semibold">
+                                                            Previous
+                                                        </span>
+                                                    </div>
+                                                }
+                                                onPageChange={handlePageClick}
+                                                pageRangeDisplayed={totalContent}
+                                                pageCount={Math.ceil(totalContent / 15)}
+                                                nextLabel={
+                                                    <div className='flex items-center gap-2'>
+
+                                                        <span className="text-sm font-semibold">
+                                                            Next
+                                                        </span>
+                                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M4.1665 10.0003H15.8332M15.8332 10.0003L9.99984 4.16699M15.8332 10.0003L9.99984 15.8337" stroke="#EAECF0" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+                                                        </svg>
+
+
+                                                    </div>
+                                                }
+                                                renderOnZeroPageCount={null}
+                                            />
+                                        </div>
+                                    </div>
+                                </> :
 
                                 <div className="text-center py-12">
                                     <svg className='inline' width="201" height="200" viewBox="0 0 201 200" fill="none" xmlns="http://www.w3.org/2000/svg">

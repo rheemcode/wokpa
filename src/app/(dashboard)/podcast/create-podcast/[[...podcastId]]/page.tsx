@@ -263,7 +263,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                                 <label htmlFor="tips_and_donations_amount" className="text-sm font-medium">
                                                     Set amount
                                                 </label>
-                                                <Field type="text" name="tips_and_donations_amount" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                <Field type="number" name="tips_and_donations_amount" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                 <ErrorMessage name="tips_and_donations_amount" component={"div"} className="text-red-600 text-sm text-left" />
                                                 <div className="text-xs text-[#D0D5DD] mt-1">
                                                     Input a range of amount
@@ -469,7 +469,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                                 <label htmlFor="tips_and_donations_amount" className="text-sm font-medium">
                                                     Set amount
                                                 </label>
-                                                <Field type="text" name="tips_and_donations_amount" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                <Field type="number" name="tips_and_donations_amount" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                 <ErrorMessage name="tips_and_donations_amount" component={"div"} className="text-red-600 text-sm text-left" />
                                                 <div className="text-xs text-[#D0D5DD] mt-1">
                                                     Input a range of amount
