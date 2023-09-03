@@ -185,7 +185,7 @@ const Sidebar = () => {
                                                             </Link>
                                                         </div>
                                                         <div>
-                                                            <Link href="/podcast/social-distribution" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
+                                                            <Link href="/podcast/social-sharing" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
                                                                 Social distribution
                                                             </Link>
                                                         </div>
