@@ -3,6 +3,7 @@
 import { getTransactions } from "@/app/api/publishers";
 import { TransactionModel } from "@/models/transaction";
 import { APICall, formatToCurrency } from "@/utils";
+import { Listbox } from "@headlessui/react";
 import moment from "moment";
 import { useEffect, useState } from "react";
 
@@ -90,12 +91,40 @@ const TransactionsTable = () => {
                                                 </div>
                                             </td>
                                             <td className="py-4 border-b pl-6 text-xs font-medium border-t border-[#667085] ">
-                                                <div className="flex items-center gap-6">
-                                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M16.0002 10.6663C17.4668 10.6663 18.6668 9.46634 18.6668 7.99967C18.6668 6.53301 17.4668 5.33301 16.0002 5.33301C14.5335 5.33301 13.3335 6.53301 13.3335 7.99967C13.3335 9.46634 14.5335 10.6663 16.0002 10.6663ZM16.0002 13.333C14.5335 13.333 13.3335 14.533 13.3335 15.9997C13.3335 17.4663 14.5335 18.6663 16.0002 18.6663C17.4668 18.6663 18.6668 17.4663 18.6668 15.9997C18.6668 14.533 17.4668 13.333 16.0002 13.333ZM16.0002 21.333C14.5335 21.333 13.3335 22.533 13.3335 23.9997C13.3335 25.4663 14.5335 26.6663 16.0002 26.6663C17.4668 26.6663 18.6668 25.4663 18.6668 23.9997C18.6668 22.533 17.4668 21.333 16.0002 21.333Z" fill="#F2F4F7" />
-                                                    </svg>
-
-                                                </div>
+                                                <Listbox as={"div"} className="relative">
+                                                    <Listbox.Button className="">
+                                                        <div className="flex items-center gap-6">
+                                                            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path d="M16.0002 10.6663C17.4668 10.6663 18.6668 9.46634 18.6668 7.99967C18.6668 6.53301 17.4668 5.33301 16.0002 5.33301C14.5335 5.33301 13.3335 6.53301 13.3335 7.99967C13.3335 9.46634 14.5335 10.6663 16.0002 10.6663ZM16.0002 13.333C14.5335 13.333 13.3335 14.533 13.3335 15.9997C13.3335 17.4663 14.5335 18.6663 16.0002 18.6663C17.4668 18.6663 18.6668 17.4663 18.6668 15.9997C18.6668 14.533 17.4668 13.333 16.0002 13.333ZM16.0002 21.333C14.5335 21.333 13.3335 22.533 13.3335 23.9997C13.3335 25.4663 14.5335 26.6663 16.0002 26.6663C17.4668 26.6663 18.6668 25.4663 18.6668 23.9997C18.6668 22.533 17.4668 21.333 16.0002 21.333Z" fill="#F2F4F7" />
+                                                            </svg>
+                                                        </div>
+                                                    </Listbox.Button>
+                                                    <Listbox.Options className="absolute mt-4 w-[205px] overflow-auto bg-[#141414] rounded-lg text-sm font-medium right-4 drop-shadow-[0px_3px_5px_rgba(255,255,255,0.1)] z-20">
+                                                        <div className="p-2">
+                                                            <Listbox.Option value={"1"}>
+                                                                {({ active }) => (
+                                                                    <div
+                                                                        className={`py-[0.63rem] px-2 rounded-lg bg-[#1D2939] ${active ? 'bg-[#1D2939]' : ""}`}
+                                                                    >
+                                                                    Download
+                                                                    </div>
+                                                                )}
+                                                            </Listbox.Option>
+                                                            <Listbox.Option value={"1"}>
+                                                                {({ active }) => (
+                                                                    <div
+                                                                        className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active ? 'bg-[#1D2939]' : ""}`}
+                                                                    >
+                                                                       Contact support
+                                                                    </div>
+                                                                )}
+                                                            </Listbox.Option>
+                                                    
+                                                        </div>
+                                                       
+                                                    </Listbox.Options>
+                                                </Listbox>
+                                              
                                             </td>
                                         </tr>
                                     })

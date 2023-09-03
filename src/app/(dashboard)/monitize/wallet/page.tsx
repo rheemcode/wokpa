@@ -6,7 +6,7 @@ import { useAppSelector, useAppDispatch } from "@/hooks";
 import Link from "next/link";
 import TransactionsTable from "../../components/transactions-table";
 import { VirtualAccountModel } from "@/models/virtual-account";
-import { getBanks, getKYC, getVirtualAccount, nameEnquiry, updateKYC } from "@/app/api/publishers";
+import { getBanks, getKYC, getVirtualAccount, nameEnquiry, transferMoney, updateKYC } from "@/app/api/publishers";
 import { APICall, formatToCurrency } from "@/utils";
 import Modal from "@/components/modal";
 import { useFilePicker } from "use-file-picker";
@@ -23,6 +23,7 @@ const WalletPage = () => {
     const dispatch = useAppDispatch();
 
     const [showAccountModal, setShowAccountModal] = useState(false);
+    const [showAddModal, setShowAddModal] = useState(false);
     const [showEditAccountModal, setEditShowAccountModal] = useState(false);
 
     const [showTransferModal, setShowTransferModal] = useState(false);
@@ -105,6 +106,27 @@ const WalletPage = () => {
             const response = await APICall(updateKYC, data, true);
             handleGetKYC()
             setEditShowAccountModal(false);
+
+            setSubmitting(false);
+
+        } catch (error: any) {
+            setSubmitting(false);
+            console.log(error)
+        }
+    }
+
+    const handleTransfer = async (values: any, setSubmitting: (val: boolean) => void) => {
+        try {
+            setSubmitting(true);
+
+            const data = {
+                ...values,
+                amount: Number(values.amount) * 100 
+            };
+
+            const response = await APICall(transferMoney, data, true);
+            handleGetVirtualAccount();
+            setShowTransferModal(false);
 
             setSubmitting(false);
 
@@ -201,52 +223,249 @@ const WalletPage = () => {
                 <div className="border-b text-center text-2xl font-raleway font-bold py-5">
                     Send money
                 </div>
-                <div className="py-10 text-center">
-                    <div className="px-8">
 
-                        <div className="space-y-4">
-                            <div className="flex-1 text-left">
-                                <label htmlFor="name" className="text-sm">
-                                    Enter amount
-                                </label>
-                                <input readOnly name="name" placeholder="Enter amount" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
-                            </div>
+                <Formik
+                    initialValues={{
+                        account_number: "",
+                        beneficiary_name: "",
+                        bank_code: "",
+                        amount: "",
+                        session_id: "",
+                        narration: "",
 
-                            <div className="flex-1 text-left">
-                                <div className="mb-2 text-slate-600">
-                                    <label htmlFor="name" className="text-sm">
-                                        Destination account details
-                                    </label>
+                    }}
+                    validationSchema={Yup.object().shape({
+                        account_number: Yup.string().required("This Field is required"),
+                        beneficiary_name: Yup.string().required("This Field is required"),
+                        bank_code: Yup.string().required("This Field is required"),
+                        amount: Yup.string().required("This Field is required"),
+                        session_id: Yup.string().required("This Field is required"),
+                        narration: Yup.string()
+                    })}
+                    onSubmit={(values, { setSubmitting }) => {
+                        handleTransfer(values, setSubmitting)
+                    }}
+                >
+                    {({ isSubmitting, values, errors, handleChange, handleBlur, setFieldValue }) => (
+                        <Form>
+
+                            <div className="py-10 text-center">
+                                <div className="px-8">
+                                    <div className="space-y-4">
+                                        <div className="flex-1 text-left">
+                                            <label htmlFor="name" className="text-sm">
+                                                Enter amount
+                                            </label>
+                                            <input value={formatToCurrency(values.amount)} onChange={(e) => Number(e.target.value) && setFieldValue("amount", e.target.value.replaceAll(",", "")) } name="name" placeholder="Enter amount" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                            <ErrorMessage name="amount" component={"div"} className="text-red-600 text-sm text-left" />
+
+                                        </div>
+
+                                        <div className="flex-1 text-left">
+                                            <div className="mb-2 text-slate-600">
+                                                <label htmlFor="name" className="text-sm">
+                                                    Destination account details
+                                                </label>
+                                            </div>
+                                            <div className="flex-1 text-left">
+                                                <label htmlFor="name" className="text-sm">
+                                                    Account number
+                                                </label>
+                                                <Field type="text" name="account_number" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                <ErrorMessage name="account_number" component={"div"} className="text-red-600 text-sm text-left" />
+                                            </div>
+                                        </div>
+
+                                        <div className="flex-1 text-left">
+                                            <label htmlFor="name" className="text-sm">
+                                                Bank
+                                            </label>
+                                            <select disabled={values.account_number.length < 10} onChange={async (e) => {
+                                                setFieldValue("bank_code", e.target.value);
+                                                const response = await nameEnquiry(values.account_number, e.target.value);
+                                                setFieldValue("beneficiary_name", response.data.data.name)
+                                                setFieldValue("session_id", response.data.data.session_id)
+
+                                            }} name="bank_code" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`}>
+                                                <option value="">Select Bank</option>
+                                                {
+                                                    banks.map(bank => {
+                                                        return <option value={bank.code}>{bank.name}</option>
+                                                    })
+                                                }
+                                            </select>
+                                            <ErrorMessage name="bank_code" component={"div"} className="text-red-600 text-sm text-left" />
+                                        </div>
+
+                                        <div className="flex-1 text-left">
+                                            <label htmlFor="name" className="text-sm">
+                                                Account name
+                                            </label>
+                                            <Field readOnly type="text" name="beneficiary_name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                            <ErrorMessage name="beneficiary_name" component={"div"} className="text-red-600 text-sm text-left" />
+                                        </div>
+
+                                    </div>
                                 </div>
-                                <label htmlFor="name" className="text-sm">
-                                    Account number
-                                </label>
-                                <input readOnly name="name" placeholder="Enter account number" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
-                            </div>
 
-                            <div className="flex-1 text-left">
-                                <label htmlFor="name" className="text-sm">
-                                    Bank name
-                                </label>
-                                <input readOnly value={""} name="name" placeholder="Enter bank name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                <div className="mt-8 space-y-4 px-8">
+                                    <div className="text-right space-x-4">
+                                        <Button type="submit" className="!text-sm !py-[0.63rem] text-center">
+                                            {
+                                                isSubmitting ? <svg className="w-5 h-5 inline" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                    viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
+                                                    <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                                                        <animateTransform
+                                                            attributeName="transform"
+                                                            attributeType="XML"
+                                                            type="rotate"
+                                                            dur="1s"
+                                                            from="0 50 50"
+                                                            to="360 50 50"
+                                                            repeatCount="indefinite" />
+                                                    </path>
+                                                </svg> : "Proceed to send money"
+                                            }
+                                            
+                                        </Button>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="flex-1 text-left">
-                                <label htmlFor="name" className="text-sm">
-                                    Account name
-                                </label>
-                                <input readOnly value={""} name="name" placeholder="Enter account name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
-                            </div>
-                        </div>
-                    </div>
+                        </Form>
+                    )}
+                </Formik>
 
-                    <div className="mt-8 space-y-4 px-8">
-                        <div className="text-right space-x-4">
-                            <Button className="!text-sm !py-[0.63rem] text-center">
-                                Proceed to send money
-                            </Button>
-                        </div>
-                    </div>
+            </Modal>
+            <Modal size="md" open={showAddModal} onClose={(val) => setShowAddModal(val)}>
+                <div className="border-b text-center text-2xl font-raleway font-bold py-5">
+                    Add money to your account
                 </div>
+
+                <Formik
+                    initialValues={{
+                        account_number: "",
+                        beneficiary_name: "",
+                        bank_code: "",
+                        amount: "",
+                        session_id: "",
+                        narration: "",
+
+                    }}
+                    validationSchema={Yup.object().shape({
+                        account_number: Yup.string().required("This Field is required"),
+                        beneficiary_name: Yup.string().required("This Field is required"),
+                        bank_code: Yup.string().required("This Field is required"),
+                        amount: Yup.string().required("This Field is required"),
+                        session_id: Yup.string().required("This Field is required"),
+                        narration: Yup.string()
+                    })}
+                    onSubmit={(values, { setSubmitting }) => {
+                        handleTransfer(values, setSubmitting)
+                    }}
+                >
+                    {({ isSubmitting, values, errors, handleChange, handleBlur, setFieldValue }) => (
+                        <Form>
+
+                            <div className="py-10 text-center">
+                                <div className="px-8">
+                                    <div className="space-y-4">
+                                        <div className="flex-1 text-left">
+                                            <label htmlFor="name" className="text-sm">
+                                                Enter amount
+                                            </label>
+                                            <input value={formatToCurrency(values.amount)} onChange={(e) => Number(e.target.value) && setFieldValue("amount", e.target.value.replaceAll(",", ""))} name="name" placeholder="Enter amount" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                            <ErrorMessage name="amount" component={"div"} className="text-red-600 text-sm text-left" />
+
+                                        </div>
+
+                                        <div className="text-sm">
+                                            Select a payment method
+                                        </div>
+
+                                        <div className="rounded-lg px-3 py-2 border-zinc-500 items-center"></div>
+
+                                        <div className="flex-1 text-left">
+                                            <label htmlFor="name" className="text-sm">
+                                                Enter amount
+                                            </label>
+                                            <input value={formatToCurrency(values.amount)} onChange={(e) => Number(e.target.value) && setFieldValue("amount", e.target.value.replaceAll(",", ""))} name="name" placeholder="Enter amount" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                            <ErrorMessage name="amount" component={"div"} className="text-red-600 text-sm text-left" />
+
+                                        </div>
+                                        <div className="flex-1 text-left">
+                                            <div className="mb-2 text-slate-600">
+                                                <label htmlFor="name" className="text-sm">
+                                                    Destination account details
+                                                </label>
+                                            </div>
+                                            <div className="flex-1 text-left">
+                                                <label htmlFor="name" className="text-sm">
+                                                    Account number
+                                                </label>
+                                                <Field type="text" name="account_number" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                <ErrorMessage name="account_number" component={"div"} className="text-red-600 text-sm text-left" />
+                                            </div>
+                                        </div>
+
+                                        <div className="flex-1 text-left">
+                                            <label htmlFor="name" className="text-sm">
+                                                Bank
+                                            </label>
+                                            <select disabled={values.account_number.length < 10} onChange={async (e) => {
+                                                setFieldValue("bank_code", e.target.value);
+                                                const response = await nameEnquiry(values.account_number, e.target.value);
+                                                setFieldValue("beneficiary_name", response.data.data.name)
+                                                setFieldValue("session_id", response.data.data.session_id)
+
+                                            }} name="bank_code" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`}>
+                                                <option value="">Select Bank</option>
+                                                {
+                                                    banks.map(bank => {
+                                                        return <option value={bank.code}>{bank.name}</option>
+                                                    })
+                                                }
+                                            </select>
+                                            <ErrorMessage name="bank_code" component={"div"} className="text-red-600 text-sm text-left" />
+                                        </div>
+
+                                        <div className="flex-1 text-left">
+                                            <label htmlFor="name" className="text-sm">
+                                                Account name
+                                            </label>
+                                            <Field readOnly type="text" name="beneficiary_name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                            <ErrorMessage name="beneficiary_name" component={"div"} className="text-red-600 text-sm text-left" />
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div className="mt-8 space-y-4 px-8">
+                                    <div className="text-right space-x-4">
+                                        <Button type="submit" className="!text-sm !py-[0.63rem] text-center">
+                                            {
+                                                isSubmitting ? <svg className="w-5 h-5 inline" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                    viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
+                                                    <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                                                        <animateTransform
+                                                            attributeName="transform"
+                                                            attributeType="XML"
+                                                            type="rotate"
+                                                            dur="1s"
+                                                            from="0 50 50"
+                                                            to="360 50 50"
+                                                            repeatCount="indefinite" />
+                                                    </path>
+                                                </svg> : "Proceed to send money"
+                                            }
+
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
+
             </Modal>
             <Modal size="md2" open={showEditAccountModal} onClose={(val) => setEditShowAccountModal(val)}>
                 <div className="border-b text-center text-2xl font-raleway font-bold py-5">
