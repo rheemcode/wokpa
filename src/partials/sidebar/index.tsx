@@ -92,8 +92,8 @@ const Sidebar = () => {
 
                                         <Disclosure.Button className="w-full outline-none">
                                             <div className="flex justify-between items-center font-medium">
-                                                <div className="text-xs">
-                                                    {user?.first_name} {user?.last_name} Podcast
+                                                <div className="text-xs text-left">
+                                                    {user?.first_name}'s Podcast
                                                 </div>
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />

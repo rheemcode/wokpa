@@ -11,6 +11,7 @@ import { addPhoneMethod } from "@/utils/yup-phone";
 import { verifyUser, resendUserOTP, register, googleLogin } from "@/app/api/auth";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import Image from "next/image"
 import { useRouter } from "next/navigation";
 import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { useAppDispatch } from "@/hooks";
@@ -86,7 +87,11 @@ export default function SignUpPage() {
             dispatch(resetAuth());
 
             dispatch(authLogin({ token: response.data.data.token, user: response.data.data.user }));
-
+            if (response.data.data.user.podcast_goal_updated_at) {
+                navigate.push("/dashboard")
+            } else {
+                navigate.push("onboarding/one");
+            }
 
             // loadingBarRef.current?.complete();
             toast(response.data.message);
@@ -170,7 +175,7 @@ export default function SignUpPage() {
                 <div className="flex min-h-screen">
                     <div className="md:w-6/12 w-full bg-dark contianer md:px-8 py-8 max-h-screen overflow-auto">
                         <div className="md:px-0 px-6">
-                            <img src={"/icons/wokpa.png"} alt="" />
+                            <Image width={138} height={48} src={"/icons/wokpa.png"} alt="" />
                         </div>
                         <div className="mt-24 text-left">
                             <div className="md:w-9/12 mx-auto md:px-0 px-6">
@@ -207,7 +212,7 @@ export default function SignUpPage() {
                                                             <label htmlFor="password" className="text-sm">
                                                                 First name *
                                                             </label>
-                                                            <Field type="text"  name="first_name" placeholder="Enter first name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                            <Field type="text" name="first_name" placeholder="Enter first name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                             <ErrorMessage name="first_name" component={"div"} className="text-red-600 text-sm text-left" />
                                                         </div>
                                                         <div className="flex-1">
@@ -301,11 +306,11 @@ export default function SignUpPage() {
                                                     </div>
                                                     <div className="">
                                                         <div className="flex-1">
-                                                            <Field  type="checkbox" name="terms" id="" />
+                                                            <Field type="checkbox" name="terms" id="" />
                                                             <label htmlFor="password" className="text-sm ml-2">
                                                                 By signing up. you are agreeing to our <Link href="/" className=" text-[#25AEA4]"> Terms & Conditions </Link> and <Link href="/" className=" text-[#25AEA4]"> Privacy Policy.</Link>
                                                             </label>
-                                                            
+
                                                             <ErrorMessage name="terms" component={"div"} className="text-red-600 text-sm text-left" />
 
                                                         </div>

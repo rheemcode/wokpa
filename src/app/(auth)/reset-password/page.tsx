@@ -14,6 +14,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import { useEffectOnce } from "react-use";
+import Image from "next/image";
 
 const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
 
@@ -65,7 +66,7 @@ export default function Login() {
                 <div className="flex min-h-screen">
                     <div className="w-6/12 bg-dark contianer md:px-8 py-8">
                         <div>
-                            <img src={("/icons/wokpa.png")} alt="" />
+                            <Image width={138} height={48} src={"/icons/wokpa.png"} alt="" />
                         </div>
 
                         <Formik

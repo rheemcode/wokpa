@@ -92,7 +92,7 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel }> = 
                     <div className="w-full flex justify-between items-center py-6">
                         <div className="flex gap-4">
 
-                            <div onClick={() => navigate.push(`/podcast/episode-view/${podcast.id}`)}>
+                            <div onClick={() => navigate.push(`/podcast/podcast-view/${podcast.id}`)}>
                                 <img className="w-[120px] h-[120px] rounded-lg" src={podcast.picture_url} alt="" />
                             </div>
                             <div className="h-full">
@@ -103,7 +103,7 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel }> = 
                                         </div>
                                     </div>
                                     <div>
-                                        <Link href={`/podcast/episode-view/${podcast.id}`} className="font-semibold text-lg cursor-pointer">
+                                        <Link href={`/podcast/podcast-view/${podcast.id}`} className="font-semibold text-lg cursor-pointer">
                                             {podcast.title}
                                         </Link>
                                     </div>
@@ -217,7 +217,7 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel }> = 
                     </div>
                     :
                     <div className="">
-                        <div className="relative" onClick={() => navigate.push(`/podcast/episode-view/${podcast.id}`)}>
+                        <div className="relative" onClick={() => navigate.push(`/podcast/podcast-view/${podcast.id}`)}>
                             <img className="w-[240px] h-[240px] rounded-xl" src={podcast.picture_url} alt="" />
                             <div className="absolute top-0 p-2">
                                 <div className="text-[8px] text-[#0D0D0D] font-semibold bg-white rounded-full py-2 px-4">
@@ -263,7 +263,7 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel }> = 
 const PodcastTable = () => {
     const [viewMode, setViewMode] = useState<"list" | "card">("list");
     const [podcasts, setPodcasts] = useState<PodcastModel[]>([]);
-    const [podcasts2, setPodcasts2] = useState<PodcastModel[]>([]);
+    const [podcastSorted, setPodcastSorted] = useState<PodcastModel[]>([]);
 
     const [podcastLoaded, setPodcastLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -280,6 +280,9 @@ const PodcastTable = () => {
         { id: 1, name: 'By date published' },
         { id: 2, name: 'By podcast title' },
         { id: 3, name: 'By listens' },
+        { id: 4, name: 'Ascending' },
+        { id: 5, name: 'Descending' },
+
     ]
 
     const [selectedFilter, setSelectedFilter] = useState(filters[0])
@@ -313,18 +316,33 @@ const PodcastTable = () => {
                     {
                         const _podcasts = [...podcasts]
                         setPodcasts(_podcasts.sort((a, b) => new Date(a.created_at).valueOf() - new Date(b.created_at).valueOf()));
+                        break;
                     }
                 case 2:
                     {
-                        console.log(podcasts)
-                        // const _podcasts = [...podcasts]
-                        // const n = _podcasts.sort((a, b) => a.title.localeCompare(b.title))
-                        setPodcasts([]);
+
+                        const _podcasts = [...podcasts]
+                        const n = _podcasts.sort((a, b) => a.title.localeCompare(b.title))
+                        setPodcasts(n);
+                        break;
                     }
                 case 3:
                     {
                         const _podcasts = [...podcasts]
                         setPodcasts(_podcasts.sort((a, b) => Number(a.play_count) - Number(b.play_count)));
+                        break;
+                    }
+                case 4:
+                    {
+                        const _podcasts = [...podcasts]
+                        setPodcasts(_podcasts.reverse());
+                        break;
+                    }
+                case 5:
+                    {
+                        const _podcasts = [...podcasts]
+                        setPodcasts(_podcasts.reverse());
+                        break;
                     }
             }
         } catch (error) {
@@ -392,7 +410,7 @@ const PodcastTable = () => {
                         <Listbox.Options className="absolute mt-1 w-[205px] overflow-auto bg-[#141414] rounded-lg text-sm font-medium z-20">
                             <div className="p-2">
                                 {
-                                    filters.map(filter => {
+                                    filters.slice(0, 2).map(filter => {
                                         return <Listbox.Option className={"cursor-pointer"} key={filter.name} value={filter}>
                                             {({ active, selected }) => (
                                                 <div
@@ -407,21 +425,22 @@ const PodcastTable = () => {
                             </div>
                             <hr />
                             <div className="p-2">
-                                <Listbox.Option value={"1"}>
+                                <Listbox.Option className={"cursor-pointer"} value={filters[3]}>
                                     {({ active, selected }) => (
                                         <div
                                             className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
                                         >
-                                            Ascending
+                                            {filters[3].name}
                                         </div>
                                     )}
                                 </Listbox.Option>
-                                <Listbox.Option value={"1"}>
+                                <Listbox.Option className={"cursor-pointer"} value={filters[4]}>
                                     {({ active, selected }) => (
                                         <div
                                             className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
                                         >
-                                            Descending
+                                            {filters[4].name}
+
                                         </div>
                                     )}
                                 </Listbox.Option>
@@ -468,14 +487,14 @@ const PodcastTable = () => {
                             (podcasts.length || podcastsCache.content.length) ?
                                 <>
                                     <div className={`${viewMode == "list" ? "divide-y pr-12" : "grid grid-cols-4 gap-y-8"}`}>
-                                    {
-                                        podcastLoaded ? podcasts.map(podcast => {
-                                            return <PodcastItem key={"podcast" + podcast.id} podcast={podcast} mode={viewMode} />
-                                        }) : podcastsCache.content.map(podcast => {
-                                            return <PodcastItem key={"podcast" + podcast.id} podcast={podcast} mode={viewMode} />
-                                        })
-                                    }
-                                    </div> 
+                                        {
+                                            podcastLoaded ? podcasts.map(podcast => {
+                                                return <PodcastItem key={"podcast" + podcast.id} podcast={podcast} mode={viewMode} />
+                                            }) : podcastsCache.content.map(podcast => {
+                                                return <PodcastItem key={"podcast" + podcast.id} podcast={podcast} mode={viewMode} />
+                                            })
+                                        }
+                                    </div>
                                     <div>
                                         <div className="py-5 px-4 mt-6">
                                             <ReactPaginate

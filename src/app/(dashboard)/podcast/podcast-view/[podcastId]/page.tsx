@@ -544,12 +544,12 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
                 <div className="pl-12 flex-1 py-6">
                     <div className="flex gap-4">
 
-                        <div className="flex-1">
+                        <div className="">
                             <div className="!w-[206px] !h-[206px] relative -top-16">
                                 <img className="!w-[206px] !h-[206px] rounded-lg border-2 border-[#BEE7E4] object-cover" src={podcast?.picture_url} alt="" />
                             </div>
                         </div>
-                        <div className="">
+                        <div className="flex-1">
                             <div className="flex gap-4 items-center">
                                 <div className="text-sm font-medium">
                                     All Podcasts
@@ -648,15 +648,15 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
                                 </div>
                             </div>
                         </div>
-
-                    </div>
-                    <div className="flex justify-end gap-4">
-                        <Button className=" !from-transparent !to-transparent text-sm !text-white border !border-[#042946] !py-2">Record new episode</Button>
-                        <Link href="/podcast/create-episode" className="rounded-[40px] px-5 inline-block bg-white text-sm !text-[#042946] !py-2 font-semibold">Upload new episode</Link>
                     </div>
                 </div>
+
             </div>
             <div className="mt-8">
+                <div className="flex justify-end gap-4">
+                    <Button className=" !from-transparent !to-transparent text-sm !text-white border !border-[#042946] !py-2">Record new episode</Button>
+                    <Link href="/podcast/create-episode" className="rounded-[40px] px-5 inline-block bg-white text-sm !text-[#042946] !py-2 font-semibold">Upload new episode</Link>
+                </div>
                 <Tab.Group>
                     <Tab.List className="flex border-b gap-2 border-[#98A2B3]">
                         <Tab className="outline-none">

@@ -14,7 +14,7 @@ import { toast } from "react-toastify";
 import { useFilePicker } from "use-file-picker";
 import * as Yup from "yup";
 
-const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
+const UpdatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
     const user = useAppSelector(state => state.auth.user);
     const dispatch = useAppDispatch();
     const [categories, setCategories] = useState<PodcastCategoryModel[]>([]);
@@ -329,7 +329,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                                                     to="360 50 50"
                                                                     repeatCount="indefinite" />
                                                             </path>
-                                                        </svg> : "Create new podcast"
+                                                        </svg> : "Update podcast"
                                                 }
 
                                             </Button>
@@ -344,4 +344,4 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
     )
 }
 
-export default CreatePodcastPage
+export default UpdatePodcastPage
