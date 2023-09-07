@@ -17,12 +17,18 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 const AuthValidator = () => {
     const navigate = useRouter();
     const auth = useAppSelector(state => state.auth);
+
     const pathName = usePathname();
 
     useEffect(() => {
-        console.log(auth)
         if (!auth.token || !auth.user) {
             navigate.push("/");
+            return;
+        }
+
+        if (!auth.user.current_subscription) {
+            // navigate.push("/onboarding/one");
+
         }
     }, [pathName, auth])
     return <>

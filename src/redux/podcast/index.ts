@@ -5,6 +5,7 @@ import { AxiosResponse } from "axios";
 //stores first podcast page for subsequent access
 
 export interface IPodcastState {
+    refresh: string,
     podcasts: {
         content: PodcastModel[];
         // currentPage: number;
@@ -14,6 +15,7 @@ export interface IPodcastState {
 }
 
 const initialState: IPodcastState = {
+    refresh: "",
     podcasts: {
         content: [],
         // currentPage: 1,
@@ -57,6 +59,9 @@ const podcastSlice = createSlice({
         //     state.podcasts.currentPage = action.payload.currentPage;
         //     state.podcasts.totalContent = action.payload.totalContent;
         // },
+        refreshPodcasts: (state, action: PayloadAction<string>) => {
+            state.refresh = action.payload;
+        },
 
         pushPodcasts: (state, action: PayloadAction<{ podcasts: PodcastModel[] }>) => {
             const podcasts = [...state.podcasts.content, ...action.payload.podcasts]
@@ -68,5 +73,5 @@ const podcastSlice = createSlice({
     },
 });
 
-export const { reset, pushPodcasts } = podcastSlice.actions;
+export const { reset, pushPodcasts, refreshPodcasts } = podcastSlice.actions;
 export default podcastSlice.reducer;

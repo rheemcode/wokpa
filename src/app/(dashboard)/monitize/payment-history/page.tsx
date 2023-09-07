@@ -45,9 +45,7 @@ const PaymentHistoryPage = () => {
             </div>
 
             <div className="mt-8">
-
-                <TransactionsTable />
-
+                <TransactionsTable showFilter={true} />
             </div>
         </div>
     )

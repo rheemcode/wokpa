@@ -7,12 +7,15 @@ import { useAppSelector, useAppDispatch } from '@/hooks';
 import { useEffect, useState, } from 'react';
 import { Listbox, Tab } from '@headlessui/react';
 import { PodcastModel } from '@/models/podcast';
-import { getPodcasts } from '@/app/api/publishers';
+import { archivePodcast, getArchivedEpisodes, getEpisodes, getPodcastArchive, getPodcasts, removeArchivePodcasts } from '@/app/api/publishers';
 import moment from "moment"
-import { pushPodcasts } from '@/redux/podcast';
+import { pushPodcasts, refreshPodcasts } from '@/redux/podcast';
 import { APICall } from '@/utils';
 import Link from 'next/link';
 import ReactPaginate from 'react-paginate';
+import Modal from '@/components/modal';
+import { EpisodeModel } from '@/models/episode';
+import { EpisodeView } from '../podcast/podcast-view/[podcastId]/page';
 
 const GetPaidCard = () => {
     return (
@@ -21,7 +24,7 @@ const GetPaidCard = () => {
                 <div className=" p-4">
                     <button>
                         <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="36" height="36" rx="18" fill="white" fill-opacity="0.2" />
+                            <rect width="36" height="36" rx="18" fill="white" fillOpacity="0.2" />
                             <path d="M23 13L13 23M13 13L23 23" stroke="white" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </button>
@@ -55,7 +58,7 @@ const AnalyticsCard = () => {
                 <div className=" p-4">
                     <button>
                         <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="36" height="36" rx="18" fill="white" fill-opacity="0.2" />
+                            <rect width="36" height="36" rx="18" fill="white" fillOpacity="0.2" />
                             <path d="M23 13L13 23M13 13L23 23" stroke="white" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </button>
@@ -82,17 +85,77 @@ const AnalyticsCard = () => {
     )
 }
 
-const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel }> = ({ mode, podcast }) => {
+const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel, isArchive: boolean }> = ({ mode, podcast, isArchive }) => {
     const navigate = useRouter();
+    const [loading, setLoading] = useState(false);
+    const [selectedPodcast, setSelectedPodcast] = useState<PodcastModel | null>(null);
+    const [showArchiveModal, setShowArchiveModal] = useState(false);
+    const dispatch = useAppDispatch();
+
+    const handleArchive = async () => {
+        try {
+            setLoading(true);
+            const response = await APICall(archivePodcast, selectedPodcast?.id, true);
+            dispatch(refreshPodcasts(new Date().toISOString()))
+            setShowArchiveModal(false);
+            setLoading(false);
+        } catch (error) {
+            setShowArchiveModal(false);
+            setLoading(false);
+        }
+    }
+
+    const handleUnarchive = async () => {
+        try {
+            setLoading(true);
+            const response = await APICall(removeArchivePodcasts, selectedPodcast?.id, true);
+            dispatch(refreshPodcasts(new Date().toISOString()))
+            setShowArchiveModal(false);
+            setLoading(false);
+        } catch (error) {
+            setShowArchiveModal(false);
+            setLoading(false);
+        }
+    }
 
     return (
         <>
+            <Modal size="sm" open={showArchiveModal} onClose={(val) => setShowArchiveModal(val)}>
+                <div className="text-center mt-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 inline">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0l-3-3m3 3l3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                    </svg>
+                </div>
+                <div className="text-center text-2xl font-raleway font-bold py-5">
+                    {isArchive ? "Unarchive" : "Archive"} this podcast
+                </div>
+                <div className="py-4 text-center">
+                    <div className="">
+                        <Button onClick={isArchive ? handleUnarchive : handleArchive} className="!text-sm !py-[0.63rem] text-center">
+                            {loading ? <svg className="w-5 h-5 inline" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
+                                <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                                    <animateTransform
+                                        attributeName="transform"
+                                        attributeType="XML"
+                                        type="rotate"
+                                        dur="1s"
+                                        from="0 50 50"
+                                        to="360 50 50"
+                                        repeatCount="indefinite" />
+                                </path>
+                            </svg> :
+                                "Continue"}
+                        </Button>
+                    </div>
+                </div>
+            </Modal>
             {
                 mode == "list" ?
                     <div className="w-full flex justify-between items-center py-6">
                         <div className="flex gap-4">
 
-                            <div onClick={() => navigate.push(`/podcast/podcast-view/${podcast.id}`)}>
+                            <div className='cursor-pointer' onClick={() => isArchive ? navigate.push(`/podcast/archive/podcast-view/${podcast.id}`) : navigate.push(`/podcast/podcast-view/${podcast.id}`)}>
                                 <img className="w-[120px] h-[120px] rounded-lg" src={podcast.picture_url} alt="" />
                             </div>
                             <div className="h-full">
@@ -201,14 +264,17 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel }> = 
                                 </button>
                             </div>
                             <div>
-                                <button>
+                                <button onClick={() => {
+                                    setSelectedPodcast(podcast);
+                                    setShowArchiveModal(true);
+                                }}>
                                     <div>
                                         <svg className="inline" width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M4.5 7.9966C4.33599 7.99236 4.2169 7.98287 4.10982 7.96157C3.31644 7.80376 2.69624 7.18356 2.53843 6.39018C2.5 6.19698 2.5 5.96466 2.5 5.5C2.5 5.03534 2.5 4.80302 2.53843 4.60982C2.69624 3.81644 3.31644 3.19624 4.10982 3.03843C4.30302 3 4.53534 3 5 3H20C20.4647 3 20.697 3 20.8902 3.03843C21.6836 3.19624 22.3038 3.81644 22.4616 4.60982C22.5 4.80302 22.5 5.03534 22.5 5.5C22.5 5.96466 22.5 6.19698 22.4616 6.39018C22.3038 7.18356 21.6836 7.80376 20.8902 7.96157C20.7831 7.98287 20.664 7.99236 20.5 7.9966M10.5 13H14.5M4.5 8H20.5V16.2C20.5 17.8802 20.5 18.7202 20.173 19.362C19.8854 19.9265 19.4265 20.3854 18.862 20.673C18.2202 21 17.3802 21 15.7 21H9.3C7.61984 21 6.77976 21 6.13803 20.673C5.57354 20.3854 5.1146 19.9265 4.82698 19.362C4.5 18.7202 4.5 17.8802 4.5 16.2V8Z" stroke="#EAECF0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
                                     </div>
                                     <div className="text-xs mt-1">
-                                        Archive
+                                        {isArchive ? "Unarchive" : "Archive"}
                                     </div>
                                 </button>
                             </div>
@@ -217,7 +283,7 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel }> = 
                     </div>
                     :
                     <div className="">
-                        <div className="relative" onClick={() => navigate.push(`/podcast/podcast-view/${podcast.id}`)}>
+                        <div className="relative" onClick={() => isArchive ? navigate.push(`/podcast/archive/podcast-view/${podcast.id}`) : navigate.push(`/podcast/podcast-view/${podcast.id}`)}>
                             <img className="w-[240px] h-[240px] rounded-xl" src={podcast.picture_url} alt="" />
                             <div className="absolute top-0 p-2">
                                 <div className="text-[8px] text-[#0D0D0D] font-semibold bg-white rounded-full py-2 px-4">
@@ -267,14 +333,22 @@ const PodcastTable = () => {
 
     const [podcastLoaded, setPodcastLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isArchive, setIsArchive] = useState(false);
 
     const podcastsCache = useAppSelector(state => state.podcasts.podcasts);
+    const refresh = useAppSelector(state => state.podcasts.refresh);
+
 
     const dispatch = useAppDispatch();
     const navigate = useRouter();
 
     const [currentPage, setCurrentPage] = useState(1);
     const [totalContent, setTotalContent] = useState(0);
+
+    const statusFilter = [
+        { id: 1, name: 'Active' },
+        { id: 2, name: 'Archive' },
+    ]
 
     const filters = [
         { id: 1, name: 'By date published' },
@@ -285,12 +359,12 @@ const PodcastTable = () => {
 
     ]
 
-    const [selectedFilter, setSelectedFilter] = useState(filters[0])
-
+    const [selectedFilter, setSelectedFilter] = useState(filters[0]);
+    const [selectedStatusFilter, setSelectedStatusFilter] = useState(statusFilter[0]);
 
     const handleGetPodcast = async (page?: number) => {
         try {
-            const response = await APICall(getPodcasts, page ? page : currentPage);
+            const response = await APICall(isArchive ? getPodcastArchive : getPodcasts, page ? page : currentPage);
             setPodcasts(response.data.data.data);
             setTotalContent(response.data.data.total);
             setPodcastLoaded(true);
@@ -350,50 +424,63 @@ const PodcastTable = () => {
         }
     }
 
+    const handleStatusSelected = (v: any) => {
+        try {
+            switch (v.id) {
+                case 1:
+                    {
+                        setCurrentPage(1);
+                        setIsArchive(false);
+                        break;
+                    }
+                case 2:
+                    {
 
+                        setCurrentPage(1);
+                        setIsArchive(true)
+                        break;
+                    }
 
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
-    useEffect(() => { handleGetPodcast() }, []);
+    useEffect(() => {
+        handleGetPodcast()
+    }, [isArchive, refresh]);
 
     return (
         <div className="mt-4">
+
             <div className="flex justify-between">
                 <div className="flex gap-4">
-                    <Listbox as={"div"} className="relative">
+                    <Listbox as={"div"} className="relative"
+                        value={selectedStatusFilter} onChange={(v) => {
+                            setSelectedStatusFilter(v);
+                            handleStatusSelected(v)
+                        }}>
                         <Listbox.Button className="inline-flex w-full justify-center text-sm font-medium gap-2 items-center">
-                            Active
+                            {selectedStatusFilter.name}
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                             </svg>
                         </Listbox.Button>
                         <Listbox.Options className="absolute mt-1 w-[205px] overflow-auto bg-[#141414] p-2 rounded-lg text-sm font-medium z-20">
-                            <Listbox.Option value={"1"}>
-                                {({ active, selected }) => (
-                                    <div
-                                        className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
-                                    >
-                                        All
-                                    </div>
-                                )}
-                            </Listbox.Option>
-                            <Listbox.Option value={"1"}>
-                                {({ active, selected }) => (
-                                    <div
-                                        className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
-                                    >
-                                        Active
-                                    </div>
-                                )}
-                            </Listbox.Option>
-                            <Listbox.Option value={"1"}>
-                                {({ active, selected }) => (
-                                    <div
-                                        className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
-                                    >
-                                        Archive
-                                    </div>
-                                )}
-                            </Listbox.Option>
+                            {
+                                statusFilter.map(filter => {
+                                    return <Listbox.Option className={"cursor-pointer"} key={filter.name} value={filter}>
+                                        {({ active, selected }) => (
+                                            <div
+                                                className={`py-[0.63rem] px-2 rounded-lg ${active || (selectedStatusFilter.id == filter.id) ? 'bg-[#1D2939]' : ""}`}
+                                            >
+                                                {filter.name}
+                                            </div>
+                                        )}
+                                    </Listbox.Option>
+                                })
+                            }
 
                         </Listbox.Options>
                     </Listbox>
@@ -410,7 +497,7 @@ const PodcastTable = () => {
                         <Listbox.Options className="absolute mt-1 w-[205px] overflow-auto bg-[#141414] rounded-lg text-sm font-medium z-20">
                             <div className="p-2">
                                 {
-                                    filters.slice(0, 2).map(filter => {
+                                    filters.slice(0, 3).map(filter => {
                                         return <Listbox.Option className={"cursor-pointer"} key={filter.name} value={filter}>
                                             {({ active, selected }) => (
                                                 <div
@@ -488,10 +575,10 @@ const PodcastTable = () => {
                                 <>
                                     <div className={`${viewMode == "list" ? "divide-y pr-12" : "grid grid-cols-4 gap-y-8"}`}>
                                         {
-                                            podcastLoaded ? podcasts.map(podcast => {
-                                                return <PodcastItem key={"podcast" + podcast.id} podcast={podcast} mode={viewMode} />
+                                            podcastLoaded && !isArchive ? podcasts.map(podcast => {
+                                                return <PodcastItem key={"podcast" + podcast.id} podcast={podcast} mode={viewMode} isArchive={isArchive} />
                                             }) : podcastsCache.content.map(podcast => {
-                                                return <PodcastItem key={"podcast" + podcast.id} podcast={podcast} mode={viewMode} />
+                                                return <PodcastItem key={"podcast" + podcast.id} podcast={podcast} mode={viewMode} isArchive={isArchive} />
                                             })
                                         }
                                     </div>
@@ -508,7 +595,7 @@ const PodcastTable = () => {
                                                 previousLabel={
                                                     <div className='flex items-center gap-2'>
                                                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M15.8332 10.0003H4.1665M4.1665 10.0003L9.99984 15.8337M4.1665 10.0003L9.99984 4.16699" stroke="#EAECF0" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+                                                            <path d="M15.8332 10.0003H4.1665M4.1665 10.0003L9.99984 15.8337M4.1665 10.0003L9.99984 4.16699" stroke="#EAECF0" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
                                                         </svg>
                                                         <span className="text-sm font-semibold">
                                                             Previous
@@ -516,7 +603,7 @@ const PodcastTable = () => {
                                                     </div>
                                                 }
                                                 onPageChange={handlePageClick}
-                                                pageRangeDisplayed={totalContent}
+                                                pageRangeDisplayed={5}
                                                 pageCount={Math.ceil(totalContent / 15)}
                                                 nextLabel={
                                                     <div className='flex items-center gap-2'>
@@ -525,7 +612,7 @@ const PodcastTable = () => {
                                                             Next
                                                         </span>
                                                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M4.1665 10.0003H15.8332M15.8332 10.0003L9.99984 4.16699M15.8332 10.0003L9.99984 15.8337" stroke="#EAECF0" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+                                                            <path d="M4.1665 10.0003H15.8332M15.8332 10.0003L9.99984 4.16699M15.8332 10.0003L9.99984 15.8337" stroke="#EAECF0" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
                                                         </svg>
 
 
@@ -540,7 +627,7 @@ const PodcastTable = () => {
                                 <div className="text-center py-12">
                                     <svg className='inline' width="201" height="200" viewBox="0 0 201 200" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <rect x="0.5" width="200" height="200" rx="100" fill="url(#paint0_linear_3977_49889)" />
-                                        <path d="M126.094 130C137.811 122.075 145.5 108.89 145.5 93.9248C145.5 69.6665 125.352 50 100.5 50C75.6479 50 55.5 69.6665 55.5 93.9248C55.5 108.89 63.1885 122.075 74.9056 130M82.2983 110C78.0937 105.75 75.5 100.043 75.5 93.7527C75.5 80.6355 86.694 70 100.5 70C114.306 70 125.5 80.6355 125.5 93.7527C125.5 100.048 122.906 105.75 118.702 110M100.5 150C94.9772 150 90.5 145.523 90.5 140V130C90.5 124.477 94.9772 120 100.5 120C106.023 120 110.5 124.477 110.5 130V140C110.5 145.523 106.023 150 100.5 150ZM105.5 95C105.5 97.7614 103.261 100 100.5 100C97.7386 100 95.5 97.7614 95.5 95C95.5 92.2386 97.7386 90 100.5 90C103.261 90 105.5 92.2386 105.5 95Z" stroke="#BEE7E4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M126.094 130C137.811 122.075 145.5 108.89 145.5 93.9248C145.5 69.6665 125.352 50 100.5 50C75.6479 50 55.5 69.6665 55.5 93.9248C55.5 108.89 63.1885 122.075 74.9056 130M82.2983 110C78.0937 105.75 75.5 100.043 75.5 93.7527C75.5 80.6355 86.694 70 100.5 70C114.306 70 125.5 80.6355 125.5 93.7527C125.5 100.048 122.906 105.75 118.702 110M100.5 150C94.9772 150 90.5 145.523 90.5 140V130C90.5 124.477 94.9772 120 100.5 120C106.023 120 110.5 124.477 110.5 130V140C110.5 145.523 106.023 150 100.5 150ZM105.5 95C105.5 97.7614 103.261 100 100.5 100C97.7386 100 95.5 97.7614 95.5 95C95.5 92.2386 97.7386 90 100.5 90C103.261 90 105.5 92.2386 105.5 95Z" stroke="#BEE7E4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                         <defs>
                                             <linearGradient id="paint0_linear_3977_49889" x1="0.5" y1="0" x2="200.5" y2="-2.08482e-08" gradientUnits="userSpaceOnUse">
                                                 <stop stop-color="#475467" />
@@ -564,10 +651,101 @@ const PodcastTable = () => {
     )
 }
 
+const Episodes = () => {
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalContent, setTotalContent] = useState(0);
+    const [isArchive, setIsArchive] = useState(false);
+
+    const refresh = useAppSelector(state => state.podcasts.refresh);
+    const [episodes, setEpidoes] = useState<EpisodeModel[]>([]);
+
+    const handleGetEpisodes = async (page?: number) => {
+        try {
+            console.log(page)
+            const response = await APICall(isArchive ? getArchivedEpisodes : getEpisodes, [page ? page : currentPage, 15]);
+            setEpidoes(response.data.data.data);
+            setTotalContent(response.data.data.total);
+
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
+
+    const handlePageClick = (event: any) => {
+        setCurrentPage(++event.selected + 1);
+        handleGetEpisodes((event.selected + 1))
+    };
+
+
+    useEffect(() => {
+        handleGetEpisodes(1)
+    }, [refresh]);
+
+    useEffect(() => {
+        handleGetEpisodes()
+    }, [isArchive]);
+
+    return (
+        <div className="mt-4">
+            <EpisodeView
+                episodes={episodes}
+                isArchive={isArchive}
+                setIsArchive={(value) => setIsArchive(value)}
+                setEpisodes={(episodes: EpisodeModel[], page?: number) => {
+                    setEpidoes(episodes);
+                    page && setCurrentPage(page)
+                }} />
+            <div>
+                <div className="py-5 px-4 mt-6">
+                    <ReactPaginate
+                        breakLabel="..."
+                        containerClassName='flex items-center justify-between'
+                        nextClassName='flex-1 flex justify-end'
+                        pageClassName='flex items-center justify-center w-[40px] h-[40px]'
+                        pageLinkClassName='font-inter text-sm font-medium'
+                        activeClassName='bg-white text-dark rounded-full'
+                        previousClassName='flex-1 '
+                        previousLabel={
+                            <div className='flex items-center gap-2'>
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M15.8332 10.0003H4.1665M4.1665 10.0003L9.99984 15.8337M4.1665 10.0003L9.99984 4.16699" stroke="#EAECF0" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                                <span className="text-sm font-semibold">
+                                    Previous
+                                </span>
+                            </div>
+                        }
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={5}
+                        pageCount={Math.ceil(totalContent / 15)}
+                        nextLabel={
+                            <div className='flex items-center gap-2'>
+
+                                <span className="text-sm font-semibold">
+                                    Next
+                                </span>
+                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4.1665 10.0003H15.8332M15.8332 10.0003L9.99984 4.16699M15.8332 10.0003L9.99984 15.8337" stroke="#EAECF0" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+
+
+                            </div>
+                        }
+                        renderOnZeroPageCount={null}
+                    />
+                </div>
+            </div>
+        </div>
+    )
+}
+
 const UserDashboard = () => {
     const user = useAppSelector(state => state.auth.user);
     const dispatch = useAppDispatch();
     const navigate = useRouter();
+
 
     return (
         <div id="dashboard">
@@ -613,7 +791,9 @@ const UserDashboard = () => {
                             <Tab.Panel>
                                 <PodcastTable />
                             </Tab.Panel>
-                            <Tab.Panel>Content 2</Tab.Panel>
+                            <Tab.Panel>
+                                <Episodes />
+                            </Tab.Panel>
                         </Tab.Panels>
                     </Tab.Group>
                 </div>

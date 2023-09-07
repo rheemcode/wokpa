@@ -169,6 +169,7 @@ export default function SignUpPage() {
         }
 
     }
+  
     return (
         <div className="flex-1">
             <div className="">

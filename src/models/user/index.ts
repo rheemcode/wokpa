@@ -41,3 +41,25 @@ export interface UserModel {
         updated_at: string;
     }
 }
+
+export interface ProfileModel {
+    id: number;
+    role_id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone: string;
+    company_name: string;
+    email_verified_at: string;
+    podcast_goal_updated_at: string;
+    created_at: string;
+    updated_at: string;
+    profile_image_url: string;
+    settings: string;
+    role: {
+        id: number;
+        name: string;
+        created_at: string;
+        updated_at: string;
+    },
+}

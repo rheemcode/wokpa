@@ -170,27 +170,27 @@ const Sidebar = () => {
                                                 <Disclosure.Panel>
                                                     <div className="space-y-1 mt-2">
                                                         <div>
-                                                            <Link href="/dashboard" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
+                                                            <Link href="/dashboard" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Dashboard
                                                             </Link>
                                                         </div>
                                                         <div>
-                                                            <Link href="/podcast/episodes" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
+                                                            <Link href="/podcast/episodes" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Episodes
                                                             </Link>
                                                         </div>
                                                         <div>
-                                                            <Link href="/podcast/distribution" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
+                                                            <Link href="/podcast/distribution" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Distribution
                                                             </Link>
                                                         </div>
                                                         <div>
-                                                            <Link href="/podcast/social-sharing" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
+                                                            <Link href="/podcast/social-sharing" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Social distribution
                                                             </Link>
                                                         </div>
                                                         <div>
-                                                            <Link href="/podcast/embedded-player" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
+                                                            <Link href="/podcast/embedded-player" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Embedded player
                                                             </Link>
                                                         </div>
@@ -232,22 +232,22 @@ const Sidebar = () => {
                                                 <Disclosure.Panel>
                                                     <div className="space-y-1 mt-2">
                                                         <div>
-                                                            <Link href="/monitize/wallet" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
+                                                            <Link href="/monitize/wallet" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Wallet
                                                             </Link>
                                                         </div>
                                                         <div>
-                                                            <Link href="/wokpa-ads" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
+                                                            <Link href="/monitize/wokpa-ads" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Wokpa Ads
                                                             </Link>
                                                         </div>
                                                         <div>
-                                                            <Link href="/tips-and-donations" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
+                                                            <Link href="/monitize/tips-and-donations" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Tips and donations
                                                             </Link>
                                                         </div>
                                                         <div>
-                                                            <Link href="/campaign" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
+                                                            <Link href="/monitize/campaign" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Campaign
                                                             </Link>
                                                         </div>
@@ -306,22 +306,22 @@ const Sidebar = () => {
                                                 <Disclosure.Panel>
                                                     <div className="space-y-1 mt-2">
                                                         <div>
-                                                            <Link href="/settings/podcast-settings" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
+                                                            <Link href="/settings/podcast-settings" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Podcast settings
                                                             </Link>
                                                         </div>
                                                         <div>
-                                                            <Link href="/settings/website-page-settings" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
+                                                            <Link href="/settings/website-page-settings" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Website page settings
                                                             </Link>
                                                         </div>
                                                         <div>
-                                                            <Link href="/settings/rss-settings" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
+                                                            <Link href="/settings/rss-settings" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Rss settings
                                                             </Link>
                                                         </div>
                                                         <div>
-                                                            <Link href="/settings/collaborators" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828]`}>
+                                                            <Link href="/settings/collaborators" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Collaborators
                                                             </Link>
                                                         </div>

@@ -1,5 +1,5 @@
 'use client';
-import { authLogin, resetAuth } from "@/redux/auth";
+import { authLogin, resetAuth, updateProfile } from "@/redux/auth";
 import Button from "../../../components/button";
 import Input from "../../../components/input";
 import PasswordInput from "../../../components/password-input";
@@ -7,7 +7,7 @@ import Link from "next/link";
 import * as Yup from "yup"
 import { useAppDispatch } from "@/hooks";
 import { APICall } from "@/utils";
-import { googleLogin, login } from "@/app/api/auth";
+import { getProfile, googleLogin, login } from "@/app/api/auth";
 import { useRouter } from "next/navigation";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import { useGoogleLogin } from "@react-oauth/google";
@@ -39,14 +39,22 @@ export default function Login() {
             // setError("");
             if (loading) return;
             setLoading(true);
-
-            // loadingBarRef.current?.continuousStart();
-
             const response = await googleLogin(token);
             dispatch(resetAuth());
             dispatch(authLogin({ token: response.data.data.token, user: response.data.data.user }));
+            const profileResponse = await getProfile();
+            dispatch(updateProfile({ profile: profileResponse.data.data }));
             navigate.push("/dashboard")
+            if (response.data.data.user.podcast_goal_updated_at) {
+                navigate.push("/dashboard")
+            } else {
+                navigate.push("onboarding/one");
+                return;
+            }
 
+            if (!response.data.data.user.current_subscription) {
+                navigate.push("/pricing")
+            } 
             // loadingBarRef.current?.complete();
             toast(response.data.message);
             setLoading(false);
@@ -68,12 +76,9 @@ export default function Login() {
             setSubmitting(true);
             const response = await APICall(login, values);
             dispatch(authLogin({ token: response.data.data.token, user: response.data.data.user }));
-
-            try {
-
-            }
-            catch (err) {
-            }
+            const profileResponse = await getProfile();
+            dispatch(updateProfile({ profile: profileResponse.data.data }));
+        
             if (response.data.data.user.podcast_goal_updated_at) {
                 navigate.push("/dashboard")
             } else {
@@ -149,9 +154,9 @@ export default function Login() {
                                                         </div>
                                                     </div>
                                                     <div className="space-y-4">
-                                                        <Button type="submit" className="w-full">
+                                                        <Button type="submit" className="w-full text-center">
                                                             {
-                                                                isSubmitting ? <svg className="w-5 h-5" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                                isSubmitting ? <svg className="w-5 h-5 inline" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                                                     viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
                                                                     <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
                                                                         <animateTransform

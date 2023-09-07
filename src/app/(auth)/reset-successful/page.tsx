@@ -42,7 +42,7 @@ export default function ResetSuccessful() {
                                             <Link href="/login" className="flex justify-center gap-2 items-center">
 
                                                 <svg width="15" height="14" viewBox="0 0 15 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M13.3334 6.99984H1.66669M1.66669 6.99984L7.50002 12.8332M1.66669 6.99984L7.50002 1.1665" stroke="#FCFCFD" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
+                                                    <path d="M13.3334 6.99984H1.66669M1.66669 6.99984L7.50002 12.8332M1.66669 6.99984L7.50002 1.1665" stroke="#FCFCFD" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
                                                 </svg>
                                                 <span>Back to login</span>
                                             </Link>

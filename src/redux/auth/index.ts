@@ -1,20 +1,23 @@
 "use client";
 
-import { UserModel } from "@/models/user";
+import { ProfileModel, UserModel } from "@/models/user";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
+import { profile } from "console";
 
 
 interface AuthState {
     token: string;
     user: UserModel | null;
+    profile: ProfileModel | null;
     userType: "user" | "agent"
 }
 
 const initialState: AuthState = {
     token: "",
     user: null,
-    userType: "user"
+    userType: "user",
+    profile: null,
 };
 
 const authSlice = createSlice({
@@ -34,11 +37,14 @@ const authSlice = createSlice({
         updateUser: (state, action: PayloadAction<{ user: UserModel }>) => {
             state.user = action.payload.user;
         },
+        updateProfile: (state, action: PayloadAction<{ profile: ProfileModel }>) => {
+            state.profile = action.payload.profile
+        },
         authLogout: () => {
             return initialState
         },
     },
 });
 
-export const { resetAuth, authLogin, authLogout, setUserType, updateUser } = authSlice.actions;
+export const { resetAuth, authLogin, updateProfile, authLogout, setUserType, updateUser } = authSlice.actions;
 export default authSlice.reducer; 

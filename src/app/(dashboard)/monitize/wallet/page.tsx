@@ -25,6 +25,7 @@ const WalletPage = () => {
     const [showAccountModal, setShowAccountModal] = useState(false);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditAccountModal, setEditShowAccountModal] = useState(false);
+    const [isAccountLoading, setIsAccountLoading] = useState(false);
 
     const [showTransferModal, setShowTransferModal] = useState(false);
 
@@ -121,7 +122,7 @@ const WalletPage = () => {
 
             const data = {
                 ...values,
-                amount: Number(values.amount) * 100 
+                amount: Number(values.amount) * 100
             };
 
             const response = await APICall(transferMoney, data, true);
@@ -256,7 +257,7 @@ const WalletPage = () => {
                                             <label htmlFor="name" className="text-sm">
                                                 Enter amount
                                             </label>
-                                            <input value={formatToCurrency(values.amount)} onChange={(e) => Number(e.target.value) && setFieldValue("amount", e.target.value.replaceAll(",", "")) } name="name" placeholder="Enter amount" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                            <input value={formatToCurrency(values.amount)} onChange={(e) => Number(e.target.value.replaceAll(",", "")) && setFieldValue("amount", e.target.value.replaceAll(",", ""))} name="name" placeholder="Enter amount" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                             <ErrorMessage name="amount" component={"div"} className="text-red-600 text-sm text-left" />
 
                                         </div>
@@ -282,9 +283,11 @@ const WalletPage = () => {
                                             </label>
                                             <select disabled={values.account_number.length < 10} onChange={async (e) => {
                                                 setFieldValue("bank_code", e.target.value);
+                                                setIsAccountLoading(true);
                                                 const response = await nameEnquiry(values.account_number, e.target.value);
-                                                setFieldValue("beneficiary_name", response.data.data.name)
-                                                setFieldValue("session_id", response.data.data.session_id)
+                                                setFieldValue("beneficiary_name", response.data.data.name);
+                                                setFieldValue("session_id", response.data.data.session_id);
+                                                setIsAccountLoading(false);
 
                                             }} name="bank_code" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`}>
                                                 <option value="">Select Bank</option>
@@ -301,8 +304,27 @@ const WalletPage = () => {
                                             <label htmlFor="name" className="text-sm">
                                                 Account name
                                             </label>
-                                            <Field readOnly type="text" name="beneficiary_name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
-                                            <ErrorMessage name="beneficiary_name" component={"div"} className="text-red-600 text-sm text-left" />
+                                            <div className="relative">
+                                                <Field readOnly type="text" name="beneficiary_name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                <ErrorMessage name="beneficiary_name" component={"div"} className="text-red-600 text-sm text-left" />
+                                                {
+                                                    isAccountLoading && <div className="h-full flex items-center justify-center absolute right-0 top-0 p-">
+                                                        <svg className="w-6 h-6 inline" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                            viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
+                                                            <path fill="black" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                                                                <animateTransform
+                                                                    attributeName="transform"
+                                                                    attributeType="XML"
+                                                                    type="rotate"
+                                                                    dur="1s"
+                                                                    from="0 50 50"
+                                                                    to="360 50 50"
+                                                                    repeatCount="indefinite" />
+                                                            </path>
+                                                        </svg>
+                                                    </div>
+                                                }
+                                            </div>
                                         </div>
 
                                     </div>
@@ -326,7 +348,7 @@ const WalletPage = () => {
                                                     </path>
                                                 </svg> : "Proceed to send money"
                                             }
-                                            
+
                                         </Button>
                                     </div>
                                 </div>
@@ -413,9 +435,11 @@ const WalletPage = () => {
                                             </label>
                                             <select disabled={values.account_number.length < 10} onChange={async (e) => {
                                                 setFieldValue("bank_code", e.target.value);
+                                                setIsAccountLoading(true);
                                                 const response = await nameEnquiry(values.account_number, e.target.value);
                                                 setFieldValue("beneficiary_name", response.data.data.name)
                                                 setFieldValue("session_id", response.data.data.session_id)
+                                                setIsAccountLoading(false);
 
                                             }} name="bank_code" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`}>
                                                 <option value="">Select Bank</option>
@@ -432,8 +456,27 @@ const WalletPage = () => {
                                             <label htmlFor="name" className="text-sm">
                                                 Account name
                                             </label>
-                                            <Field readOnly type="text" name="beneficiary_name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
-                                            <ErrorMessage name="beneficiary_name" component={"div"} className="text-red-600 text-sm text-left" />
+                                            <div className="relative">
+                                                <Field readOnly type="text" name="beneficiary_name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                <ErrorMessage name="beneficiary_name" component={"div"} className="text-red-600 text-sm text-left" />
+                                                {
+                                                    isAccountLoading && <div className="h-full flex items-center justify-center absolute right-0 top-0 p-">
+                                                        <svg className="w-6 h-6 inline" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                            viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
+                                                            <path fill="black" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                                                                <animateTransform
+                                                                    attributeName="transform"
+                                                                    attributeType="XML"
+                                                                    type="rotate"
+                                                                    dur="1s"
+                                                                    from="0 50 50"
+                                                                    to="360 50 50"
+                                                                    repeatCount="indefinite" />
+                                                            </path>
+                                                        </svg>
+                                                    </div>
+                                                }
+                                            </div>
                                         </div>
 
                                     </div>
@@ -509,8 +552,11 @@ const WalletPage = () => {
                                             </label>
                                             <select disabled={values.account_number.length < 10} onChange={async (e) => {
                                                 setFieldValue("bank_code", e.target.value);
+                                                setIsAccountLoading(true);
                                                 const response = await nameEnquiry(values.account_number, e.target.value);
                                                 setFieldValue("account_name", response.data.data.name)
+                                                setIsAccountLoading(false);
+
                                             }} name="bank_code" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`}>
                                                 <option value="">Select Bank</option>
                                                 {
@@ -526,8 +572,28 @@ const WalletPage = () => {
                                             <label htmlFor="name" className="text-sm">
                                                 Account name
                                             </label>
-                                            <Field readOnly type="text" name="account_name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
-                                            <ErrorMessage name="account_name" component={"div"} className="text-red-600 text-sm text-left" />
+                                            <div className="relative">
+                                                <Field readOnly type="text" name="account_name" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+
+                                                <ErrorMessage name="account_name" component={"div"} className="text-red-600 text-sm text-left" />
+                                                {
+                                                    isAccountLoading && <div className="h-full flex items-center justify-center absolute right-0 top-0 p-">
+                                                        <svg className="w-6 h-6 inline" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                            viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
+                                                            <path fill="black" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                                                                <animateTransform
+                                                                    attributeName="transform"
+                                                                    attributeType="XML"
+                                                                    type="rotate"
+                                                                    dur="1s"
+                                                                    from="0 50 50"
+                                                                    to="360 50 50"
+                                                                    repeatCount="indefinite" />
+                                                            </path>
+                                                        </svg>
+                                                    </div>
+                                                }
+                                            </div>
                                         </div>
                                         <div className="flex-1 text-left">
                                             <label htmlFor="name" className="text-sm">
@@ -561,8 +627,8 @@ const WalletPage = () => {
 
                                                             <svg className="inline" width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <rect x="3" y="3" width="40" height="40" rx="20" fill="#F5F5F5" />
-                                                                <path d="M19.6665 26.3333L22.9998 23M22.9998 23L26.3332 26.3333M22.9998 23V30.5M29.6665 26.9524C30.6844 26.1117 31.3332 24.8399 31.3332 23.4167C31.3332 20.8854 29.2811 18.8333 26.7498 18.8333C26.5677 18.8333 26.3974 18.7383 26.3049 18.5814C25.2182 16.7374 23.2119 15.5 20.9165 15.5C17.4647 15.5 14.6665 18.2982 14.6665 21.75C14.6665 23.4718 15.3627 25.0309 16.489 26.1613" stroke="#757575" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
-                                                                <rect x="3" y="3" width="40" height="40" rx="20" stroke="#FAFAFA" stroke-width="6" />
+                                                                <path d="M19.6665 26.3333L22.9998 23M22.9998 23L26.3332 26.3333M22.9998 23V30.5M29.6665 26.9524C30.6844 26.1117 31.3332 24.8399 31.3332 23.4167C31.3332 20.8854 29.2811 18.8333 26.7498 18.8333C26.5677 18.8333 26.3974 18.7383 26.3049 18.5814C25.2182 16.7374 23.2119 15.5 20.9165 15.5C17.4647 15.5 14.6665 18.2982 14.6665 21.75C14.6665 23.4718 15.3627 25.0309 16.489 26.1613" stroke="#757575" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
+                                                                <rect x="3" y="3" width="40" height="40" rx="20" stroke="#FAFAFA" strokeWidth="6" />
                                                             </svg>
                                                             <div className="text-xs">
                                                                 <span className="font-semibold text-[#36FFE8] text-sm">Click to upload</span> or drag and drop
@@ -615,8 +681,8 @@ const WalletPage = () => {
 
                                                         <svg className="inline" width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                             <rect x="3" y="3" width="40" height="40" rx="20" fill="#F5F5F5" />
-                                                            <path d="M19.6665 26.3333L22.9998 23M22.9998 23L26.3332 26.3333M22.9998 23V30.5M29.6665 26.9524C30.6844 26.1117 31.3332 24.8399 31.3332 23.4167C31.3332 20.8854 29.2811 18.8333 26.7498 18.8333C26.5677 18.8333 26.3974 18.7383 26.3049 18.5814C25.2182 16.7374 23.2119 15.5 20.9165 15.5C17.4647 15.5 14.6665 18.2982 14.6665 21.75C14.6665 23.4718 15.3627 25.0309 16.489 26.1613" stroke="#757575" stroke-width="1.66667" stroke-linecap="round" stroke-linejoin="round" />
-                                                            <rect x="3" y="3" width="40" height="40" rx="20" stroke="#FAFAFA" stroke-width="6" />
+                                                            <path d="M19.6665 26.3333L22.9998 23M22.9998 23L26.3332 26.3333M22.9998 23V30.5M29.6665 26.9524C30.6844 26.1117 31.3332 24.8399 31.3332 23.4167C31.3332 20.8854 29.2811 18.8333 26.7498 18.8333C26.5677 18.8333 26.3974 18.7383 26.3049 18.5814C25.2182 16.7374 23.2119 15.5 20.9165 15.5C17.4647 15.5 14.6665 18.2982 14.6665 21.75C14.6665 23.4718 15.3627 25.0309 16.489 26.1613" stroke="#757575" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
+                                                            <rect x="3" y="3" width="40" height="40" rx="20" stroke="#FAFAFA" strokeWidth="6" />
                                                         </svg>
                                                         <div className="text-xs">
                                                             <span className="font-semibold text-[#36FFE8] text-sm">Click to upload</span> or drag and drop
