@@ -39,6 +39,7 @@ const signupValidationSchema = Yup.object().shape({
     country: Yup.string()
         .required('Country is required'),
     phone: (Yup.string() as any)?.phone("Phone number is invalid!").required("Phone number is required!"),
+    date_of_birth: Yup.date().required("Date of birth is required"),
     publisher_category: Yup.string()
         .required('Publisher Category is required'),
     password: Yup.string()
@@ -169,7 +170,7 @@ export default function SignUpPage() {
         }
 
     }
-  
+
     return (
         <div className="flex-1">
             <div className="">
@@ -192,6 +193,7 @@ export default function SignUpPage() {
                                         country: "",
                                         phone: "",
                                         publisher_category: "",
+                                        date_of_birth: "",
                                         password: "",
                                         password_confirmation: "",
                                         company_name: "",
@@ -279,6 +281,13 @@ export default function SignUpPage() {
                                                             <Field type="text" name="phone" placeholder="Enter phone number" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                             <ErrorMessage name="phone" component={"div"} className="text-red-600 text-sm text-left" />
                                                         </div>
+                                                        <div className="flex-1">
+                                                            <label htmlFor="phone" className="text-sm">
+                                                                Date of birth *
+                                                            </label>
+                                                            <Field type="date" name="date_of_birth"  className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                            <ErrorMessage name="date_of_birth" component={"div"} className="text-red-600 text-sm text-left" />
+                                                        </div>
                                                     </div>
                                                     <div className="flex md:flex-row flex-col gap-4">
                                                         <div className="flex-1">
@@ -318,9 +327,9 @@ export default function SignUpPage() {
 
                                                     </div>
                                                     <div className="space-y-4">
-                                                        <Button type="submit" className="w-full">
+                                                        <Button type="submit" className="w-full text-center">
                                                             {
-                                                                isSubmitting ? <svg className="w-5 h-5" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                                isSubmitting ? <svg className="w-5 h-5 inline" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                                                     viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
                                                                     <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
                                                                         <animateTransform

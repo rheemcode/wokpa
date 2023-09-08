@@ -1,6 +1,6 @@
 "use client";
 
-import { archiveEpisode, getEpisodesArchive, getPodcastEpisodes, getPodcastsById } from "@/app/api/publishers";
+import { archiveEpisode, getArchivedEpisodes, getEpisodesArchive, getPodcastEpisodes, getPodcastsById } from "@/app/api/publishers";
 import Button from "@/components/button";
 import Input from "@/components/input";
 import Modal from "@/components/modal";
@@ -611,7 +611,7 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
 
     const handleGetPodcasts = async () => {
         try {
-            const podcastResponse = await APICall(getPodcastsById, params.podcastId);
+            const podcastResponse = await APICall(isArchive ? getArchivedEpisodes : getPodcastsById, params.podcastId);
             setPodcast(podcastResponse.data.data);
 
         } catch (error) {
