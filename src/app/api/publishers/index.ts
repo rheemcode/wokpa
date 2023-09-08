@@ -19,6 +19,9 @@ export const deleteCollaborators = async (id: number) => axios.delete(`${API_URL
 export const getVirtualAccount = async () => axios.get(`${API_URL}/publishers/virtual-accounts`);
 export const getTransactions = async (page = 1, per_page = 15, start_date = "", end_date = "") => axios.get(`${API_URL}/publishers/virtual-accounts/transactions?page=${page}&per_page=${per_page}&start_date=${start_date}&end_date=${end_date}`);
 
+export const getAnalytics = async () => axios.get(`${API_URL}/publishers/podcasts/analyitcs`);
+
+
 export const transferMoney = async (data: any) => axios.post(`${API_URL}/publishers/virtual-accounts/transfer`, data);
 
 

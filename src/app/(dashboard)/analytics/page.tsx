@@ -6,47 +6,58 @@ import { useAppSelector, useAppDispatch } from "@/hooks";
 import { PodcastModel } from "@/models/podcast";
 import { pushPodcasts } from "@/redux/podcast";
 import { APICall } from "@/utils";
-import { Listbox, Switch } from "@headlessui/react";
+import { Listbox, Popover, Switch } from "@headlessui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
-
+import { DateRangePicker, RangeKeyDict } from 'react-date-range';
+import { usePopper } from "react-popper";
 
 const PodcastTable = () => {
-    const [viewMode, setViewMode] = useState<"list" | "card">("list");
+    const dispatch = useAppDispatch();
+    const navigate = useRouter();
+
     const [podcasts, setPodcasts] = useState<PodcastModel[]>([]);
-    const [podcastSorted, setPodcastSorted] = useState<PodcastModel[]>([]);
+    const refresh = useAppSelector(state => state.podcasts.refresh);
+    const podcastsCache = useAppSelector(state => state.podcasts.podcasts);
+    const analytics = useAppSelector(state => state.analytics.analytics)
+
+    let [referenceElement, setReferenceElement] = useState<any>()
+    let [popperElement, setPopperElement] = useState<any>()
+    let { styles, attributes } = usePopper(referenceElement, popperElement);
+
+    const [dateRange, setDateRange] = useState<{ startDate: string | Date, endDate: string | Date, key: string }[]>([
+        {
+            startDate: "", endDate: "",
+            key: 'selection'
+        }
+    ]);
+
+    const onChange = (ranges: RangeKeyDict) => {
+        const [start, end] = [ranges.selection.startDate as Date, ranges.selection.endDate as Date];
+        setDateRange([{ startDate: start, endDate: end, key: "selection" }]);
+    };
 
     const [podcastLoaded, setPodcastLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
     const [isArchive, setIsArchive] = useState(false);
 
-    const podcastsCache = useAppSelector(state => state.podcasts.podcasts);
-    const refresh = useAppSelector(state => state.podcasts.refresh);
-
-
-    const dispatch = useAppDispatch();
-    const navigate = useRouter();
 
     const [currentPage, setCurrentPage] = useState(1);
     const [totalContent, setTotalContent] = useState(0);
 
-    const statusFilter = [
-        { id: 1, name: 'Active' },
-        { id: 2, name: 'Archive' },
-    ]
 
     const filters = [
-        { id: 1, name: 'By date published' },
-        { id: 2, name: 'By podcast title' },
-        { id: 3, name: 'By listens' },
-        { id: 4, name: 'Ascending' },
-        { id: 5, name: 'Descending' },
+        { id: 1, name: 'Last 7 days' },
+        { id: 2, name: 'Last 14 days' },
+        { id: 3, name: 'Last 30 days' },
+        { id: 4, name: 'First 90 days' },
+        { id: 5, name: 'All time' },
 
     ]
 
     const [selectedFilter, setSelectedFilter] = useState(filters[0]);
-    const [selectedStatusFilter, setSelectedStatusFilter] = useState(statusFilter[0]);
+
 
     const handleGetPodcast = async (page?: number) => {
         try {
@@ -64,7 +75,6 @@ const PodcastTable = () => {
     }
 
     const handlePageClick = (event: any) => {
-        console.log(event)
         setCurrentPage(++event.selected + 1);
         handleGetPodcast((event.selected + 1))
     };
@@ -110,28 +120,6 @@ const PodcastTable = () => {
         }
     }
 
-    const handleStatusSelected = (v: any) => {
-        try {
-            switch (v.id) {
-                case 1:
-                    {
-                        setCurrentPage(1);
-                        setIsArchive(false);
-                        break;
-                    }
-                case 2:
-                    {
-
-                        setCurrentPage(1);
-                        setIsArchive(true)
-                        break;
-                    }
-
-            }
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
     useEffect(() => {
         handleGetPodcast()
@@ -139,7 +127,7 @@ const PodcastTable = () => {
 
     return (
         <div className="mt-8">
-            <div className="">
+            <div ref={setReferenceElement} className="">
                 <div className="flex gap-6 items-center">
                     <div className="flex-1">
                         <div className="relative">
@@ -165,7 +153,7 @@ const PodcastTable = () => {
                         <Listbox.Options className="absolute mt-1 w-[205px] overflow-auto bg-[#141414] rounded-lg text-xs font-medium z-20">
                             <div className="p-2">
                                 {
-                                    filters.slice(0, 3).map(filter => {
+                                    filters.map(filter => {
                                         return <Listbox.Option className={"cursor-pointer"} key={filter.name} value={filter}>
                                             {({ active, selected }) => (
                                                 <div
@@ -180,25 +168,28 @@ const PodcastTable = () => {
                             </div>
                             <hr />
                             <div className="p-2">
-                                <Listbox.Option className={"cursor-pointer"} value={filters[3]}>
+                                <Listbox.Option className={"cursor-pointer"} value={{ id: 6, name: "Custom range" }}>
                                     {({ active, selected }) => (
-                                        <div
-                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
-                                        >
-                                            {filters[3].name}
-                                        </div>
-                                    )}
-                                </Listbox.Option>
-                                <Listbox.Option className={"cursor-pointer"} value={filters[4]}>
-                                    {({ active, selected }) => (
-                                        <div
-                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
-                                        >
-                                            {filters[4].name}
 
-                                        </div>
+                                        <Popover className={``}>
+                                            <Popover.Button className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`} >
+                                                <span>  Choose a date range</span>
+                                            </Popover.Button>
+
+                                            <Popover.Panel
+                                                ref={setPopperElement}
+                                                style={styles.popper}
+                                                {...attributes.popper}
+                                                className="absolute z-30 text-black shadow-md">
+                                                <DateRangePicker
+                                                    ranges={dateRange as any}
+                                                    onChange={onChange}
+                                                />
+                                            </Popover.Panel>
+                                        </Popover>
                                     )}
                                 </Listbox.Option>
+
                             </div>
                         </Listbox.Options>
                     </Listbox>

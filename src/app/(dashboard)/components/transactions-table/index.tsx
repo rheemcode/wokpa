@@ -4,8 +4,6 @@ import { getTransactions } from "@/app/api/publishers";
 import { TransactionModel } from "@/models/transaction";
 import { APICall, formatToCurrency } from "@/utils";
 import { DateRangePicker, RangeKeyDict } from 'react-date-range';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
 import { Listbox, Popover } from "@headlessui/react";
 import moment from "moment";
 import { useEffect, useState } from "react";
