@@ -54,7 +54,7 @@ export default function Login() {
 
             if (!response.data.data.user.current_subscription) {
                 navigate.push("/pricing")
-            } 
+            }
             // loadingBarRef.current?.complete();
             toast(response.data.message);
             setLoading(false);
@@ -76,9 +76,9 @@ export default function Login() {
             setSubmitting(true);
             const response = await APICall(login, values);
             dispatch(authLogin({ token: response.data.data.token, user: response.data.data.user }));
-            const profileResponse = await getProfile();
+            const profileResponse = await APICall(getProfile, [], true);
             dispatch(updateProfile({ profile: profileResponse.data.data }));
-        
+
             if (response.data.data.user.podcast_goal_updated_at) {
                 navigate.push("/dashboard")
             } else {
