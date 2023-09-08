@@ -10,7 +10,7 @@ import { Formik, Form, ErrorMessage, Field } from "formik";
 import { APICall } from "@/utils";
 import { forgotPassword, verifyEmail } from "@/app/api/auth";
 import { useParams, useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useEffectOnce } from "react-use";
 

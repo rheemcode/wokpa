@@ -162,6 +162,8 @@ export default function SignUpPage() {
             setSubmitting(true);
             setPhone(values.phone)
             const response = await APICall(register, values, true);
+            navigate.push("/login");
+
             setTimer(60);
             setRegistered(true);
             setSubmitting(false);
