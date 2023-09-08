@@ -1,17 +1,19 @@
 "use client";
 
-import { getPodcastArchive, getPodcasts } from "@/app/api/publishers";
+import { getAnalytics, getPodcastArchive, getPodcasts } from "@/app/api/publishers";
 import Button from "@/components/button";
 import { useAppSelector, useAppDispatch } from "@/hooks";
 import { PodcastModel } from "@/models/podcast";
 import { pushPodcasts } from "@/redux/podcast";
-import { APICall } from "@/utils";
+import { APICall, formatToCurrency } from "@/utils";
 import { Listbox, Popover, Switch } from "@headlessui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { DateRangePicker, RangeKeyDict } from 'react-date-range';
 import { usePopper } from "react-popper";
+import { updateAnalytics } from "@/redux/analytics";
+import { useEffectOnce } from "react-use";
 
 const PodcastTable = () => {
     const dispatch = useAppDispatch();
@@ -57,7 +59,6 @@ const PodcastTable = () => {
     ]
 
     const [selectedFilter, setSelectedFilter] = useState(filters[0]);
-
 
     const handleGetPodcast = async (page?: number) => {
         try {
@@ -120,14 +121,13 @@ const PodcastTable = () => {
         }
     }
 
-
     useEffect(() => {
         handleGetPodcast()
     }, [isArchive, refresh]);
 
     return (
         <div className="mt-8">
-            <div ref={setReferenceElement} className="">
+            <div className="">
                 <div className="flex gap-6 items-center">
                     <div className="flex-1">
                         <div className="relative">
@@ -150,7 +150,7 @@ const PodcastTable = () => {
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                             </svg>
                         </Listbox.Button>
-                        <Listbox.Options className="absolute mt-1 w-[205px] overflow-auto bg-[#141414] rounded-lg text-xs font-medium z-20">
+                        <Listbox.Options className="absolute mt-1 w-[205px] bg-[#141414] rounded-lg text-xs font-medium z-20">
                             <div className="p-2">
                                 {
                                     filters.map(filter => {
@@ -172,7 +172,7 @@ const PodcastTable = () => {
                                     {({ active, selected }) => (
 
                                         <Popover className={``}>
-                                            <Popover.Button className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`} >
+                                            <Popover.Button ref={setReferenceElement} className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] w-full text-left ${active || selected ? 'bg-[#1D2939]' : ""}`} >
                                                 <span>  Choose a date range</span>
                                             </Popover.Button>
 
@@ -180,7 +180,7 @@ const PodcastTable = () => {
                                                 ref={setPopperElement}
                                                 style={styles.popper}
                                                 {...attributes.popper}
-                                                className="absolute z-30 text-black shadow-md">
+                                                className="text-black shadow-md">
                                                 <DateRangePicker
                                                     ranges={dateRange as any}
                                                     onChange={onChange}
@@ -309,8 +309,26 @@ const PodcastTable = () => {
 }
 
 const AnalyticsPage = () => {
-    const user = useAppSelector(state => state.auth.user);
     const dispatch = useAppDispatch();
+    const navigate = useRouter();
+
+    const user = useAppSelector(state => state.auth.user);
+    const analytics = useAppSelector(state => state.analytics.analytics)
+
+    const handleGetAnalytics = async (page?: number) => {
+        try {
+            const response = await getAnalytics();
+            dispatch(updateAnalytics(response.data.data));
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffectOnce(() => {
+        handleGetAnalytics();
+    })
+
 
     return (
         <div id="dashboard">
@@ -368,7 +386,7 @@ const AnalyticsPage = () => {
                             </svg>
                             <div>
                                 <span className="text-2xl font-raleway font-bold">
-                                    400,000
+                                    {formatToCurrency(Number(analytics.total_income))}
                                 </span>
                             </div>
                         </div>
@@ -405,7 +423,7 @@ const AnalyticsPage = () => {
 
                             <div>
                                 <span className="text-2xl font-raleway font-bold">
-                                    4000
+                                    {formatToCurrency(Number(analytics.follower_count))}
                                 </span>
                             </div>
                         </div>
@@ -441,7 +459,7 @@ const AnalyticsPage = () => {
                         <div className="flex items-center">
                             <div>
                                 <span className="text-2xl font-raleway font-bold">
-                                    800
+                                    {formatToCurrency(Number(analytics.listener_count))}
                                 </span>
                             </div>
                         </div>

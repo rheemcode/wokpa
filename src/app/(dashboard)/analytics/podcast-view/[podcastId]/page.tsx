@@ -18,7 +18,7 @@ import ReactPaginate from "react-paginate";
 import { refreshPodcasts } from "@/redux/podcast";
 
 
-const PodcastView = ({ params }: { params: { podcastId: string[] } }) => {
+const PodcastView = ({ params }: { params: { podcastId: string } }) => {
     const user = useAppSelector(state => state.auth.user);
     const dispatch = useAppDispatch();
 
@@ -44,7 +44,7 @@ const PodcastView = ({ params }: { params: { podcastId: string[] } }) => {
     const handleGetEpisodes = async (page?: number) => {
         try {
             console.log(page)
-            const response = await APICall(isArchive ? getEpisodesArchive : getPodcastEpisodes, [params.podcastId[0], page ? page : currentPage, 15]);
+            const response = await APICall(isArchive ? getEpisodesArchive : getPodcastEpisodes, [params.podcastId, page ? page : currentPage, 15]);
             setEpidoes(response.data.data.data);
             setTotalContent(response.data.data.total);
 
@@ -56,7 +56,7 @@ const PodcastView = ({ params }: { params: { podcastId: string[] } }) => {
 
     const handleGetPodcasts = async () => {
         try {
-            const podcastResponse = await APICall(getPodcastsById, params.podcastId[0]);
+            const podcastResponse = await APICall(getPodcastsById, params.podcastId);
             setPodcast(podcastResponse.data.data);
 
         } catch (error) {
@@ -248,7 +248,7 @@ const PodcastView = ({ params }: { params: { podcastId: string[] } }) => {
                                                 </div>
                                             </div>
                                             <div className="mt-4 flex justify-between items-center">
-                                                    <div className="text-xs text-[#98A2B3]">All time</div>
+                                                <div className="text-xs text-[#98A2B3]">All time</div>
                                                 <span className="text-sm font-medium bg-[#ECFDF3] py-1 pl-[8px] pr-[10px] rounded-full inline-flex items-center gap-1 font-inter text-[#027A48]">
                                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                         <path d="M6 9.5V2.5M6 2.5L2.5 6M6 2.5L9.5 6" stroke="#12B76A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -282,7 +282,7 @@ const PodcastView = ({ params }: { params: { podcastId: string[] } }) => {
                                                 </svg>
                                                 <div>
                                                     <span className="text-2xl font-raleway font-bold">
-                                                       2M
+                                                        2M
                                                     </span>
                                                 </div>
                                             </div>
