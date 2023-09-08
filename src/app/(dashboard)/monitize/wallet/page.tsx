@@ -272,7 +272,12 @@ const WalletPage = () => {
                                                 <label htmlFor="name" className="text-sm">
                                                     Account number
                                                 </label>
-                                                <Field type="text" name="account_number" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                <input type="text"
+                                                    name="account_number"
+                                                    onChange={(e) => {
+                                                        (Number(e.target.value) && e.target.value.length < 11) && setFieldValue("account_number", e.target.value);
+                                                    }}
+                                                    className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                 <ErrorMessage name="account_number" component={"div"} className="text-red-600 text-sm text-left" />
                                             </div>
                                         </div>
@@ -424,7 +429,11 @@ const WalletPage = () => {
                                                 <label htmlFor="name" className="text-sm">
                                                     Account number
                                                 </label>
-                                                <Field type="text" name="account_number" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                <input type="text" name="account_number"
+                                                    onChange={(e) => {
+                                                        (Number(e.target.value) && e.target.value.length < 11) && setFieldValue("account_number", e.target.value);
+                                                    }}
+                                                    className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                 <ErrorMessage name="account_number" component={"div"} className="text-red-600 text-sm text-left" />
                                             </div>
                                         </div>

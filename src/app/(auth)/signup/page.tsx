@@ -371,7 +371,7 @@ export default function SignUpPage() {
                                                     </div>
                                                     <div className="text-center">
                                                         <div className="text-sm font-normal text-gray-50">
-                                                            ALready have an account <Link href="/login" className="font-semibold text-base text-cyan-200 font-inter"> Log in</Link>
+                                                            Already have an account <Link href="/login" className="font-semibold text-base text-cyan-200 font-inter"> Log in</Link>
                                                         </div>
                                                     </div>
                                                 </div>

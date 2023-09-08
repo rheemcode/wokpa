@@ -56,6 +56,7 @@ const Sidebar = () => {
                             <div className="flex gap-2 items-center">
                                 <div>
                                     {
+
                                         <svg width="150" height="40" viewBox="0 0 150 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <mask id="mask0_3125_62387" style={{ maskType: "luminance" }} maskUnits="userSpaceOnUse" x="0" y="0" width="150" height="40">
                                                 <path d="M149.855 0H0V39.9784H149.855V0Z" fill="white" />
@@ -74,17 +75,21 @@ const Sidebar = () => {
                             </div>
                             <div className="flex gap-3">
                                 <div>
-                                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <circle cx="32" cy="32" r="32" fill="url(#paint0_linear_3125_62399)" />
-                                        <path d="M32 32C35.3137 32 38 29.3137 38 26C38 22.6863 35.3137 20 32 20C28.6863 20 26 22.6863 26 26C26 29.3137 28.6863 32 32 32Z" fill="#E5F5F4" />
-                                        <path d="M42.6667 44C42.6667 42.1392 42.6667 41.2089 42.4371 40.4518C41.92 38.7473 40.5861 37.4134 38.8816 36.8963C38.1245 36.6667 37.1941 36.6667 35.3334 36.6667H28.6667C26.806 36.6667 25.8756 36.6667 25.1185 36.8963C23.414 37.4134 22.0801 38.7473 21.563 40.4518C21.3334 41.2089 21.3334 42.1392 21.3334 44M38 26C38 29.3137 35.3137 32 32 32C28.6863 32 26 29.3137 26 26C26 22.6863 28.6863 20 32 20C35.3137 20 38 22.6863 38 26Z" stroke="#E5F5F4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                        <defs>
-                                            <linearGradient id="paint0_linear_3125_62399" x1="-0.000996671" y1="63.9996" x2="63.9992" y2="-0.000779231" gradientUnits="userSpaceOnUse">
-                                                <stop stopColor="#083F62" />
-                                                <stop offset="1" stopColor="#25AEA4" />
-                                            </linearGradient>
-                                        </defs>
-                                    </svg>
+                                    <Link href="/settings/account">
+                                        {user?.image ? <>
+                                            <img src={user.image} className="w-16 h-16 rounded-full object-contain" alt="" />
+                                        </> : <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="32" cy="32" r="32" fill="url(#paint0_linear_3125_62399)" />
+                                            <path d="M32 32C35.3137 32 38 29.3137 38 26C38 22.6863 35.3137 20 32 20C28.6863 20 26 22.6863 26 26C26 29.3137 28.6863 32 32 32Z" fill="#E5F5F4" />
+                                            <path d="M42.6667 44C42.6667 42.1392 42.6667 41.2089 42.4371 40.4518C41.92 38.7473 40.5861 37.4134 38.8816 36.8963C38.1245 36.6667 37.1941 36.6667 35.3334 36.6667H28.6667C26.806 36.6667 25.8756 36.6667 25.1185 36.8963C23.414 37.4134 22.0801 38.7473 21.563 40.4518C21.3334 41.2089 21.3334 42.1392 21.3334 44M38 26C38 29.3137 35.3137 32 32 32C28.6863 32 26 29.3137 26 26C26 22.6863 28.6863 20 32 20C35.3137 20 38 22.6863 38 26Z" stroke="#E5F5F4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                            <defs>
+                                                <linearGradient id="paint0_linear_3125_62399" x1="-0.000996671" y1="63.9996" x2="63.9992" y2="-0.000779231" gradientUnits="userSpaceOnUse">
+                                                    <stop stopColor="#083F62" />
+                                                    <stop offset="1" stopColor="#25AEA4" />
+                                                </linearGradient>
+                                            </defs>
+                                        </svg>}
+                                    </Link>
                                 </div>
 
                                 <div className="flex-1">

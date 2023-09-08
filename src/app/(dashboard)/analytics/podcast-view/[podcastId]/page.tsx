@@ -16,51 +16,43 @@ import { useEffect, useState } from "react";
 import { useEffectOnce } from "react-use";
 import ReactPaginate from "react-paginate";
 import { refreshPodcasts } from "@/redux/podcast";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, Pie, PieChart } from 'recharts';
 
 const data = [
     {
-        name: 'Page A',
-        uv: 4000,
-        pv: 2400,
-        amt: 2400,
+        v: 42
     },
     {
-        name: 'Page B',
-        uv: 3000,
-        pv: 1398,
-        amt: 2210,
+        v: 33
     },
     {
-        name: 'Page C',
-        uv: 2000,
-        pv: 9800,
-        amt: 2290,
+        v: 66
     },
     {
-        name: 'Page D',
-        uv: 2780,
-        pv: 3908,
-        amt: 2000,
+        v: 57
     },
     {
-        name: 'Page E',
-        uv: 1890,
-        pv: 4800,
-        amt: 2181,
+        v: 24
     },
     {
-        name: 'Page F',
-        uv: 2390,
-        pv: 3800,
-        amt: 2500,
+        v: 29
     },
     {
-        name: 'Page G',
-        uv: 3490,
-        pv: 4300,
-        amt: 2100,
+        v: 27
     },
+    {
+        v: 31
+    },
+    {
+        v: 21
+    },
+    {
+        v: 55
+    },
+    {
+        v: 67
+    },
+
 ];
 
 
@@ -429,67 +421,58 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
                                                     <div className="flex-1">
                                                         <div className="text-3xl font-raleway font-medium text-[#101828]">2k</div>
                                                     </div>
-                                                    <div className="flex items-center">
+                                                    <div className="flex items-center gap-2">
                                                         <div className="flex gap-1 items-center">
                                                             <svg width="51" height="20" viewBox="0 0 51 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                 <path d="M18.3332 5.83203L11.776 12.3892C11.446 12.7192 11.281 12.8842 11.0907 12.9461C10.9233 13.0004 10.743 13.0004 10.5757 12.9461C10.3854 12.8842 10.2204 12.7192 9.89036 12.3892L7.60931 10.1082C7.2793 9.77816 7.11429 9.61315 6.92402 9.55133C6.75665 9.49695 6.57636 9.49695 6.40899 9.55133C6.21872 9.61315 6.05371 9.77816 5.72369 10.1082L1.6665 14.1654M18.3332 5.83203H12.4998M18.3332 5.83203V11.6654" stroke="#17B26A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                                <path d="M24.378 7.006V4.78H28.256V15H25.764V7.006H24.378ZM37.0897 6.866H32.7217V8.798C32.9083 8.59267 33.1697 8.42467 33.5057 8.294C33.8417 8.16333 34.2057 8.098 34.5977 8.098C35.2977 8.098 35.8763 8.25667 36.3337 8.574C36.8003 8.89133 37.141 9.302 37.3557 9.806C37.5703 10.31 37.6777 10.856 37.6777 11.444C37.6777 12.536 37.3697 13.404 36.7537 14.048C36.1377 14.6827 35.2697 15 34.1497 15C33.403 15 32.7543 14.874 32.2037 14.622C31.653 14.3607 31.2283 14.0013 30.9297 13.544C30.631 13.0867 30.4677 12.5593 30.4397 11.962H32.7777C32.8337 12.2513 32.969 12.494 33.1837 12.69C33.3983 12.8767 33.6923 12.97 34.0657 12.97C34.5043 12.97 34.831 12.83 35.0457 12.55C35.2603 12.27 35.3677 11.8967 35.3677 11.43C35.3677 10.9727 35.2557 10.6227 35.0317 10.38C34.8077 10.1373 34.481 10.016 34.0517 10.016C33.7343 10.016 33.473 10.0953 33.2677 10.254C33.0623 10.4033 32.927 10.604 32.8617 10.856H30.5517V4.766H37.0897V6.866ZM38.8031 7.356C38.8031 6.6 39.0178 6.01667 39.4471 5.606C39.8858 5.19533 40.4505 4.99 41.1411 4.99C41.8318 4.99 42.3918 5.19533 42.8211 5.606C43.2505 6.01667 43.4651 6.6 43.4651 7.356C43.4651 8.112 43.2505 8.69533 42.8211 9.106C42.3918 9.51667 41.8318 9.722 41.1411 9.722C40.4505 9.722 39.8858 9.51667 39.4471 9.106C39.0178 8.69533 38.8031 8.112 38.8031 7.356ZM48.3091 5.144L42.9191 15H40.6091L45.9991 5.144H48.3091ZM41.1271 6.39C40.6791 6.39 40.4551 6.712 40.4551 7.356C40.4551 7.99067 40.6791 8.308 41.1271 8.308C41.3418 8.308 41.5098 8.22867 41.6311 8.07C41.7525 7.91133 41.8131 7.67333 41.8131 7.356C41.8131 6.712 41.5845 6.39 41.1271 6.39ZM45.4671 12.788C45.4671 12.032 45.6818 11.4487 46.1111 11.038C46.5405 10.6273 47.1005 10.422 47.7911 10.422C48.4818 10.422 49.0418 10.6273 49.4711 11.038C49.9005 11.4487 50.1151 12.032 50.1151 12.788C50.1151 13.544 49.9005 14.1273 49.4711 14.538C49.0418 14.9487 48.4818 15.154 47.7911 15.154C47.1005 15.154 46.5405 14.9487 46.1111 14.538C45.6818 14.1273 45.4671 13.544 45.4671 12.788ZM47.7771 11.822C47.5625 11.822 47.3945 11.9013 47.2731 12.06C47.1611 12.2187 47.1051 12.4613 47.1051 12.788C47.1051 13.4227 47.3291 13.74 47.7771 13.74C47.9918 13.74 48.1598 13.6607 48.2811 13.502C48.4025 13.3433 48.4631 13.1053 48.4631 12.788C48.4631 12.4707 48.4025 12.2327 48.2811 12.074C48.1598 11.906 47.9918 11.822 47.7771 11.822Z" fill="#067647" />
                                                             </svg>
                                                             <span className="text-sm font-bold text-[#067647]">15%</span>
                                                         </div>
-                                                        <span className="text-sm font-[#1D2939]">
+                                                        <span className="text-sm text-[#1D2939]">
                                                             vs last month
                                                         </span>
                                                     </div>
                                                 </div>
                                                 <div className="w-full">
-                                                    <ResponsiveContainer width="100%" height="100%">
-                                                        <LineChart width={300} height={100} data={data}>
-                                                            <Line type="monotone" dataKey="pv" stroke="#8884d8" strokeWidth={2} />
-                                                        </LineChart>
+                                                    <ResponsiveContainer width="100%" height={100}>
+                                                        <AreaChart width={300} height={100} data={data}>
+                                                            <defs>
+                                                                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                                                                    <stop offset="5%" stopColor="#17B26A" stopOpacity={0.3} />
+                                                                    <stop offset="95%" stopColor="#17B26A" stopOpacity={0} />
+                                                                </linearGradient>
+                                                            </defs>
+                                                            <Area type="linear" dataKey="v" stroke="#17B26A" strokeWidth={3} fill="url(#colorUv)" dot={false} />
+                                                        </AreaChart>
                                                     </ResponsiveContainer>
                                                 </div>
                                             </div>
                                         </div>
-                                        {/* followers */}
-                                        <div className="py-6 px-6 rounded-xl bg-white space-y-2">
-                                            <div className="flex gap-6">
-                                                <div>
-                                                    <div className="text-sm font-medium">Wokpa ads</div>
-                                                </div>
-                                                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <g clip-path="url(#clip0_5552_61211)">
-                                                        <path d="M9.99984 13.3346V10.0013M9.99984 6.66797H10.0082M18.3332 10.0013C18.3332 14.6037 14.6022 18.3346 9.99984 18.3346C5.39746 18.3346 1.6665 14.6037 1.6665 10.0013C1.6665 5.39893 5.39746 1.66797 9.99984 1.66797C14.6022 1.66797 18.3332 5.39893 18.3332 10.0013Z" stroke="#D0D5DD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                    </g>
-                                                    <defs>
-                                                        <clipPath id="clip0_5552_61211">
-                                                            <rect width="20" height="20" fill="white" />
-                                                        </clipPath>
-                                                    </defs>
-                                                </svg>
+
+
+                                        <div className="">
+                                            <div className="text-sm">
+                                                New followers
                                             </div>
-                                            <div className="flex items-center">
-                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M7 20V5H7.5L16.5 19H17V4M4 10H20M4 14H20" stroke="#F9FAFB" stroke-width="2" />
-                                                </svg>
-                                                <div>
-                                                    <span className="text-2xl font-raleway font-bold">
-                                                        2M
-                                                    </span>
+                                            {/* total income */}
+                                            <div className="py-6 px-6 rounded-xl mt-3 bg-white space-y-10 h-[230px]">
+                                                <div className="flex">
+                                                    <div className="w-full">
+                                                        <ResponsiveContainer width={160} height={160}>
+                                                            <PieChart width={160} height={160}>
+                                                                <Pie data={[{ v: 60 }]} dataKey="v" innerRadius={6} fill="green" />
+                                                            </PieChart>
+                                                        </ResponsiveContainer>
+                                                    </div>
+                                                    <div className="flex-1 flex gap-4 py-1">
+
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="mt-4 flex justify-between items-center">
-                                                <div className="text-xs text-[#98A2B3]">All time</div>
-                                                <span className="text-sm font-medium bg-[#ECFDF3] py-1 pl-[8px] pr-[10px] rounded-full inline-flex items-center gap-1 font-inter text-[#027A48]">
-                                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M6 9.5V2.5M6 2.5L2.5 6M6 2.5L9.5 6" stroke="#12B76A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                    </svg>
-                                                    <span>7.2%</span>
-                                                </span>
 
                                             </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </Tab.Panel>
                             <Tab.Panel>
