@@ -14,6 +14,8 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import Image from "next/image"
+import { resetPodcast } from "@/redux/podcast";
+import { resetAnalytics } from "@/redux/analytics";
 
 const loginValidationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Email is required!'),
@@ -41,6 +43,9 @@ export default function Login() {
             setLoading(true);
             const response = await googleLogin(token);
             dispatch(resetAuth());
+            dispatch(resetPodcast());
+            dispatch(resetAnalytics());
+
             dispatch(authLogin({ token: response.data.data.token, user: response.data.data.user }));
             const profileResponse = await getProfile();
             dispatch(updateProfile({ profile: profileResponse.data.data }));

@@ -28,7 +28,7 @@ const podcastSlice = createSlice({
     name: "podcast",
     initialState,
     reducers: {
-        reset: () => {
+        resetPodcast: () => {
             return initialState;
         },
         // updatePodcasts: (state, action: PayloadAction<{ podcasts: PodcastModel[], currentPage: number, totalContent: number }>) => {
@@ -73,5 +73,5 @@ const podcastSlice = createSlice({
     },
 });
 
-export const { reset, pushPodcasts, refreshPodcasts } = podcastSlice.actions;
+export const { resetPodcast, pushPodcasts, refreshPodcasts } = podcastSlice.actions;
 export default podcastSlice.reducer;
