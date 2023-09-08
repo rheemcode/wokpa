@@ -18,7 +18,7 @@ import ReactPaginate from "react-paginate";
 import { refreshPodcasts } from "@/redux/podcast";
 
 
-const PodcastView = ({ params }: { params: { podcastId: string } }) => {
+const PodcastView = ({ params }: { params: { podcastId: string[] } }) => {
     const user = useAppSelector(state => state.auth.user);
     const dispatch = useAppDispatch();
 
@@ -44,7 +44,7 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
     const handleGetEpisodes = async (page?: number) => {
         try {
             console.log(page)
-            const response = await APICall(isArchive ? getEpisodesArchive : getPodcastEpisodes, [params.podcastId, page ? page : currentPage, 15]);
+            const response = await APICall(isArchive ? getEpisodesArchive : getPodcastEpisodes, [params.podcastId[0], page ? page : currentPage, 15]);
             setEpidoes(response.data.data.data);
             setTotalContent(response.data.data.total);
 
@@ -56,7 +56,7 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
 
     const handleGetPodcasts = async () => {
         try {
-            const podcastResponse = await APICall(getPodcastsById, params.podcastId);
+            const podcastResponse = await APICall(getPodcastsById, params.podcastId[0]);
             setPodcast(podcastResponse.data.data);
 
         } catch (error) {
@@ -68,8 +68,6 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
         setCurrentPage(++event.selected + 1);
         handleGetEpisodes((event.selected + 1))
     };
-
-
 
     const handleRedorder = (v: any) => {
         try {

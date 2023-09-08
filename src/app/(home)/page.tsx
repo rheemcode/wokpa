@@ -558,7 +558,7 @@ const Home = () => {
                                             </div>
 
 
-                                            <div className="relative -left-8 md:block flex justify-center w-full">
+                                            <div className="relative md:block flex justify-center w-full">
                                                 <div className="flex gap-1 ">
                                                     {
 
