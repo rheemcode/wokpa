@@ -15,7 +15,7 @@ import { useEffect } from "react";
 import { useEffectOnce } from "react-use";
 
 
-export default function ForgotPassword() {
+export default function VerifyEmail() {
     const params = useSearchParams();
     const router = useRouter();
 
