@@ -15,7 +15,7 @@ import Link from 'next/link';
 import ReactPaginate from 'react-paginate';
 import Modal from '@/components/modal';
 import { EpisodeModel } from '@/models/episode';
-import { EpisodeView } from '../podcast/podcast-view/[podcastId]/page';
+import { EpisodeView } from '../components/Episode';
 
 const GetPaidCard = () => {
     return (

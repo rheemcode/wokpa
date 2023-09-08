@@ -6,12 +6,12 @@ import { useAppSelector, useAppDispatch } from "@/hooks";
 import { Switch, Listbox, Tab } from "@headlessui/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { EpisodeView } from "../podcast-view/[podcastId]/page";
 import { EpisodeModel } from "@/models/episode";
 import { getArchivedEpisodes, getEpisodes, getEpisodesArchive, getPodcastEpisodes } from "@/app/api/publishers";
 import { APICall } from "@/utils";
 import ReactPaginate from "react-paginate";
 import router from "next/router";
+import { EpisodeView } from "../../components/Episode";
 
 
 const EpisodesPage = () => {
