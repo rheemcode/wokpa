@@ -10,7 +10,6 @@ import { EpisodeModel } from "@/models/episode";
 import { getArchivedEpisodes, getEpisodes, getEpisodesArchive, getPodcastEpisodes } from "@/app/api/publishers";
 import { APICall } from "@/utils";
 import ReactPaginate from "react-paginate";
-import router from "next/router";
 import { EpisodeView } from "../../components/Episode";
 
 
@@ -18,6 +17,7 @@ const EpisodesPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalContent, setTotalContent] = useState(0);
     const [isArchive, setIsArchive] = useState(false);
+    const router = useRouter()
 
     const refresh = useAppSelector(state => state.podcasts.refresh);
     const [episodes, setEpidoes] = useState<EpisodeModel[]>([]);

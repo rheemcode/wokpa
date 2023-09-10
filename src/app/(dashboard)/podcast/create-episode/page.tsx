@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { useFilePicker } from "use-file-picker";
 import * as Yup from "yup"
 import { useDropzone, Accept } from 'react-dropzone'
+import { useRouter } from "next/navigation";
 
 
 
@@ -25,7 +26,7 @@ const CreateEpisodePage = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [audioFile, setAudioFile] = useState<File | null>(null)
     const [podcasts, setPodcasts] = useState<PodcastModel[]>([]);
-
+    const router = useRouter();
 
 
     const handleGetPodcast = async () => {
@@ -63,6 +64,7 @@ const CreateEpisodePage = () => {
 
             const response = await uploadEpisode(selectedPodcast, data);
             toast(response.data.message, { type: "success" });
+            router.push("/episodes")
             setIsLoading(false);
 
         } catch (error: any) {

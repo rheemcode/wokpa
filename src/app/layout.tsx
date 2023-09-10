@@ -1,4 +1,5 @@
 'use client';
+import 'rsuite/dist/rsuite.min.css';
 import './globals.css'
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -53,7 +54,7 @@ function RootLayout({ children, ...rest }: PropsWithChildren) {
 
         <html lang="en" className={`${inter.variable} ${raleway.variable} ${poppins.variable}`} >
             <body className="" >
-                <main className="relative">
+                <main className="relative text-base">
                     <LoadingBar color='#36FFE8' ref={loadingBarRef as React.RefObject<LoadingBarRef>} height={5} />
                     {children}
                 </main>

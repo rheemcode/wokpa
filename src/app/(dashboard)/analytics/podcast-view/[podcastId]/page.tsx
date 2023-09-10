@@ -462,8 +462,7 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
                                                             <PieChart width={160} height={160}>
                                                                 <Pie data={[{ v: 60 }]} dataKey="v" innerRadius={6} fill="green" />
                                                             </PieChart>
-                                                        </ResponsiveContainer>
-                                                    </div>
+                                                        </ResponsiveContainer> </div>
                                                     <div className="flex-1 flex gap-4 py-1">
 
                                                     </div>

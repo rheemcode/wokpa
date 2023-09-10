@@ -7,8 +7,10 @@ import Input from "@/components/input";
 import { useAppSelector, useAppDispatch } from "@/hooks";
 import { PodcastCategoryModel } from "@/models/category";
 import { PodcastModel } from "@/models/podcast";
+import { APICall } from "@/utils";
 import { Switch } from "@headlessui/react";
 import { Formik, Form, ErrorMessage, Field } from "formik";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useFilePicker } from "use-file-picker";
@@ -22,6 +24,7 @@ const UpdatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
     const [enableTips, setEnableTips] = useState(false);
     const [isExplicit, setIsExplicit] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
+    const router = useRouter();
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("This field is required"),
@@ -54,7 +57,8 @@ const UpdatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                 explicit: isExplicit
             };
 
-            const response = await updatePodcast(params.podcastId[0], data);
+            const response = await APICall(updatePodcast, [params.podcastId[0], data], true);
+            router.push(`/podcast/archive/podcast-view/${params.podcastId[0]}`)
             toast(response.data.message, { type: "success" });
             setSubmitting(false);
 

@@ -21,6 +21,9 @@ import { AudioPlayer } from "@/utils/audio-player";
 import { updatePlaybackData } from "@/redux/player";
 import { useEffectOnce } from "react-use"
 import Slider from "react-input-slider"
+import { useRouter } from "next/navigation";
+import { Tag, } from 'rsuite';
+
 
 const ReplaceAudioTab = ({ episode }: { episode: EpisodeModel }) => {
     const user = useAppSelector(state => state.auth.user);
@@ -223,7 +226,9 @@ const EditPodcastPage = ({ params }: { params: { slug: string[] } }) => {
     const [scale, setScale] = useState(1);
     const [editedImage, setEditedImage] = useState<File | null>(null);
     const [editedImageURL, setEditedImageURL] = useState<string>("");
-    const [selectedFile, setSelectedFile] = useState<FileContent | null>(null);
+    const router = useRouter();
+    const [tags, setTags] = useState<string[]>([]);
+    const [inputValue, setInputValue] = useState('');
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("This field is required"),
@@ -265,6 +270,17 @@ const EditPodcastPage = ({ params }: { params: { slug: string[] } }) => {
     });
 
 
+    const removeTag = (tag: string) => {
+        const nextTags = tags.filter(item => item !== tag);
+        setTags(nextTags);
+    };
+
+    const addTag = () => {
+        const nextTags = inputValue ? [...tags, inputValue] : tags;
+        setTags(nextTags);
+        setInputValue('');
+    };
+
     useEffect(() => {
         (async () => {
             try {
@@ -289,7 +305,7 @@ const EditPodcastPage = ({ params }: { params: { slug: string[] } }) => {
 
             let data = {
                 ...values,
-                tags: (values.tags as string)?.split(","),
+                tags
             };
 
 
@@ -298,6 +314,8 @@ const EditPodcastPage = ({ params }: { params: { slug: string[] } }) => {
             }
 
             const response = await APICall(updateEpisode, [episode?.podcast_id, episode?.id, data], true);
+            router.push(`/podcast-view/${params.slug[0]}`)
+
             setSubmitting(false);
 
         } catch (error: any) {
@@ -620,8 +638,35 @@ const EditPodcastPage = ({ params }: { params: { slug: string[] } }) => {
                                                                 Tags
                                                             </label>
 
-                                                            <Field type="text" name="tags" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
-                                                            <ErrorMessage name="tags" component={"div"} className="text-red-600 text-sm text-left" />
+                                                            <div className="p-3 rounded-lg border border-gray-500 bg-white">
+                                                                <div className="flex items-center gap-1 flex-wrap w-full">
+                                                                    {
+                                                                        tags.map((item, index) => (
+                                                                            <Tag
+                                                                                color="cyan"
+                                                                                className="!ml-0 !border text-dark font-inter text-sm font-medium !border-[#D0D5DD] !bg-white" key={index}
+                                                                                closable
+                                                                                onClose={() => removeTag(item)}>
+                                                                                {item}
+                                                                            </Tag>
+                                                                        ))
+                                                                    }
+                                                                    <input type="text"
+                                                                        value={inputValue}
+                                                                        onChange={(e) => {
+                                                                            if (e.target.value && e.target.value.includes(',')) {
+                                                                                addTag()
+                                                                                setInputValue("");
+                                                                                return;
+                                                                            }
+                                                                            setInputValue(e.target.value);
+                                                                        }}
+                                                                        onBlur={addTag}
+                                                                        className="!focus:outline-none f!ocus:border-none bg-transparent p-0 text-[#101828] placeholder:text-[#101828] outline-0 border-0 md:w-[400px]"
+                                                                        placeholder="Add a tag by adding a comma at the end of each word" />
+                                                                </div>
+                                                            </div>
+
                                                             <div className="text-xs text-[#D0D5DD] mt-1">
                                                                 Max 20 tags (30 chars per tag limit)
                                                             </div>
@@ -675,7 +720,45 @@ const EditPodcastPage = ({ params }: { params: { slug: string[] } }) => {
                                                     </div>
                                                 </div>
                                                 {Object.values(errors).map((e) => e)}
-                                                <div className="text-right">
+                                                <div className="text-right space-x-4">
+                                                    <Button type="submit" className="!text-sm  !from-trasparent !to-transparent !text-[#063150] font-semibold">
+                                                        {
+                                                            isSubmitting ?
+                                                                <svg className="w-5 h-5" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                                    viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
+                                                                    <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                                                                        <animateTransform
+                                                                            attributeName="transform"
+                                                                            attributeType="XML"
+                                                                            type="rotate"
+                                                                            dur="1s"
+                                                                            from="0 50 50"
+                                                                            to="360 50 50"
+                                                                            repeatCount="indefinite" />
+                                                                    </path>
+                                                                </svg> : "Create new Podcast"
+                                                        }
+
+                                                    </Button>
+                                                    <Button type="submit" className="!text-sm !from-white !to-white !text-[#063150] font-semibold">
+                                                        {
+                                                            isSubmitting ?
+                                                                <svg className="w-5 h-5" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                                    viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
+                                                                    <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                                                                        <animateTransform
+                                                                            attributeName="transform"
+                                                                            attributeType="XML"
+                                                                            type="rotate"
+                                                                            dur="1s"
+                                                                            from="0 50 50"
+                                                                            to="360 50 50"
+                                                                            repeatCount="indefinite" />
+                                                                    </path>
+                                                                </svg> : "Save as draft"
+                                                        }
+
+                                                    </Button>
                                                     <Button type="submit" className="!text-sm">
                                                         {
                                                             isSubmitting ?

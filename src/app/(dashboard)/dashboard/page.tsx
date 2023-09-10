@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Button from '@/components/button';
 import { useAppSelector, useAppDispatch } from '@/hooks';
 import { useEffect, useState, } from 'react';
-import { Listbox, Tab } from '@headlessui/react';
+import { Listbox, Popover, Tab } from '@headlessui/react';
 import { PodcastModel } from '@/models/podcast';
 import { archivePodcast, getArchivedEpisodes, getEpisodes, getPodcastArchive, getPodcasts, removeArchivePodcasts } from '@/app/api/publishers';
 import moment from "moment"
@@ -16,6 +16,7 @@ import ReactPaginate from 'react-paginate';
 import Modal from '@/components/modal';
 import { EpisodeModel } from '@/models/episode';
 import { EpisodeView } from '../components/Episode';
+import { usePopper } from 'react-popper';
 
 const GetPaidCard = () => {
     return (
@@ -90,6 +91,10 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel, isAr
     const [loading, setLoading] = useState(false);
     const [selectedPodcast, setSelectedPodcast] = useState<PodcastModel | null>(null);
     const [showArchiveModal, setShowArchiveModal] = useState(false);
+    let [referenceElement, setReferenceElement] = useState<any>()
+    let [popperElement, setPopperElement] = useState<any>()
+    let { styles, attributes } = usePopper(referenceElement, popperElement);
+
     const dispatch = useAppDispatch();
 
     const handleArchive = async () => {
@@ -286,9 +291,49 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel, isAr
                         <div className="relative" onClick={() => isArchive ? navigate.push(`/podcast/archive/podcast-view/${podcast.id}`) : navigate.push(`/podcast/podcast-view/${podcast.id}`)}>
                             <img className="w-[240px] h-[240px] rounded-xl" src={podcast.picture_url} alt="" />
                             <div className="absolute top-0 p-2">
-                                <div className="text-[8px] text-[#0D0D0D] font-semibold bg-white rounded-full py-2 px-4">
+                                <div className="text-[8px] text-[#0D0D0D] font-semibold bg-white rounded-full py-[6px] px-3">
                                     {podcast.episode_count} Episodes
                                 </div>
+                            </div>
+                            <div className="absolute bottom-0 right-12 p-2">
+                                <Popover as={"div"} className="relative">
+                                    <Popover.Button ref={setReferenceElement} className="">
+                                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="28" width="28" height="28" rx="14" transform="rotate(90 28 0)" fill="white" />
+                                            <path d="M18 14C18 15.1 18.9 16 20 16C21.1 16 22 15.1 22 14C22 12.9 21.1 12 20 12C18.9 12 18 12.9 18 14ZM16 14C16 12.9 15.1 12 14 12C12.9 12 12 12.9 12 14C12 15.1 12.9 16 14 16C15.1 16 16 15.1 16 14ZM10 14C10 12.9 9.1 12 8 12C6.9 12 6 12.9 6 14C6 15.1 6.9 16 8 16C9.1 16 10 15.1 10 14Z" fill="#344054" />
+                                        </svg>
+                                    </Popover.Button>
+                                    <Popover.Panel
+                                        ref={setPopperElement}
+                                        style={styles.popper}
+                                        {...attributes.popper}
+                                        className="absolute mt-4 w-[164px] overflow-auto bg-[#141414] rounded-lg text-sm font-medium drop-shadow-[0px_3px_5px_rgba(255,255,255,0.1)] z-20">
+                                        <div className="p-2">
+
+                                            <div className={``}>
+                                                <Link className="block py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] cursor-pointer " href={`/podcast/archive/podcast-view/${podcast.id}`}>
+
+                                                    View
+                                                </Link>
+                                            </div>
+                                            <div >
+                                                <Link className="block py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] cursor-pointer " href={`/podcast/edit-podcast/${podcast.id}`}>
+                                                    Edit
+                                                </Link>
+                                            </div>
+                                            <div onClick={() => setShowArchiveModal(true)} className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] cursor-pointer `}>
+                                                Archive
+                                            </div>
+                                            <div className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] cursor-pointer `}>
+                                                Share
+                                            </div>
+                                        </div>
+
+
+                                    </Popover.Panel>
+                                </Popover>
+
+
                             </div>
                         </div>
                         <div className="mt-2">

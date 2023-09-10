@@ -6,11 +6,17 @@ body {
     margin: 0;
     text-align: left !important;
     color: #F9FAFB;
+    font-family: var(--font-poppins) !important;
     /* overflow-x: hidden; */
     -webkit-font-smoothing: subpixel-antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
+
+a:hover {
+    color: #F9FAFB;
+    text-decoration: none;
+}
 
 *::-webkit-scrollbar {
     width: 1px;
