@@ -359,7 +359,7 @@ export const EpisodeTableItem: React.FC<{ episode: EpisodeModel, isArchive: bool
                                         setSelectedEpisode(episode)
                                         setShowArchiveModal(true)
                                     }} className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] cursor-pointer `}>
-                                        Archive
+                                        {isArchive ? "Unarchive" : "Archive"}
                                     </div>
                                 </div>
 

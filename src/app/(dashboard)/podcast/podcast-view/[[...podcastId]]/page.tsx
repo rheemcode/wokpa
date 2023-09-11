@@ -1,6 +1,6 @@
 "use client";
 
-import { archiveEpisode, getEpisodesArchive, getPodcastEpisodes, getPodcastsById, removeArchiveEpisode } from "@/app/api/publishers";
+import { archiveEpisode, getArchivePodcastsById, getEpisodesArchive, getPodcastEpisodes, getPodcastsById, removeArchiveEpisode } from "@/app/api/publishers";
 import Button from "@/components/button";
 import Input from "@/components/input";
 import Modal from "@/components/modal";
@@ -20,6 +20,7 @@ import { EpisodeView } from "@/app/(dashboard)/components/Episode";
 
 const PodcastView = ({ params }: { params: { podcastId: string } }) => {
     const user = useAppSelector(state => state.auth.user);
+    const refresh = useAppSelector(state => state.podcasts.refresh)
     const dispatch = useAppDispatch();
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -44,7 +45,7 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
 
     const handleGetPodcasts = async () => {
         try {
-            const podcastResponse = await APICall(getPodcastsById, params.podcastId);
+            const podcastResponse = await APICall(isArchive ? getArchivePodcastsById : getPodcastsById, params.podcastId);
             setPodcast(podcastResponse.data.data);
 
         } catch (error) {
@@ -60,7 +61,7 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
 
     useEffect(() => {
         handleGetEpisodes(1)
-    }, [isArchive]);
+    }, [isArchive, refresh]);
 
     useEffectOnce(() => {
         handleGetPodcasts();
