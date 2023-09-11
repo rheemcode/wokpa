@@ -26,7 +26,6 @@ import { Tag, } from 'rsuite';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 
-
 const ReplaceAudioTab = ({ episode }: { episode: EpisodeModel }) => {
     const user = useAppSelector(state => state.auth.user);
     const dispatch = useAppDispatch();
@@ -316,7 +315,7 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
             }
 
             const response = await APICall(updateEpisode, [episode?.podcast_id, episode?.id, data], true);
-            router.push(`/podcast/podcast-view/${params.episodeId[0]}`)
+            router.push(`/podcast-view/${params.episodeId[0]}`)
 
             setSubmitting(false);
 
@@ -498,9 +497,11 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
                                                                         </svg>
                                                                     </div>
                                                                     <div className="text-[#063150] text-[14px] font-semibold font-inter cursor-pointer">
-                                                                        <CopyToClipboard text={episode.content_url}
+                                                                        <CopyToClipboard text={episode?.content_url}
                                                                             onCopy={() => toast("Link copied!", { type: "success" })}>
-                                                                            Copy
+                                                                            <button>
+                                                                                Copy
+                                                                            </button>
                                                                         </CopyToClipboard>
                                                                     </div>
                                                                 </div>
