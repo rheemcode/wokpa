@@ -2,7 +2,7 @@ import { loadingBarRef } from '@/app/layout';
 import { PlaybackData } from '@/models/playback';
 import { Howl, Howler } from 'howler';
 
-function formatTime(seconds: number) {
+export function formatTime(seconds: number) {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
     const s = Math.round(seconds % 60);
