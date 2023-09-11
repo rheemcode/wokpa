@@ -1,5 +1,6 @@
 "use client";
 
+import { Tag } from "@/app/(dashboard)/components/Tag";
 import { getPodcastCategories } from "@/app/api/general";
 import { createPodcast, getArchivePodcastsById, getPodcastsById, updatePodcast } from "@/app/api/publishers";
 import Button from "@/components/button";
@@ -14,7 +15,6 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useFilePicker } from "use-file-picker";
-import { Tag, } from 'rsuite';
 import * as Yup from "yup";
 
 const UpdatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
@@ -371,9 +371,7 @@ const UpdatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                                         {
                                                             tags.map((item, index) => (
                                                                 <Tag
-                                                                    color="cyan"
-                                                                    className="!ml-0 !bg-gray-600" key={index}
-                                                                    closable
+                                                                    key={index}
                                                                     onClose={() => removeTag(item)}>
                                                                     {item}
                                                                 </Tag>

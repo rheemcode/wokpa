@@ -22,8 +22,9 @@ import { updatePlaybackData } from "@/redux/player";
 import { useEffectOnce } from "react-use"
 import Slider from "react-input-slider"
 import { useRouter } from "next/navigation";
-import { Tag, } from 'rsuite';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Tag } from "@/app/(dashboard)/components/Tag";
+import Link from "next/link";
 
 
 const ReplaceAudioTab = ({ episode }: { episode: EpisodeModel }) => {
@@ -178,10 +179,16 @@ const EpisodePlayer = ({ episode }: { episode: EpisodeModel }) => {
     return (
         <div className="rounded-lg border py-4 px-6 flex items-center gap-4">
             <button onClick={handlePlay}>
-                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20.0002 36.6663C29.2049 36.6663 36.6668 29.2044 36.6668 19.9997C36.6668 10.7949 29.2049 3.33301 20.0002 3.33301C10.7954 3.33301 3.3335 10.7949 3.3335 19.9997C3.3335 29.2044 10.7954 36.6663 20.0002 36.6663Z" stroke="#F2F4F7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M15.8335 14.9419C15.8335 14.1464 15.8335 13.7487 15.9997 13.5266C16.1446 13.3331 16.3664 13.2121 16.6075 13.1948C16.8841 13.1751 17.2187 13.3902 17.8878 13.8203L25.7555 18.8781C26.3361 19.2514 26.6265 19.438 26.7267 19.6753C26.8144 19.8827 26.8144 20.1167 26.7267 20.324C26.6265 20.5613 26.3361 20.748 25.7555 21.1212L17.8878 26.179C17.2187 26.6092 16.8841 26.8243 16.6075 26.8045C16.3664 26.7873 16.1446 26.6662 15.9997 26.4727C15.8335 26.2507 15.8335 25.8529 15.8335 25.0575V14.9419Z" stroke="#F2F4F7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+                {
+                    playbackData.playing ? <svg width="40" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12.666 20.0001V12.0001M19.3327 20.0001V12.0001M29.3327 16.0001C29.3327 23.3639 23.3631 29.3334 15.9993 29.3334C8.63555 29.3334 2.66602 23.3639 2.66602 16.0001C2.66602 8.63628 8.63555 2.66675 15.9993 2.66675C23.3631 2.66675 29.3327 8.63628 29.3327 16.0001Z" stroke="#E5F5F4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg> : <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20.0002 36.6663C29.2049 36.6663 36.6668 29.2044 36.6668 19.9997C36.6668 10.7949 29.2049 3.33301 20.0002 3.33301C10.7954 3.33301 3.3335 10.7949 3.3335 19.9997C3.3335 29.2044 10.7954 36.6663 20.0002 36.6663Z" stroke="#F2F4F7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M15.8335 14.9419C15.8335 14.1464 15.8335 13.7487 15.9997 13.5266C16.1446 13.3331 16.3664 13.2121 16.6075 13.1948C16.8841 13.1751 17.2187 13.3902 17.8878 13.8203L25.7555 18.8781C26.3361 19.2514 26.6265 19.438 26.7267 19.6753C26.8144 19.8827 26.8144 20.1167 26.7267 20.324C26.6265 20.5613 26.3361 20.748 25.7555 21.1212L17.8878 26.179C17.2187 26.6092 16.8841 26.8243 16.6075 26.8045C16.3664 26.7873 16.1446 26.6662 15.9997 26.4727C15.8335 26.2507 15.8335 25.8529 15.8335 25.0575V14.9419Z" stroke="#F2F4F7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+
+                }
+
             </button>
             <div className="space-y-4 flex-1">
 
@@ -651,9 +658,7 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
                                                                     {
                                                                         tags.map((item, index) => (
                                                                             <Tag
-                                                                                color="cyan"
-                                                                                className="!ml-0 !border text-dark font-inter text-sm font-medium !border-[#D0D5DD] !bg-white" key={index}
-                                                                                closable
+                                                                                key={index}
                                                                                 onClose={() => removeTag(item)}>
                                                                                 {item}
                                                                             </Tag>
@@ -729,25 +734,11 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
                                                 </div>
                                                 {Object.values(errors).map((e) => e)}
                                                 <div className="text-right space-x-4">
-                                                    <Button type="submit" className="!text-sm  !from-trasparent !to-transparent !text-[#063150] font-semibold">
-                                                        {
-                                                            isSubmitting ?
-                                                                <svg className="w-5 h-5" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                                                    viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
-                                                                    <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
-                                                                        <animateTransform
-                                                                            attributeName="transform"
-                                                                            attributeType="XML"
-                                                                            type="rotate"
-                                                                            dur="1s"
-                                                                            from="0 50 50"
-                                                                            to="360 50 50"
-                                                                            repeatCount="indefinite" />
-                                                                    </path>
-                                                                </svg> : "Create new Podcast"
-                                                        }
-
-                                                    </Button>
+                                                    <Link href="/podcast/create-podcast">
+                                                        <Button type="button" className="!text-sm  !from-transparent !to-transparent !text-white border font-semibold">
+                                                            Create new Podcast
+                                                        </Button>
+                                                    </Link>
                                                     <Button type="submit" className="!text-sm !from-white !to-white !text-[#063150] font-semibold">
                                                         {
                                                             isSubmitting ?

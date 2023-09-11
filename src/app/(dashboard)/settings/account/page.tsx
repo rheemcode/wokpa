@@ -1,5 +1,6 @@
 "use client";
 
+import { changePassword } from "@/app/api/auth";
 import { getProfile, getPublisherCategories } from "@/app/api/general";
 import { udpateUserProfile, updateWebsiteSettings } from "@/app/api/publishers";
 import Button from "@/components/button";
@@ -24,7 +25,7 @@ import * as Yup from "yup"
 addPhoneMethod();
 const passwordRules = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}$/;
 
-const signupValidationSchema = Yup.object().shape({
+const schema = Yup.object().shape({
     first_name: Yup.string()
         .min(2, 'First name is too short!')
         .max(35, 'First name is too Long!')
@@ -48,6 +49,19 @@ const signupValidationSchema = Yup.object().shape({
     company_name: Yup.string(),
     terms: Yup.boolean().isTrue("Accept Terms & Conditions to continue registration")
 });
+
+
+const passwordSchema = Yup.object().shape({
+    current_password: Yup.string()
+        .required("Password is required"),
+    password: Yup.string()
+        .matches(passwordRules, { message: "Please create a stronger password!" })
+        .required("Password is required"),
+    password_confirmation: Yup.string()
+        .oneOf([Yup.ref('password')], 'Passwords must match!')
+        .required("Confirm password is required!"),
+});
+
 
 
 
@@ -98,6 +112,17 @@ const ProfileSettings = () => {
             const response = await APICall(udpateUserProfile, [values], true);
             const profileResponse = await getProfile();
             dispatch(updateProfile({ profile: profileResponse.data.data }));
+            setSubmitting(false);
+        } catch (error: any) {
+
+            setSubmitting(false);
+        }
+    }
+
+    const handleChangePassword = async (values: any, setSubmitting: (val: boolean) => void) => {
+        try {
+            setSubmitting(true);
+            const response = await APICall(changePassword, [values], true);
             setSubmitting(false);
         } catch (error: any) {
 
@@ -184,7 +209,7 @@ const ProfileSettings = () => {
                             company_name: profile?.company_name,
 
                         }}
-                        validationSchema={signupValidationSchema}
+                        validationSchema={schema}
                         onSubmit={(values, { setSubmitting }) => {
                             handleSubmit(values, setSubmitting)
                         }}
@@ -316,6 +341,114 @@ const ProfileSettings = () => {
                             </div>
                         </div>
                     </div>
+                </div>
+
+            </div>
+
+
+            <div className="mt-8">
+
+                <div className="pr-5 mt-8">
+                    <div className={`font-bold text-xl pb-2`}>
+                        Change Password
+                    </div>
+                    <div>
+                        <p className="text-sm">
+                            Manage and update you profile pic and personal details. These will be displayed in your host profile page
+                        </p>
+                    </div>
+                </div>
+
+
+                <div className="flex gap-6">
+                    <div className="w-[65%]">
+
+                        <Formik
+                            initialValues={{
+                                current_password: "",
+                                password: "",
+                                password_confirmation: ""
+
+                            }}
+                            validationSchema={passwordSchema}
+                            onSubmit={(values, { setSubmitting }) => {
+                                handleChangePassword(values, setSubmitting)
+                            }}
+                        >
+                            {({ isSubmitting, values, handleChange, handleBlur, setFieldValue }) => (
+                                <Form>
+                                    <div className="mt-6">
+                                        <div className="space-y-5">
+                                            <div className="flex md:flex-row flex-col gap-4">
+                                                <div className="flex-1">
+                                                    <label htmlFor="current_password" className="text-sm">
+                                                        Current Password *
+                                                    </label>
+                                                    <PasswordInput name="current_password" placeholder="Enter your password"
+                                                        value={values.current_password}
+                                                        onChange={(e: any) => handleChange(e)}
+                                                        onBlur={handleBlur}
+                                                    />
+                                                    <ErrorMessage name="current_password" component={"div"} className="text-red-600 text-sm text-left" />
+                                                </div>
+
+                                            </div>
+                                            <div className="flex md:flex-row flex-col gap-4">
+                                                <div className="flex-1">
+                                                    <label htmlFor="password" className="text-sm">
+                                                        Password *
+                                                    </label>
+                                                    <PasswordInput name="password" placeholder="Create a password"
+                                                        value={values.password}
+                                                        onChange={(e: any) => handleChange(e)}
+                                                        onBlur={handleBlur}
+                                                    />
+                                                    <ErrorMessage name="password" component={"div"} className="text-red-600 text-sm text-left" />
+                                                </div>
+
+                                            </div>
+                                            <div className="flex md:flex-row flex-col gap-4">
+                                                <div className="flex-1">
+                                                    <label htmlFor="password" className="text-sm">
+                                                        Confirm Password *
+                                                    </label>
+                                                    <PasswordInput name="password_confirmation" placeholder="Re-enter password"
+                                                        value={values.password_confirmation}
+                                                        onChange={(e: any) => handleChange(e)}
+                                                        onBlur={handleBlur}
+                                                    />
+                                                    <ErrorMessage name="password_confirmation" component={"div"} className="text-red-600 text-sm text-left" />
+                                                </div>
+                                            </div>
+
+                                            <div className="space-x-4">
+                                                <Button type="submit" className="text-center font-semibold !py-[10px] !px-[18px]">
+                                                    {
+                                                        isSubmitting ?
+                                                            <svg className="w-5 h-5 inline" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                                viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
+                                                                <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                                                                    <animateTransform
+                                                                        attributeName="transform"
+                                                                        attributeType="XML"
+                                                                        type="rotate"
+                                                                        dur="1s"
+                                                                        from="0 50 50"
+                                                                        to="360 50 50"
+                                                                        repeatCount="indefinite" />
+                                                                </path>
+                                                            </svg> : "Save changes"
+                                                    }
+                                                </Button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </Form>
+                            )}
+                        </Formik>
+                    </div>
+
                 </div>
 
             </div>

@@ -1,5 +1,6 @@
 'use client';
-import 'rsuite/dist/rsuite.min.css';
+// import 'rsuite/dist/rsuite.min.css';
+import 'react-tooltip/dist/react-tooltip.css'
 import './globals.css'
 import 'swiper/css';
 import 'swiper/css/pagination';

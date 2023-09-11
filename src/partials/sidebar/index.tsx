@@ -6,7 +6,7 @@ import { Disclosure, Transition } from "@headlessui/react";
 import { PropsWithChildren } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-
+import { Tooltip } from 'react-tooltip'
 interface NavLinkProps extends PropsWithChildren {
     href: string;
     exact: boolean;
@@ -93,13 +93,16 @@ const Sidebar = () => {
                                 </div>
 
                                 <div className="flex-1">
-                                    <Disclosure>
+                                    <Disclosure defaultOpen>
 
                                         <Disclosure.Button className="w-full outline-none">
                                             <div className="flex justify-between items-center font-medium">
-                                                <div className="text-xs text-left">
-                                                    {user?.first_name}'s Podcast
-                                                </div>
+                                                <a className="name text-xs text-left">
+                                                    {(user?.first_name + " " + user?.last_name).slice(0, 20)} {(user?.first_name + " " + user?.last_name).length > 20 && "..."}
+                                                </a>
+                                                <Tooltip anchorSelect=".name" place="bottom">
+                                                    {user?.first_name} {user?.last_name}
+                                                </Tooltip>
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                                                 </svg>

@@ -83,8 +83,8 @@ export const EpisodeItem: React.FC<{ mode: "list" | "card", episode: EpisodeMode
             {
                 mode == "list" ?
                     <div className="flex items-center gap-4">
-                        <div className='cursor-pointer'>
-                            <img className="w-[120px] h-[120px] rounded-lg" src={episode.picture_url} alt="" />
+                        <div className='cursor-pointer w-[120px] h-[120px]'>
+                            <img className="w-[120px] h-[120px] object-cover rounded-lg" src={episode.picture_url} alt="" />
                         </div>
                         <div className="w-full flex justify-between items-center py-6">
                             <div className="flex gap-4">

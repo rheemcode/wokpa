@@ -13,9 +13,9 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useFilePicker } from "use-file-picker";
 import * as Yup from "yup";
-import { Tag, } from 'rsuite';
 import { useRouter } from "next/navigation";
 import Link from 'next/link';
+import { Tag } from "@/app/(dashboard)/components/Tag";
 
 const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
     const user = useAppSelector(state => state.auth.user);
@@ -118,7 +118,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
             <div className="relative">
                 <div className="flex gap-3 items-center">
                     <div className="text-sm font-medium">
-                        <Link href="/Dashboard">
+                        <Link href="/dashboard">
                             Dashboard
                         </Link>
                     </div>
@@ -359,9 +359,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                                             {
                                                                 tags.map((item, index) => (
                                                                     <Tag
-                                                                        color="cyan"
-                                                                        className="!ml-0 !bg-gray-600" key={index}
-                                                                        closable
+                                                                        key={index}
                                                                         onClose={() => removeTag(item)}>
                                                                         {item}
                                                                     </Tag>
@@ -637,9 +635,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                                             {
                                                                 tags.map((item, index) => (
                                                                     <Tag
-                                                                        color="cyan"
-                                                                        className="!ml-0 !bg-gray-600" key={index}
-                                                                        closable
+                                                                        key={index}
                                                                         onClose={() => removeTag(item)}>
                                                                         {item}
                                                                     </Tag>

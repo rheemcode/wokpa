@@ -28,6 +28,7 @@ const EpisodesPage = () => {
             console.log(page)
             const response = await APICall(isArchive ? getArchivedEpisodes : getEpisodes, [page ? page : currentPage, 15]);
             setEpidoes(response.data.data.data);
+            console.log(response.data.data.total)
             setTotalContent(response.data.data.total);
 
         } catch (error) {
@@ -107,7 +108,7 @@ const EpisodesPage = () => {
                                     }} />
                                 <div>
                                     <div className="py-5 px-4 mt-6">
-                                        <ReactPaginate
+                                         <ReactPaginate
                                             breakLabel="..."
                                             containerClassName='flex items-center justify-between'
                                             nextClassName='flex-1 flex justify-end'
