@@ -185,7 +185,7 @@ const EpisodePlayer = ({ episode }: { episode: EpisodeModel }) => {
             <div className="space-y-4 flex-1">
 
                 <div className="font-bold">
-                    {episode.title.substring(0, 30)}... <span className="ml-4 text-xs font-normal">{playbackData.playtime}/{playbackData.duration}</span>
+                    {episode?.title?.substring(0, 30)}... <span className="ml-4 text-xs font-normal">{playbackData.playtime}/{playbackData.duration}</span>
                 </div>
 
                 <Slider
