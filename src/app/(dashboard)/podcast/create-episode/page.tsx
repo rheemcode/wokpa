@@ -65,7 +65,7 @@ const CreateEpisodePage = () => {
 
             const response = await uploadEpisode(selectedPodcast, data);
             toast(response.data.message, { type: "success" });
-            router.push("/episodes")
+            router.push("/podcast/episodes")
             setIsLoading(false);
 
         } catch (error: any) {
