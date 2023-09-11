@@ -13,6 +13,14 @@ export function formatTime(seconds: number) {
     ].filter(Boolean).join(':');
 }
 
+export function formatTimeW(seconds: number) {
+    const h = Math.floor(seconds / 3600) ? `${Math.floor(seconds / 3600)}h` : "";
+    const m = Math.floor((seconds % 3600) / 60) ? `${Math.floor((seconds % 3600) / 60)}min` : ""
+    const s = Math.round(seconds % 60) ? `${Math.round(seconds % 60)}sec` : "";
+
+    return `${h} ${m} ${s}`
+}
+
 export class AudioPlayer {
     static player: Howl;
     static radioPlayer: Howl;
@@ -132,7 +140,7 @@ export class AudioPlayer {
                 AudioPlayer._playing = false;
                 AudioPlayer.paused = false;
                 AudioPlayer.loaded = false;
-                
+
                 AudioPlayer?.onEndFn();
             },
             onpause: () => {
