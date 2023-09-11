@@ -377,7 +377,7 @@ const WalletPage = () => {
                                 <label htmlFor="name" className="text-sm">
                                     Account Number
                                 </label>
-                                <input value={virtualAccount?.number} className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                <input readOnly value={virtualAccount?.number} className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
 
                             </div>
 
@@ -385,7 +385,7 @@ const WalletPage = () => {
                                 <label htmlFor="name" className="text-sm">
                                     Bank Name
                                 </label>
-                                <input value={virtualAccount?.bank} className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                <input readOnly value={virtualAccount?.bank} className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
 
 
                             </div>
@@ -394,7 +394,7 @@ const WalletPage = () => {
                                 <label htmlFor="name" className="text-sm">
                                     Account Name
                                 </label>
-                                <input value={virtualAccount?.name} className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                <input readOnly value={virtualAccount?.name} className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
 
 
                             </div>
