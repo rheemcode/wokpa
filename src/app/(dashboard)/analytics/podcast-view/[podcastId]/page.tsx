@@ -392,7 +392,7 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
                                             <div className="flex items-center">
                                                 <div>
                                                     <span className="text-2xl font-raleway font-bold">
-                                                        100k
+                                                        0
                                                     </span>
                                                 </div>
                                             </div>

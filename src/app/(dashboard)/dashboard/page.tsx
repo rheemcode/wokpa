@@ -313,7 +313,7 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel, isAr
                                         <div className="p-2">
 
                                             <div className={``}>
-                                                <Link className="block py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] cursor-pointer " href={`/podcast/archive/podcast-view/${podcast.id}`}>
+                                                <Link className="block py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] cursor-pointer " href={isArchive ? `/podcast/archive/podcast-view/${podcast.id}` : `/podcast/podcast-view/${podcast.id}`}>
 
                                                     View
                                                 </Link>

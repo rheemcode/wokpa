@@ -16,6 +16,7 @@ import { useFilePicker } from "use-file-picker";
 import * as Yup from "yup"
 import { useDropzone, Accept } from 'react-dropzone'
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 
 
@@ -82,7 +83,9 @@ const CreateEpisodePage = () => {
             <div className="relative">
                 <div className="flex gap-3 items-center">
                     <div className="text-sm font-medium">
-                        Dashboard
+                        <Link href="/dashboard">
+                            Dashboard
+                        </Link>
                     </div>
                     <div>
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

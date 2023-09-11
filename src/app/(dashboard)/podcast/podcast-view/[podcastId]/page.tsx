@@ -171,7 +171,7 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
                                                 ₦
                                             </div>
                                             <div>
-                                                100k
+                                                0
                                             </div>
                                         </div>
                                     </div>

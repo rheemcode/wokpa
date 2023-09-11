@@ -11,6 +11,7 @@ import { getArchivedEpisodes, getEpisodes, getEpisodesArchive, getPodcastEpisode
 import { APICall } from "@/utils";
 import ReactPaginate from "react-paginate";
 import { EpisodeView } from "../../components/Episode";
+import Link from "next/link";
 
 
 const EpisodesPage = () => {
@@ -54,15 +55,9 @@ const EpisodesPage = () => {
             <div className="relative">
                 <div className="flex gap-3 items-center">
                     <div className="text-sm font-medium">
-                        All Podcasts
-                    </div>
-                    <div>
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 12L10 8L6 4" stroke="#D0D5DD" strokeWidth="1.33333" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </div>
-                    <div className="text-sm font-medium">
-                        Emax podcast
+                        <Link href={"/dashboard"}>
+                            All Podcasts
+                        </Link>
                     </div>
                     <div>
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
