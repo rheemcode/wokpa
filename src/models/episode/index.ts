@@ -15,6 +15,7 @@ export interface EpisodeModel {
     season: string;
     status: string;
     title: string;
+    duration: number;
     transcript_type: string;
     transcript_url: string;
     updated_at: string;

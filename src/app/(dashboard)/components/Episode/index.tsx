@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks";
 import { EpisodeModel } from "@/models/episode";
 import { refreshPodcasts } from "@/redux/podcast";
 import { APICall } from "@/utils";
+import { formatTimeW } from "@/utils/audio-player";
 import { Listbox, Popover } from "@headlessui/react";
 import moment from "moment";
 import Link from "next/link";
@@ -322,7 +323,7 @@ export const EpisodeTableItem: React.FC<{ episode: EpisodeModel, isArchive: bool
             </td>
             <td className="py-4 border-b pl-6 text-xs border-t border-[#667085] ">
                 <div className="">
-                    {"0.00"}
+                    {formatTimeW(episode.duration)}
                 </div>
             </td>
 

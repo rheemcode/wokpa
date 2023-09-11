@@ -23,6 +23,8 @@ import { useEffectOnce } from "react-use"
 import Slider from "react-input-slider"
 import { useRouter } from "next/navigation";
 import { Tag, } from 'rsuite';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+
 
 
 const ReplaceAudioTab = ({ episode }: { episode: EpisodeModel }) => {
@@ -314,7 +316,7 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
             }
 
             const response = await APICall(updateEpisode, [episode?.podcast_id, episode?.id, data], true);
-            router.push(`/podcast-view/${params.episodeId[0]}`)
+            router.push(`/podcast/podcast-view/${params.episodeId[0]}`)
 
             setSubmitting(false);
 
@@ -495,7 +497,12 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
                                                                             </defs>
                                                                         </svg>
                                                                     </div>
-                                                                    <div className="text-[#063150] text-[14px] font-semibold font-inter">Copy</div>
+                                                                    <div className="text-[#063150] text-[14px] font-semibold font-inter cursor-pointer">
+                                                                        <CopyToClipboard text={episode.content_url}
+                                                                            onCopy={() => toast("Link copied!", { type: "success" })}>
+                                                                            Copy
+                                                                        </CopyToClipboard>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
