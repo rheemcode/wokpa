@@ -24,7 +24,7 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
 
     const [currentPage, setCurrentPage] = useState(1);
     const [totalContent, setTotalContent] = useState(0);
-    const [isArchive, setIsArchive] = useState(false);
+    const [isArchive, setIsArchive] = useState(params.podcastId[1] ? true : false);
 
     const [podcast, setPodcast] = useState<PodcastModel | null>(null);
     const [episodes, setEpidoes] = useState<EpisodeModel[]>([]);

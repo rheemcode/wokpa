@@ -351,10 +351,10 @@ export const EpisodeTableItem: React.FC<{ episode: EpisodeModel, isArchive: bool
                                 <div className="p-2">
 
                                     <div className={``}>
-                                        <Link className="block py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] cursor-pointer " href={`/podcast/edit-episode/${episode.podcast_id}/${episode.id}`}>
+                                        <Link className="block py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] cursor-pointer " href={isArchive ? `/podcast/edit-episode/${episode.podcast_id}/${episode.id}/archive` : `/podcast/edit-episode/${episode.podcast_id}/${episode.id}`}>
                                             Edit
                                         </Link>
-                                    </div>  
+                                    </div>
                                     <div onClick={() => {
                                         setSelectedEpisode(episode)
                                         setShowArchiveModal(true)

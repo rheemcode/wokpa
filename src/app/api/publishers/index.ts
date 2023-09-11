@@ -6,8 +6,10 @@ export const getPodcastsById = async (id: number | string) => axios.get(`${API_U
 export const getArchivePodcastsById = async (id: number | string) => axios.get(`${API_URL}/publishers/archives/podcasts/${id}`);
 
 export const getPodcastEpisodes = async (id: number | string, page = 1, perPage = 10) => axios.get(`${API_URL}/publishers/podcasts/${id}/episodes?page=${page}&per_page=${perPage}`);
-export const getEpisodes = async ( page = 1, perPage = 10) => axios.get(`${API_URL}/publishers/episodes?page=${page}&per_page=${perPage}`);
+export const getEpisodes = async (page = 1, perPage = 10) => axios.get(`${API_URL}/publishers/episodes?page=${page}&per_page=${perPage}`);
 export const getArchivedEpisodes = async (page = 1, perPage = 10) => axios.get(`${API_URL}/publishers/archives/episodes?page=${page}&per_page=${perPage}`);
+export const getArchivedEpisodeById = async (podcastId: number | string, episodeId: number | string) => axios.get(`${API_URL}/publishers/archives/podcasts/${podcastId}/episodes/${episodeId}`);
+
 
 
 export const getPodcastEpisode = async (podcastId: number | string, episodeId: number | string) => axios.get(`${API_URL}/publishers/podcasts/${podcastId}/episodes/${episodeId}`);

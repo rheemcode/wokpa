@@ -369,7 +369,7 @@ const EpisodeItemTable: React.FC<{ episodes: EpisodeModel[] }> = ({ episodes }) 
     )
 }
 
-const EpisodeView: React.FC<{ episodes: EpisodeModel[], setEpisodes: (episodes: EpisodeModel[], page?: number) => void, setIsArchive: (value: boolean) => void }> = ({ episodes, setEpisodes, setIsArchive }) => {
+const EpisodeView: React.FC<{ episodes: EpisodeModel[], setEpisodes: (episodes: EpisodeModel[], page?: number) => void, setIsArchive: (value: boolean) => void, isArchive: boolean }> = ({ episodes, setEpisodes, setIsArchive, isArchive }) => {
     const [viewMode, setViewMode] = useState<"list" | "card">("list");
     const [loading, setLoading] = useState(false);
 
@@ -773,6 +773,7 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
                         <Tab.Panel>
                             <EpisodeView
                                 episodes={episodes}
+                                isArchive={isArchive}
                                 setIsArchive={(value) => setIsArchive(value)}
                                 setEpisodes={(episodes: EpisodeModel[], page?: number) => {
                                     setEpidoes(episodes);

@@ -1,7 +1,7 @@
 "use client";
 
 import { getPodcastCategories } from "@/app/api/general";
-import { createPodcast, getPodcastsById, updatePodcast } from "@/app/api/publishers";
+import { createPodcast, getArchivePodcastsById, getPodcastsById, updatePodcast } from "@/app/api/publishers";
 import Button from "@/components/button";
 import Input from "@/components/input";
 import { useAppSelector, useAppDispatch } from "@/hooks";
@@ -81,7 +81,7 @@ const UpdatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
             };
 
             const response = await APICall(updatePodcast, [params.podcastId[0], data], true);
-            router.push(`/podcast/archive/podcast-view/${params.podcastId[0]}`)
+            router.push(`/podcast/podcast-view/${params.podcastId[0]}`)
             toast(response.data.message, { type: "success" });
             setSubmitting(false);
 
@@ -102,7 +102,7 @@ const UpdatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
 
                 if (params.podcastId.length) {
                     setIsEdit(true);
-                    response = await getPodcastsById(params.podcastId[0]);
+                    response = params.podcastId[1] ? await getArchivePodcastsById(params.podcastId[0]) : await getPodcastsById(params.podcastId[0]);
                     setPodcast(response.data.data)
                 }
 

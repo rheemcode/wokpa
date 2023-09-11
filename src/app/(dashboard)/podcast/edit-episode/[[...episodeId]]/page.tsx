@@ -1,6 +1,6 @@
 "use client";
 
-import { getPodcastsById, getPodcastEpisodes, getPodcastEpisode, updateEpisode, uploadEpisode, uploadEpisodeAudio } from "@/app/api/publishers";
+import { getPodcastsById, getPodcastEpisodes, getPodcastEpisode, updateEpisode, uploadEpisode, uploadEpisodeAudio, getArchivePodcastsById, getArchivedEpisodeById } from "@/app/api/publishers";
 import Button from "@/components/button";
 import Input from "@/components/input";
 import Modal from "@/components/modal";
@@ -213,7 +213,7 @@ const EpisodePlayer = ({ episode }: { episode: EpisodeModel }) => {
     )
 }
 
-const EditPodcastPage = ({ params }: { params: { slug: string[] } }) => {
+const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
     const user = useAppSelector(state => state.auth.user);
     const dispatch = useAppDispatch();
 
@@ -284,10 +284,10 @@ const EditPodcastPage = ({ params }: { params: { slug: string[] } }) => {
     useEffect(() => {
         (async () => {
             try {
-                const podcastResponse = await getPodcastsById(params.slug[0]);
-                setPodcast(podcastResponse.data.data);
+                // const podcastResponse = await getPodcastsById(params.episodeId[0]);
+                // setPodcast(podcastResponse.data.data);
 
-                const episodesResponse = await getPodcastEpisode(params.slug[0], params.slug[1]);
+                const episodesResponse = params.episodeId[2] ? await getArchivedEpisodeById(params.episodeId[0], params.episodeId[1]) : await getPodcastEpisode(params.episodeId[0], params.episodeId[1]);
                 setEpidoe(episodesResponse.data.data);
 
 
@@ -314,7 +314,7 @@ const EditPodcastPage = ({ params }: { params: { slug: string[] } }) => {
             }
 
             const response = await APICall(updateEpisode, [episode?.podcast_id, episode?.id, data], true);
-            router.push(`/podcast-view/${params.slug[0]}`)
+            router.push(`/podcast-view/${params.episodeId[0]}`)
 
             setSubmitting(false);
 
