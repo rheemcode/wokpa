@@ -682,7 +682,7 @@ const WalletPage = () => {
                             </Button>
                         </div>
                         <div>
-                            <Button onClick={() => setShowTransferModal(true)} className="!from-white !to-white !text-[#063150] text-sm font-semibold">
+                            <Button onClick={() => setShowAddModal(true)} className="!from-white !to-white !text-[#063150] text-sm font-semibold">
                                 Add money
                             </Button>
                         </div>
