@@ -149,7 +149,7 @@ const ProfileSettings = () => {
                 <div className="w-[65%]">
                     <div className="flex gap-6">
                         <div className="w-[130px] h-[130px] ob bg-slate-100 rounded-lg">
-                            <img className="w-full object-contain" src={profilePicImg || profile?.profile_image_url} />
+                            <img className="w-[130px] h-[130px] object-cover" src={profilePicImg || profile?.profile_image_url} />
                         </div>
                         <div>
                             <div   {...getRootProps({ className: 'h-full cursor-pointer dropzone border-2 rounded-lg bg-[#18181B] w-[358px] border-[#98A2B3] px-6 py-2 text-center' })}>
