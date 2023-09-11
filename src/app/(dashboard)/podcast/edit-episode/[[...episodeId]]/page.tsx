@@ -499,7 +499,7 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
                                                                     <div className="text-[#063150] text-[14px] font-semibold font-inter cursor-pointer">
                                                                         <CopyToClipboard text={episode?.content_url}
                                                                             onCopy={() => toast("Link copied!", { type: "success" })}>
-                                                                            <button>
+                                                                            <button type="button">
                                                                                 Copy
                                                                             </button>
                                                                         </CopyToClipboard>
