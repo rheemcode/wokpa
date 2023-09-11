@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useFilePicker } from "use-file-picker";
+import { Tag, } from 'rsuite';
 import * as Yup from "yup";
 
 const UpdatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
@@ -25,6 +26,9 @@ const UpdatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
     const [isExplicit, setIsExplicit] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
     const router = useRouter();
+
+    const [tags, setTags] = useState<string[]>([]);
+    const [inputValue, setInputValue] = useState('');
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("This field is required"),
@@ -43,6 +47,24 @@ const UpdatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
         maxFileSize: 1,
     });
 
+    const removeTag = (tag: string) => {
+        const nextTags = tags.filter(item => item !== tag);
+        setTags(nextTags);
+    };
+
+    const addTag = () => {
+        const nextTags = inputValue ? [...tags, inputValue] : tags;
+        setTags(nextTags);
+        setInputValue('');
+    };
+
+    const [coverImagePicker, { filesContent: coverImageContent, plainFiles: coverImageFiles, clear: clearCoverImage, }] = useFilePicker({
+        readAs: 'DataURL',
+        accept: ['image/*', "pdf"],
+        multiple: false,
+        limitFilesConfig: { max: 1 },
+        maxFileSize: 1,
+    });
 
     const handleCreatePodcast = async (values: any, setSubmitting: (val: boolean) => void) => {
         try {
@@ -53,6 +75,7 @@ const UpdatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                 category_name: categories.find(val => val.id == values.podcast_category)?.name,
                 category_type: categories.find(val => val.id == values.podcast_category)?.type,
                 picture: plainFiles[0] as any,
+                cover_picture: coverImageFiles[0] as any,
                 tips_and_donations_activated: enableTips,
                 explicit: isExplicit
             };
@@ -193,47 +216,91 @@ const UpdatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
 
                                             </div>
                                         </div>
-                                        <div>
-                                            <div className="font-medium">
-                                                Picture
-                                            </div>
-                                            <div className="w-[348px] py-4">
-                                                <div className="text-center">
-                                                    {
-                                                        filesContent.length ?
-                                                            <>
-                                                                {filesContent.map((file, index) => (
-                                                                    <div key={index}>
-                                                                        <img className="max-w-sm" alt={file.name} src={file.content}></img>
-                                                                        <br />
+                                        <div className="flex gap-5">
+                                            <div className="flex-1">
+                                                <div className="font-medium">
+                                                    Picture
+                                                </div>
+                                                <div className="w-[348px] py-4">
+                                                    <div className="text-center">
+                                                        {
+                                                            filesContent.length ?
+                                                                <>
+                                                                    {filesContent.map((file, index) => (
+                                                                        <div key={index}>
+                                                                            <img className="max-w-sm" alt={file.name} src={file.content}></img>
+                                                                            <br />
+                                                                        </div>
+                                                                    ))}
+
+                                                                </>
+                                                                : <>
+
+                                                                    {podcast.picture_url ? <div>
+                                                                        <img className="max-w-[150px] rounded-lg inline" src={podcast.picture_url}></img>
                                                                     </div>
-                                                                ))}
+                                                                        :
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-32 inline">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                                                        </svg>
+                                                                    }
+                                                                </>
+                                                        }
 
-                                                            </>
-                                                            : <>
-
-                                                                {podcast.picture_url ? <div>
-                                                                    <img className="max-w-[150px] rounded-lg inline" src={podcast.picture_url}></img>
-                                                                </div>
-                                                                    :
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-32 inline">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                                                                    </svg>
-                                                                }
-                                                            </>
-                                                    }
-
-                                                    <div className="text-xs text-[#EAECF0] px-6">
-                                                        We recommend uploading an artwork of at least 1400x1400 pixels and maximum 5MB. We support jpg, png, gif and tiff formats.
+                                                        <div className="text-xs text-[#EAECF0] px-6">
+                                                            We recommend uploading an artwork of at least 1400x1400 pixels and maximum 5MB. We support jpg, png, gif and tiff formats.
+                                                        </div>
+                                                        <div className="mt-4">
+                                                            <button type="button" onClick={() => imagePicker()} className="bg-[#F9F5FF] rounded-full py-2 px-4 text-sm font-semibold text-[#042946]">
+                                                                Upload image
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                    <div className="mt-4">
-                                                        <button type="button" onClick={() => imagePicker()} className="bg-[#F9F5FF] rounded-full py-2 px-4 text-sm font-semibold text-[#042946]">
-                                                            Upload image
-                                                        </button>
+                                                </div>
+                                            </div>
+                                            <div className="flex-1">
+                                                <div className="font-medium">
+                                                    Cover Image
+                                                </div>
+                                                <div className="w-[348px] py-4">
+                                                    <div className="text-center">
+                                                        {
+                                                            coverImageContent.length ?
+                                                                <>
+                                                                    {coverImageContent.map((file, index) => (
+                                                                        <div key={index}>
+                                                                            <img className="max-w-sm" alt={file.name} src={file.content}></img>
+                                                                            <br />
+                                                                        </div>
+                                                                    ))}
+
+                                                                </>
+                                                                : <>
+
+                                                                    {podcast.cover_image ? <div>
+                                                                        <img className="max-w-[150px] rounded-lg inline" src={podcast.cover_image}></img>
+                                                                    </div>
+                                                                        :
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-32 inline">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                                                        </svg>
+                                                                    }
+                                                                </>
+                                                        }
+
+                                                        <div className="text-xs text-[#EAECF0] px-6">
+                                                            Adding a cover image is a great way to enhance your podcast page. Become a Pro user to upload one now.
+                                                        </div>
+                                                        <div className="mt-4">
+                                                            <button type="button" onClick={() => coverImagePicker()} className="bg-[#F9F5FF] rounded-full py-2 px-4 text-sm font-semibold text-[#042946]">
+                                                                Upload image
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div className="flex gap-5">
                                             <div className="md:w-6/12">
                                                 <label htmlFor="password" className="text-sm font-medium">
@@ -291,6 +358,41 @@ const UpdatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                                 <ErrorMessage name="email" component={"div"} className="text-red-600 text-sm text-left" />
                                                 <div className="text-xs text-[#D0D5DD] mt-1">
                                                     By adding your email address here, it will be displayed on your podcast page and RSS feed. This email address allows you to confirm the ownership into platforms like Spotify and Google Podcasts.
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flex">
+                                            <div className="md:w-8/12">
+                                                <label htmlFor="tags" className="text-sm font-medium">
+                                                    Tags
+                                                </label>
+                                                <div className="p-3 rounded-lg border border-gray-500 bg-white">
+                                                    <div className="flex items-center gap-1 flex-wrap w-full">
+                                                        {
+                                                            tags.map((item, index) => (
+                                                                <Tag
+                                                                    color="cyan"
+                                                                    className="!ml-0 !bg-gray-600" key={index}
+                                                                    closable
+                                                                    onClose={() => removeTag(item)}>
+                                                                    {item}
+                                                                </Tag>
+                                                            ))
+                                                        }
+                                                        <input type="text"
+                                                            value={inputValue}
+                                                            onChange={(e) => {
+                                                                if (e.target.value && e.target.value.includes(',')) {
+                                                                    addTag()
+                                                                    setInputValue("");
+                                                                    return;
+                                                                }
+                                                                setInputValue(e.target.value);
+                                                            }}
+                                                            onBlur={addTag}
+                                                            className="focus:outline-0 focus:border-0 text-sm p-0 text-gray-500 outline-0 border-0"
+                                                            placeholder="Add a tag by with comma" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

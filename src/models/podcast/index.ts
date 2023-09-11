@@ -17,6 +17,7 @@ export interface PodcastModel {
     episode_count: string;
     play_count: string;
     total_duration: number;
+    cover_image: string;
     rating_count: string;
     average_rating: string;
 }

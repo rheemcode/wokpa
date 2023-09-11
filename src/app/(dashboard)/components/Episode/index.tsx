@@ -356,7 +356,10 @@ export const EpisodeTableItem: React.FC<{ episode: EpisodeModel, isArchive: bool
                                             Edit
                                         </Link>
                                     </div>
-                                    <div onClick={() => setShowArchiveModal(true)} className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] cursor-pointer `}>
+                                    <div onClick={() => {
+                                        setSelectedEpisode(episode)
+                                        setShowArchiveModal(true)
+                                    }} className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] cursor-pointer `}>
                                         Archive
                                     </div>
                                 </div>
