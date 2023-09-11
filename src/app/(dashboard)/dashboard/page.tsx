@@ -160,9 +160,9 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel, isAr
                     <div className="w-full flex justify-between items-center py-6">
                         <div className="flex gap-4">
 
-                            <div className='cursor-pointer' onClick={() => isArchive ? navigate.push(`/podcast/archive/podcast-view/${podcast.id}`) : navigate.push(`/podcast/podcast-view/${podcast.id}`)}>
+                            <Link className='cursor-pointer' href={isArchive ? `/podcast/archive/podcast-view/${podcast.id}` : `/podcast/podcast-view/${podcast.id}`}>
                                 <img className="w-[120px] h-[120px] rounded-lg" src={podcast.picture_url} alt="" />
-                            </div>
+                            </Link>
                             <div className="h-full">
                                 <div className="flex justify-between flex-col gap-2">
                                     <div>
@@ -171,7 +171,7 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel, isAr
                                         </div>
                                     </div>
                                     <div>
-                                        <Link href={`/podcast/podcast-view/${podcast.id}`} className="font-semibold text-lg cursor-pointer">
+                                        <Link href={isArchive ? `/podcast/archive/podcast-view/${podcast.id}` : `/podcast/podcast-view/${podcast.id}`} className="font-semibold text-lg cursor-pointer">
                                             {podcast.title}
                                         </Link>
                                     </div>
@@ -288,8 +288,10 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel, isAr
                     </div>
                     :
                     <div className="">
-                        <div className="relative" onClick={() => isArchive ? navigate.push(`/podcast/archive/podcast-view/${podcast.id}`) : navigate.push(`/podcast/podcast-view/${podcast.id}`)}>
-                            <img className="w-[240px] h-[240px] rounded-xl" src={podcast.picture_url} alt="" />
+                        <div className="relative" >
+                            <Link href={isArchive ? (`/podcast/archive/podcast-view/${podcast.id}`) : (`/podcast/podcast-view/${podcast.id}`)}>
+                                <img className="w-[240px] h-[240px] rounded-xl" src={podcast.picture_url} alt="" />
+                            </Link>
                             <div className="absolute top-0 p-2">
                                 <div className="text-[8px] text-[#0D0D0D] font-semibold bg-white rounded-full py-[6px] px-3">
                                     {podcast.episode_count} Episodes
@@ -338,7 +340,9 @@ const PodcastItem: React.FC<{ mode: "list" | "card", podcast: PodcastModel, isAr
                         </div>
                         <div className="mt-2">
                             <div className="font-semibold text-lg">
-                                {podcast.title}
+                                <Link href={isArchive ? (`/podcast/archive/podcast-view/${podcast.id}`) : (`/podcast/podcast-view/${podcast.id}`)}>
+                                    {podcast.title}
+                                </Link>
                             </div>
                         </div>
                         <div className="">

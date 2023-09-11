@@ -76,7 +76,7 @@ export const updateEpisode = async (podcastId: string, episodeId: string | numbe
 //archives
 export const archiveEpisode = async (podcastId: string | number, episodeId: string | number) => axios.post(`${API_URL}/publishers/podcasts/${podcastId}/episodes/${episodeId}/archives`);
 export const removeArchiveEpisode = async (podcastId: string | number, episodeId: string | number) => axios.delete(`${API_URL}/publishers/podcasts/${podcastId}/episodes/${episodeId}/archives`);
-export const getEpisodesArchive = async (podcastId: string | number, page = 1, perPage = 15) => axios.get(`${API_URL}/publishers/archives/${podcastId}/episodes?page=${page}&per_page=${perPage}`);
+export const getEpisodesArchive = async (podcastId: string | number, page = 1, perPage = 15) => axios.get(`${API_URL}/publishers/archives/podcasts/${podcastId}/episodes?page=${page}&per_page=${perPage}`);
 
 export const archivePodcast = async (podcastId: string | number) => axios.post(`${API_URL}/publishers/podcasts/${podcastId}/archives`);
 export const removeArchivePodcasts = async (podcastId: string | number) => axios.delete(`${API_URL}/publishers/podcasts/${podcastId}/archives`);
