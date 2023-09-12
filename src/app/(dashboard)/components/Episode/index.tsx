@@ -1,4 +1,4 @@
-import { archiveEpisode, removeArchiveEpisode } from "@/app/api/publishers";
+import { archiveEpisode, getArchivedEpisodes, getEpisodes, removeArchiveEpisode } from "@/app/api/publishers";
 import Button from "@/components/button";
 import Modal from "@/components/modal";
 import { useAppDispatch, useAppSelector } from "@/hooks";
@@ -83,8 +83,10 @@ export const EpisodeItem: React.FC<{ mode: "list" | "card", episode: EpisodeMode
             {
                 mode == "list" ?
                     <div className="flex items-center gap-4">
-                        <div className='cursor-pointer w-[120px] h-[120px]'>
-                            <img className="w-[120px] h-[120px] object-cover rounded-lg" src={episode.picture_url} alt="" />
+                        <div>
+                            <div className='cursor-pointer !w-[120px] !h-[120px]'>
+                                <img className="object-cover rounded-lg" src={episode.picture_url} alt="" />
+                            </div>
                         </div>
                         <div className="w-full flex justify-between items-center py-6">
                             <div className="flex gap-4">
@@ -154,7 +156,7 @@ export const EpisodeItem: React.FC<{ mode: "list" | "card", episode: EpisodeMode
                                                 </svg>
                                                 <div>
                                                     {formatTimeW(episode.duration)}
-                                                    
+
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-1 text-sm">
@@ -425,13 +427,16 @@ export const EpisodeTable: React.FC<{ episodes: EpisodeModel[], isArchive: boole
 export const EpisodeView: React.FC<{
     episodes: EpisodeModel[],
     isArchive: boolean,
+    view: "list" | "table",
     setEpisodes: (episodes: EpisodeModel[], page?: number) => void,
     setIsArchive: (value: boolean) => void,
-}> = ({ episodes, setEpisodes, setIsArchive, isArchive }) => {
-    const [viewMode, setViewMode] = useState<"list" | "card">("card");
+}> = ({ episodes, setEpisodes, setIsArchive, isArchive, view }) => {
+    const [viewMode, setViewMode] = useState<"list" | "table">(view);
     const [loading, setLoading] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalContent, setTotalContent] = useState(0);
+    const [search, setSearch] = useState("");
+    const router = useRouter()
 
     const statusFilter = [
         { id: 1, name: 'Active' },
@@ -448,6 +453,19 @@ export const EpisodeView: React.FC<{
 
     const [selectedFilter, setSelectedFilter] = useState(filters[0])
     const [selectedStatusFilter, setSelectedStatusFilter] = useState(statusFilter[0])
+
+    const handleGetEpisodes = async (title: string, page?: number) => {
+        try {
+            setSearch(title)
+            const response = await APICall(isArchive ? getArchivedEpisodes : getEpisodes, [page ? page : currentPage, 15, title]);
+            setEpisodes(response.data.data.data, 1);
+            setTotalContent(response.data.data.total);
+
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
 
 
     const handleRedorder = (v: any) => {
@@ -533,7 +551,7 @@ export const EpisodeView: React.FC<{
                                     return <Listbox.Option className={"cursor-pointer"} key={filter.name} value={filter}>
                                         {({ active, selected }) => (
                                             <div
-                                                className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
+                                                className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] `}
                                             >
                                                 {filter.name}
                                             </div>
@@ -561,7 +579,7 @@ export const EpisodeView: React.FC<{
                                         return <Listbox.Option className={"cursor-pointer"} key={filter.name} value={filter}>
                                             {({ active, selected }) => (
                                                 <div
-                                                    className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
+                                                    className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] `}
                                                 >
                                                     {filter.name}
                                                 </div>
@@ -575,7 +593,7 @@ export const EpisodeView: React.FC<{
                                 <Listbox.Option className={"cursor-pointer"} value={filters[3]}>
                                     {({ active, selected }) => (
                                         <div
-                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
+                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] `}
                                         >
                                             {filters[3].name}
                                         </div>
@@ -584,7 +602,7 @@ export const EpisodeView: React.FC<{
                                 <Listbox.Option className={"cursor-pointer"} value={filters[4]}>
                                     {({ active, selected }) => (
                                         <div
-                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
+                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] `}
                                         >
                                             {filters[4].name}
 
@@ -605,7 +623,7 @@ export const EpisodeView: React.FC<{
                             </button>
                         </div>
                         <div>
-                            <button onClick={() => setViewMode("card")} className={`outline-none rounded ${viewMode != "list" && "bg-[#475467]"}`}>
+                            <button onClick={() => setViewMode("table")} className={`outline-none rounded ${viewMode != "list" && "bg-[#475467]"}`}>
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M8.4 3H4.6C4.03995 3 3.75992 3 3.54601 3.10899C3.35785 3.20487 3.20487 3.35785 3.10899 3.54601C3 3.75992 3 4.03995 3 4.6V8.4C3 8.96005 3 9.24008 3.10899 9.45399C3.20487 9.64215 3.35785 9.79513 3.54601 9.89101C3.75992 10 4.03995 10 4.6 10H8.4C8.96005 10 9.24008 10 9.45399 9.89101C9.64215 9.79513 9.79513 9.64215 9.89101 9.45399C10 9.24008 10 8.96005 10 8.4V4.6C10 4.03995 10 3.75992 9.89101 3.54601C9.79513 3.35785 9.64215 3.20487 9.45399 3.10899C9.24008 3 8.96005 3 8.4 3Z" stroke="#D0D5DD" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     <path d="M19.4 3H15.6C15.0399 3 14.7599 3 14.546 3.10899C14.3578 3.20487 14.2049 3.35785 14.109 3.54601C14 3.75992 14 4.03995 14 4.6V8.4C14 8.96005 14 9.24008 14.109 9.45399C14.2049 9.64215 14.3578 9.79513 14.546 9.89101C14.7599 10 15.0399 10 15.6 10H19.4C19.9601 10 20.2401 10 20.454 9.89101C20.6422 9.79513 20.7951 9.64215 20.891 9.45399C21 9.24008 21 8.96005 21 8.4V4.6C21 4.03995 21 3.75992 20.891 3.54601C20.7951 3.35785 20.6422 3.20487 20.454 3.10899C20.2401 3 19.9601 3 19.4 3Z" stroke="#D0D5DD" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -621,7 +639,10 @@ export const EpisodeView: React.FC<{
                                         <path d="M17.5 17.5L14.5834 14.5833M16.6667 9.58333C16.6667 13.4954 13.4954 16.6667 9.58333 16.6667C5.67132 16.6667 2.5 13.4954 2.5 9.58333C2.5 5.67132 5.67132 2.5 9.58333 2.5C13.4954 2.5 16.6667 5.67132 16.6667 9.58333Z" stroke="#98A2B3" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                 </div>
-                                <input type="text" placeholder="Search" className="text-lg w-[292px] placeholder:text-[#98A2B3] pl-10 pr-3 py-2 rounded-lg border border-gray-300 bg-transparent" />
+                                <input value={search} onChange={(e) => {
+                                    handleGetEpisodes(e.target.value, 1)
+                                }} type="text" placeholder="Search" className="text-lg w-[292px] placeholder:text-[#98A2B3] pl-10 pr-3 py-2 rounded-lg border border-gray-300 bg-transparent" />
+                             
                             </div>
                         </div>
                     </div>
@@ -629,19 +650,43 @@ export const EpisodeView: React.FC<{
             </div>
             <div className="mt-8">
                 {
-                    viewMode == "list" ? <div className={`${viewMode == "list" ? "divide-y pr-12" : "grid grid-cols-4 gap-y-8"}`}>
-                        {
-                            episodes.map((episode) => {
-                                return <EpisodeItem key={episode.id + "ep"} episode={episode} mode={viewMode} isArchive={isArchive} />
+                    episodes.length ? <>
+                        {viewMode == "list" ? <div className={`${viewMode == "list" ? "divide-y pr-12" : "grid grid-cols-4 gap-y-8"}`}>
+                            {
+                                episodes.map((episode) => {
+                                    return <EpisodeItem key={episode.id + "ep"} episode={episode} mode={viewMode} isArchive={isArchive} />
 
-                            })
-                        }
-                    </div> :
-                        <>
-                            <EpisodeTable episodes={episodes} isArchive={isArchive} />
+                                })
+                            }
+                        </div> :
+                            <>
+                                <EpisodeTable episodes={episodes} isArchive={isArchive} />
 
-                        </>
+                            </>}
+                    </> :
+                        <div className="text-center py-12">
+                            <svg className='inline' width="201" height="200" viewBox="0 0 201 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="0.5" width="200" height="200" rx="100" fill="url(#paint0_linear_3977_49889)" />
+                                <path d="M126.094 130C137.811 122.075 145.5 108.89 145.5 93.9248C145.5 69.6665 125.352 50 100.5 50C75.6479 50 55.5 69.6665 55.5 93.9248C55.5 108.89 63.1885 122.075 74.9056 130M82.2983 110C78.0937 105.75 75.5 100.043 75.5 93.7527C75.5 80.6355 86.694 70 100.5 70C114.306 70 125.5 80.6355 125.5 93.7527C125.5 100.048 122.906 105.75 118.702 110M100.5 150C94.9772 150 90.5 145.523 90.5 140V130C90.5 124.477 94.9772 120 100.5 120C106.023 120 110.5 124.477 110.5 130V140C110.5 145.523 106.023 150 100.5 150ZM105.5 95C105.5 97.7614 103.261 100 100.5 100C97.7386 100 95.5 97.7614 95.5 95C95.5 92.2386 97.7386 90 100.5 90C103.261 90 105.5 92.2386 105.5 95Z" stroke="#BEE7E4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                <defs>
+                                    <linearGradient id="paint0_linear_3977_49889" x1="0.5" y1="0" x2="200.5" y2="-2.08482e-08" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#475467" />
+                                        <stop offset="1" stop-color="#667085" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div className="text-lg font-medium mt-4">
+                                {isArchive ? "There are no archived episodes" : "Create your first episode"}
+                            </div>
+                            <div className="mt-4">
+                                <Button onClick={() => { isArchive ? setSelectedStatusFilter(statusFilter[0]) : router.push("/podcast/create-episod") }} className='text-sm'>
+                                    {isArchive ? "Go to Active Episodes" : "Create a new episode"}
+                                </Button>
+                            </div>
+                        </div>
                 }
+
+
             </div>
         </div >
     )

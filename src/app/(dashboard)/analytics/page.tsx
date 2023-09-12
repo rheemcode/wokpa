@@ -76,7 +76,7 @@ const PodcastTable = () => {
     }
 
     const handlePageClick = (event: any) => {
-        setCurrentPage(++event.selected + 1);
+        setCurrentPage(++event.selected);
         handleGetPodcast((event.selected + 1))
     };
 
@@ -157,7 +157,7 @@ const PodcastTable = () => {
                                         return <Listbox.Option className={"cursor-pointer"} key={filter.name} value={filter}>
                                             {({ active, selected }) => (
                                                 <div
-                                                    className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
+                                                    className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] `}
                                                 >
                                                     {filter.name}
                                                 </div>
@@ -172,7 +172,7 @@ const PodcastTable = () => {
                                     {({ active, selected }) => (
 
                                         <Popover className={``}>
-                                            <Popover.Button ref={setReferenceElement} className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] w-full text-left ${active || selected ? 'bg-[#1D2939]' : ""}`} >
+                                            <Popover.Button ref={setReferenceElement} className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] w-full text-left `} >
                                                 <span>  Choose a date range</span>
                                             </Popover.Button>
 
@@ -213,8 +213,7 @@ const PodcastTable = () => {
                                         <thead className="text-white text-left border-b-2 border-[#EAECF0]">
                                             <tr>
                                                 <th className="py-4 pl-6 font-medium text-sm">{totalContent} podcasts</th>
-                                                <th className="py-4 pl-6 font-medium text-sm text-right">Followers</th>
-                                                <th className="py-4 pl-6 font-medium text-sm text-right">Listeners</th>
+                                                <th className="py-4 pl-6 font-medium text-sm text-right">Subscribers</th>
                                                 <th className="py-4 pl-6 font-medium text-sm text-right">Wokpa Ads</th>
                                                 <th className="py-4 pl-6 font-medium text-sm text-right">Tips and Donation</th>
                                                 <th className="py-4 px-6 font-medium text-sm text-right">Plays</th>
@@ -231,16 +230,14 @@ const PodcastTable = () => {
                                                                 <span className="">{podcast.title}</span>
                                                             </div>
                                                         </td>
-                                                        <td className="py-4 border-b pl-6 text-xs font-medium border-t border-[#667085] text-right">
-                                                            <div>{0}</div>
-                                                        </td>
+
                                                         <td className="py-4 border-b pl-6 text-xs border-t border-[#667085] text-right">
                                                             <div className="">
-                                                                {0}
+                                                                {podcast.subscriber_count}
                                                             </div>
                                                         </td>
                                                         <td className="py-4 border-b pl-6 text-xs font-medium border-t border-[#667085] text-right">
-                                                            {0}
+                                                            <div>{0}</div>
                                                         </td>
                                                         <td className="py-4 border-b pl-6 text-xs font-medium border-t border-[#667085] text-right">
                                                             <div className="">
@@ -287,6 +284,7 @@ const PodcastTable = () => {
                     }
                     onPageChange={handlePageClick}
                     pageRangeDisplayed={5}
+                    forcePage={(currentPage - 1)}
                     pageCount={Math.ceil(totalContent / 15)}
                     nextLabel={
                         <div className='flex items-center gap-2'>

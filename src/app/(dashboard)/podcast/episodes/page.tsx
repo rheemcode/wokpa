@@ -38,7 +38,7 @@ const EpisodesPage = () => {
     }
 
     const handlePageClick = (event: any) => {
-        setCurrentPage(++event.selected + 1);
+        setCurrentPage(++event.selected);
         handleGetEpisodes((event.selected + 1))
     };
 
@@ -101,6 +101,7 @@ const EpisodesPage = () => {
                                 <EpisodeView
                                     episodes={episodes}
                                     isArchive={isArchive}
+                                    view="table"
                                     setIsArchive={(value) => setIsArchive(value)}
                                     setEpisodes={(episodes: EpisodeModel[], page?: number) => {
                                         setEpidoes(episodes);
@@ -108,7 +109,7 @@ const EpisodesPage = () => {
                                     }} />
                                 <div>
                                     <div className="py-5 px-4 mt-6">
-                                         <ReactPaginate
+                                        <ReactPaginate
                                             breakLabel="..."
                                             containerClassName='flex items-center justify-between'
                                             nextClassName='flex-1 flex justify-end'
@@ -126,6 +127,8 @@ const EpisodesPage = () => {
                                                     </span>
                                                 </div>
                                             }
+                                            forcePage={(currentPage - 1)}
+
                                             onPageChange={handlePageClick}
                                             pageRangeDisplayed={5}
                                             pageCount={Math.ceil(totalContent / 15)}

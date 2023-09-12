@@ -1,7 +1,8 @@
 "use client";
- 
+
 import Button from "@/components/button";
 import { useAppSelector, useAppDispatch } from "@/hooks";
+import Link from "next/link";
 import { useEffect } from "react";
 
 
@@ -26,7 +27,9 @@ const CampaignPage = () => {
             <div className="relative">
                 <div className="flex gap-3 items-center">
                     <div className="text-sm font-medium">
-                        Emax podcast
+                        <Link href={"/dashboard"}>
+                            All Podcasts
+                        </Link>
                     </div>
                     <div>
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -34,7 +37,7 @@ const CampaignPage = () => {
                         </svg>
                     </div>
                     <div className="text-sm font-medium">
-                        Monitize
+                        Monetize
                     </div>
                     <div>
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

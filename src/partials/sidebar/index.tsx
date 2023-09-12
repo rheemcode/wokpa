@@ -240,22 +240,22 @@ const Sidebar = () => {
                                                 <Disclosure.Panel>
                                                     <div className="space-y-1 mt-2">
                                                         <div>
-                                                            <Link href="/monitize/wallet" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
+                                                            <Link href="/monetize/wallet" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Wallet
                                                             </Link>
                                                         </div>
                                                         <div>
-                                                            <Link href="/monitize/wokpa-ads" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
+                                                            <Link href="/monetize/wokpa-ads" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Wokpa Ads
                                                             </Link>
                                                         </div>
                                                         <div>
-                                                            <Link href="/monitize/tips-and-donations" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
+                                                            <Link href="/monetize/tips-and-donations" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Tips and donations
                                                             </Link>
                                                         </div>
                                                         <div>
-                                                            <Link href="/monitize/campaign" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
+                                                            <Link href="/monetize/campaign" className={`block w-full outline-none py-2 px-6 font-medium rounded-lg bg-[#101828] hover:bg-[#344054]`}>
                                                                 Campaign
                                                             </Link>
                                                         </div>

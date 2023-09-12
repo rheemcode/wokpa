@@ -1,6 +1,6 @@
 "use client";
 
-import { archiveEpisode, getEpisodesArchive, getPodcastEpisodes, getPodcastsById, removeArchiveEpisode } from "@/app/api/publishers";
+import { archiveEpisode, getArchivedEpisodes, getEpisodes, getEpisodesArchive, getPodcastEpisodes, getPodcastsById, removeArchiveEpisode } from "@/app/api/publishers";
 import Button from "@/components/button";
 import Input from "@/components/input";
 import Modal from "@/components/modal";
@@ -16,9 +16,10 @@ import { useEffect, useState } from "react";
 import { useEffectOnce } from "react-use";
 import ReactPaginate from "react-paginate";
 import { refreshPodcasts } from "@/redux/podcast";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, Pie, PieChart } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ResponsiveContainer, BarChart, Bar, AreaChart, Area, Pie, PieChart, Cell } from 'recharts';
+import { formatTimeW } from "@/utils/audio-player";
 
-const data = [
+const followersData = [
     {
         v: 42
     },
@@ -55,6 +56,402 @@ const data = [
 
 ];
 
+const ageData = [
+    {
+        name: '10-16',
+        uv: 70,
+        pv: 14,
+        amt: 64,
+    },
+    {
+        name: '16-21',
+        uv: 28,
+        pv: 44,
+        amt: 34,
+    },
+    {
+        name: '22-28',
+        uv: 12,
+        pv: 24,
+        amt: 41,
+    },
+    {
+        name: '25-43',
+        uv: 15,
+        pv: 44,
+        amt: 32,
+    },
+    {
+        name: '35-44',
+        uv: 20,
+        pv: 24,
+        amt: 34,
+    },
+    {
+        name: '45-59',
+        uv: 42,
+        pv: 27,
+        amt: 38,
+    },
+    {
+        name: '60-50',
+        uv: 50,
+        pv: 54,
+        amt: 44,
+    },
+    {
+        name: 'Unknown',
+        uv: 30,
+        pv: 64,
+        amt: 24,
+    },
+];
+
+const COLORS = ["#1849A9", "#B2DDFF", "#FFBB28", "#FF8042"];
+
+const CustomLabel: React.FC<any> = ({ viewBox, labelText, value }) => {
+    const { cx, cy } = viewBox;
+    return (
+        <g>
+            <text
+                x={cx}
+                y={cy}
+                className="recharts-text recharts-label text-xs text-[#1D2939]"
+                textAnchor="middle"
+                dominantBaseline="central"
+                alignmentBaseline="middle"
+            >
+                {labelText}
+            </text>
+            <text
+                x={cx}
+                y={cy + 20}
+                className="recharts-text recharts-label text-xl font-medium text-[#98A2B3]"
+                textAnchor="middle"
+                dominantBaseline="central"
+                alignmentBaseline="middle"
+            >
+                {value}
+            </text>
+        </g>
+    );
+};
+
+const TimeListenedChart = () => {
+    return (
+
+        <div className="">
+            <div className="text-sm">
+                Time listened
+            </div>
+            {/* total income */}
+            <div className="py-6 px-6 rounded-xl mt-3 bg-white space-y-10 h-[230px]">
+                <div className="flex items-center gap-4">
+                    <div className="">
+                        <ResponsiveContainer width={160} height={160}>
+                            <PieChart width={160} height={160}>
+                                <Pie
+                                    data={[{ v: 90 }, { v: 10 }]} dataKey="v" innerRadius={70} outerRadius={80}>
+                                    <Cell fill={COLORS[0]} />
+                                    <Cell fill={COLORS[1]} />
+                                    <Label
+                                        content={<CustomLabel labelText="Hours" value={15} />}
+                                        position="center"
+                                    />
+                                </Pie>
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="">
+                        <div className="flex items-center gap-2">
+                            <span className="w-3 h-3 bg-[#1849A9] rounded-full"></span>
+                            <div className="text-[#101828]">
+                                <span className="text-lg font-bold">90%</span>
+                                <span className="text-xs ml-1">150</span>
+                            </div>
+                        </div>
+                        <div className="text-xs text-[#344054]  ml-4">Not following</div>
+                    </div>
+                    <div className="">
+                        <div className="flex items-center gap-2">
+                            <span className="w-3 h-3 bg-[#B2DDFF] rounded-full"></span>
+                            <div className="text-[#101828]">
+                                <span className="text-lg font-bold">10%</span>
+                                <span className="text-xs ml-1">150</span>
+                            </div>
+                        </div>
+                        <div className="text-xs text-[#344054] ml-4">following</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    )
+}
+
+const FollowersChart = () => {
+    return (
+        <div className="">
+            <div className="text-sm">
+                New followers
+            </div>
+            {/* total income */}
+            <div className="py-6 px-6 rounded-xl mt-3 bg-white space-y-10">
+                <div className="flex gap-4 py-1">
+                    <div className="flex-1">
+                        <div className="text-3xl font-raleway font-medium text-[#101828]">2k</div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <div className="flex gap-1 items-center">
+                            <svg width="51" height="20" viewBox="0 0 51 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18.3332 5.83203L11.776 12.3892C11.446 12.7192 11.281 12.8842 11.0907 12.9461C10.9233 13.0004 10.743 13.0004 10.5757 12.9461C10.3854 12.8842 10.2204 12.7192 9.89036 12.3892L7.60931 10.1082C7.2793 9.77816 7.11429 9.61315 6.92402 9.55133C6.75665 9.49695 6.57636 9.49695 6.40899 9.55133C6.21872 9.61315 6.05371 9.77816 5.72369 10.1082L1.6665 14.1654M18.3332 5.83203H12.4998M18.3332 5.83203V11.6654" stroke="#17B26A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span className="text-sm font-bold text-[#067647]">15%</span>
+                        </div>
+                        <span className="text-sm text-[#1D2939]">
+                            vs last month
+                        </span>
+                    </div>
+                </div>
+                <div className="w-full">
+                    <ResponsiveContainer width="100%" height={100}>
+                        <AreaChart width={300} height={100} data={followersData}>
+                            <defs>
+                                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="5%" stopColor="#17B26A" stopOpacity={0.3} />
+                                    <stop offset="95%" stopColor="#17B26A" stopOpacity={0} />
+                                </linearGradient>
+                            </defs>
+                            <Area type="linear" dataKey="v" stroke="#17B26A" strokeWidth={3} fill="url(#colorUv)" dot={false} />
+                        </AreaChart>
+                    </ResponsiveContainer>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+const TopCountries = () => {
+    return (
+        <div className="">
+            <div className="text-sm font-medium">
+                Top Countries / Regions <span className="text-xs text-[#98A2B3]">Streams</span>
+            </div>
+            <div className="divide-y">
+                {[1, 1, 1, 1, 1].map((v) => {
+                    return (
+                        <div className="">
+                            <div className="flex justify-between py-4 text-sm font-semibold text-[#98A2B3]">
+                                <div className="">Nigeria</div>
+                                <div className="font-medium text-[#D0D5DD]">4000</div>
+                            </div>
+                        </div>
+                    )
+                })}
+            </div>
+        </div>
+    )
+}
+
+const GendersChart = () => {
+    return (
+        <div className="">
+            <div className="text-sm">
+                Gender
+            </div>
+
+            <div className="py-6 px-6 rounded-xl mt-3 bg-white space-y-10 h-[230px]">
+                <div className="flex items-center gap-4">
+                    <div className="">
+                        <ResponsiveContainer width={200} height={200}>
+                            <PieChart width={180} height={180}>
+                                <Pie
+                                    data={[{ v: 60 }, { v: 40 }]} dataKey="v">
+                                    <Cell fill={"#BA24D5"} />
+                                    <Cell fill={"#F6D0FE"} />
+                                </Pie>
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                    <div className="">
+                        <div className="flex items-center gap-2">
+                            <span className="w-3 h-3 bg-[#BA24D5] rounded-full"></span>
+                            <div className="text-[#101828]">
+                                <span className="text-lg font-bold">90%</span>
+                                <span className="text-xs ml-1">150</span>
+                            </div>
+                        </div>
+                        <div className="text-xs text-[#344054]  ml-4">Male</div>
+                    </div>
+                    <div className="">
+                        <div className="flex items-center gap-2">
+                            <span className="w-3 h-3 bg-[#F6D0FE] rounded-full"></span>
+                            <div className="text-[#101828]">
+                                <span className="text-lg font-bold">10%</span>
+                                <span className="text-xs ml-1">150</span>
+                            </div>
+                        </div>
+                        <div className="text-xs text-[#344054] ml-4">Female</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    )
+}
+
+const AgeChart = () => {
+    return (
+        <div className="">
+            <div className="text-sm">
+                Gender
+            </div>
+
+            <div className="py-6 px-6 rounded-xl mt-3 bg-white space-y-10 ">
+                <div className="flex justify-end gap-2">
+                    <div className="flex items-center gap-2">
+                        <span className="w-3 h-3 bg-[#F6D0FE] rounded-full"></span>
+                        <div className="text-xs text-[#344054]">Male</div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className="w-3 h-3 bg-[#9E77ED] rounded-full"></span>
+                        <div className="text-xs text-[#344054]">Female</div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className="w-3 h-3 bg-[#6941C6] rounded-full"></span>
+                        <div className="text-xs text-[#344054]">Unspecified</div>
+                    </div>
+                </div>
+                <div className="">
+                    <ResponsiveContainer width="100%" height={170}>
+                        <BarChart
+                            width={500}
+                            height={170}
+                            data={ageData}
+                        >
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <Bar dataKey="pv" stackId="a" fill="#6941C6" barSize={32} />
+                            <Bar dataKey="uv" stackId="a" fill="#9E77ED" barSize={32} />
+                            <Bar dataKey="amt" stackId="a" fill="#EAECF0" barSize={32} radius={[6, 6, 0, 0]} />
+
+                        </BarChart>
+                    </ResponsiveContainer>
+                </div>
+
+
+
+            </div>
+        </div>
+    )
+}
+
+
+const RecentEpisodes = () => {
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalContent, setTotalContent] = useState(0);
+    const [isArchive, setIsArchive] = useState(false);
+    const router = useRouter()
+
+    const refresh = useAppSelector(state => state.podcasts.refresh);
+    const [episodes, setEpidoes] = useState<EpisodeModel[]>([]);
+
+    const handleGetEpisodes = async (page?: number) => {
+        try {
+            console.log(page)
+            const response = await APICall(isArchive ? getArchivedEpisodes : getEpisodes, [page ? page : currentPage, 15]);
+            setEpidoes(response.data.data.data);
+            console.log(response.data.data.total)
+            setTotalContent(response.data.data.total);
+
+        } catch (error) {
+            console.log(error)
+
+        }
+    }
+
+    const handlePageClick = (event: any) => {
+        setCurrentPage(++event.selected);
+        handleGetEpisodes((event.selected + 1))
+    };
+
+
+    useEffect(() => {
+        handleGetEpisodes(1)
+    }, [refresh]);
+
+    useEffect(() => {
+        handleGetEpisodes()
+    }, [isArchive]);
+
+    return (
+        <div className="">
+            <div className="text-sm">
+                Recent Episodes
+            </div>
+            {
+                <div className="mt-3">
+                    {
+                        <div>
+                            <div className="overflow-x-scroll mt-8 md:h-auto h-96 rounded-lg">
+                                <table className="border-collapse table-auto w-full whitespace-nowrap">
+                                    <thead className="text-white text-left border-b-2 border-[#EAECF0]">
+                                        <tr>
+                                            <th className="py-4 pl-6 font-medium text-sm">Name</th>
+                                            <th className="py-4 pl-6 font-medium text-sm text-right">Date uploaded</th>
+                                            <th className="py-4 pl-6 font-medium text-sm text-right">Duration</th>
+                                            <th className="py-4 pl-6 font-medium text-sm text-right">Tips and Ads</th>
+                                            <th className="py-4 px-6 font-medium text-sm text-right">Plays</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="">
+                                        {
+                                            episodes.map((episode) => {
+                                                return <tr className="hover:bg-grayTrue cursor-pointer">
+                                                    <td className="py-4 border-b pl-6 text-xs font-bold border-t border-[#667085]">
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="w-[40px] h-[40px] rounded">
+                                                                <img src={episode.picture_url} alt="" className="w-full h-full rounded" /></div>
+                                                            <span className="">{episode.title}</span>
+                                                        </div>
+                                                    </td>
+
+                                                    <td className="py-4 border-b pl-6 text-xs border-t border-[#667085] text-right">
+                                                        <div className="">
+                                                            {moment(episode.created_at).format("MMM YYYY, DD")}
+                                                        </div>
+                                                    </td>
+                                                    <td className="py-4 border-b pl-6 text-xs font-medium border-t border-[#667085] text-right">
+                                                        <div>
+                                                            {formatTimeW(episode.duration)}
+                                                        </div>
+                                                    </td>
+                                                    <td className="py-4 border-b pl-6 text-xs font-medium border-t border-[#667085] text-right">
+                                                        <div className="">
+                                                            {0}
+                                                        </div>
+                                                    </td>
+
+                                                    <td className="py-4 border-b px-6 text-xs border-t border-[#667085] text-right">
+                                                        <div className="">
+                                                            {episode.play_count}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            })
+                                        }
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            }
+        </div>
+    )
+}
 
 const PodcastView = ({ params }: { params: { podcastId: string } }) => {
     const user = useAppSelector(state => state.auth.user);
@@ -103,7 +500,7 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
     }
 
     const handlePageClick = (event: any) => {
-        setCurrentPage(++event.selected + 1);
+        setCurrentPage(++event.selected);
         handleGetEpisodes((event.selected + 1))
     };
 
@@ -213,7 +610,7 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
                                                 return <Listbox.Option className={"cursor-pointer"} key={filter.name} value={filter}>
                                                     {({ active, selected }) => (
                                                         <div
-                                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
+                                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] `}
                                                         >
                                                             {filter.name}
                                                         </div>
@@ -227,7 +624,7 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
                                         <Listbox.Option className={"cursor-pointer"} value={filters[3]}>
                                             {({ active, selected }) => (
                                                 <div
-                                                    className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
+                                                    className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] `}
                                                 >
                                                     {filters[3].name}
                                                 </div>
@@ -236,7 +633,7 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
                                         <Listbox.Option className={"cursor-pointer"} value={filters[4]}>
                                             {({ active, selected }) => (
                                                 <div
-                                                    className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
+                                                    className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] `}
                                                 >
                                                     {filters[4].name}
 
@@ -410,72 +807,22 @@ const PodcastView = ({ params }: { params: { podcastId: string } }) => {
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-8 ">
-
-                                        <div className="">
-                                            <div className="text-sm">
-                                                New followers
-                                            </div>
-                                            {/* total income */}
-                                            <div className="py-6 px-6 rounded-xl mt-3 bg-white space-y-10">
-                                                <div className="flex gap-4 py-1">
-                                                    <div className="flex-1">
-                                                        <div className="text-3xl font-raleway font-medium text-[#101828]">2k</div>
-                                                    </div>
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="flex gap-1 items-center">
-                                                            <svg width="51" height="20" viewBox="0 0 51 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                                <path d="M18.3332 5.83203L11.776 12.3892C11.446 12.7192 11.281 12.8842 11.0907 12.9461C10.9233 13.0004 10.743 13.0004 10.5757 12.9461C10.3854 12.8842 10.2204 12.7192 9.89036 12.3892L7.60931 10.1082C7.2793 9.77816 7.11429 9.61315 6.92402 9.55133C6.75665 9.49695 6.57636 9.49695 6.40899 9.55133C6.21872 9.61315 6.05371 9.77816 5.72369 10.1082L1.6665 14.1654M18.3332 5.83203H12.4998M18.3332 5.83203V11.6654" stroke="#17B26A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                                            </svg>
-                                                            <span className="text-sm font-bold text-[#067647]">15%</span>
-                                                        </div>
-                                                        <span className="text-sm text-[#1D2939]">
-                                                            vs last month
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div className="w-full">
-                                                    <ResponsiveContainer width="100%" height={100}>
-                                                        <AreaChart width={300} height={100} data={data}>
-                                                            <defs>
-                                                                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                                                                    <stop offset="5%" stopColor="#17B26A" stopOpacity={0.3} />
-                                                                    <stop offset="95%" stopColor="#17B26A" stopOpacity={0} />
-                                                                </linearGradient>
-                                                            </defs>
-                                                            <Area type="linear" dataKey="v" stroke="#17B26A" strokeWidth={3} fill="url(#colorUv)" dot={false} />
-                                                        </AreaChart>
-                                                    </ResponsiveContainer>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <div className="">
-                                            <div className="text-sm">
-                                                New followers
-                                            </div>
-                                            {/* total income */}
-                                            <div className="py-6 px-6 rounded-xl mt-3 bg-white space-y-10 h-[230px]">
-                                                <div className="flex">
-                                                    <div className="w-full">
-                                                        <ResponsiveContainer width={160} height={160}>
-                                                            <PieChart width={160} height={160}>
-                                                                <Pie data={[{ v: 60 }]} dataKey="v" innerRadius={6} fill="green" />
-                                                            </PieChart>
-                                                        </ResponsiveContainer> </div>
-                                                    <div className="flex-1 flex gap-4 py-1">
-
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
+                                        <FollowersChart />
+                                        <TimeListenedChart />
+                                        <TopCountries />
+                                        <GendersChart />
                                     </div>
-
+                                    <AgeChart />
+                                    <RecentEpisodes />
                                 </div>
                             </Tab.Panel>
                             <Tab.Panel>
                                 {/* <Episodes /> */}
+                            </Tab.Panel>
+                            <Tab.Panel>
+                                <div>
+                                    <RecentEpisodes />
+                                </div>
                             </Tab.Panel>
                         </Tab.Panels>
                     </Tab.Group>

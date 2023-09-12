@@ -17,9 +17,11 @@ export interface PodcastModel {
     episode_count: string;
     play_count: string;
     total_duration: number;
-    cover_image: string;
+    cover_picture_url: string;
     rating_count: string;
     average_rating: string;
+    total_tips: 0;
+    subscriber_count;
 }
 
 export interface PodcastGoal {

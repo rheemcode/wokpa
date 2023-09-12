@@ -109,7 +109,7 @@ const WokpaAdsPage = () => {
                         </svg>
                     </div>
                     <div className="text-sm font-medium">
-                        Monitize
+                        Monetize
                     </div>
                     <div>
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -126,7 +126,7 @@ const WokpaAdsPage = () => {
                     </div>
                     <div>
                         <p className="text-sm">
-                            We monitize your podcast so you don't have to.
+                            We monetize your podcast so you don't have to.
                         </p>
                     </div>
                 </div>

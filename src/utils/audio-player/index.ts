@@ -16,8 +16,8 @@ export function formatTime(seconds: number) {
 export function formatTimeW(seconds?: number) {
     if (!seconds) return ""
     const h = Math.floor(seconds / 3600) ? `${Math.floor(seconds / 3600)}h` : "";
-    const m = Math.floor((seconds % 3600) / 60) ? `${Math.floor((seconds % 3600) / 60)}min` : ""
-    const s = Math.round(seconds % 60) ? `${Math.round(seconds % 60)}sec` : "";
+    const m = Math.floor((seconds % 3600) / 60) ? `${Math.floor((seconds % 3600) / 60)}mins` : ""
+    const s = Math.round(seconds % 60) ? `${Math.round(seconds % 60)}secs` : "";
 
     return `${h} ${m} ${s}`
 }

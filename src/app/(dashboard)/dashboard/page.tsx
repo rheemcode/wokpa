@@ -384,6 +384,9 @@ const PodcastTable = () => {
     const [viewMode, setViewMode] = useState<"list" | "card">("list");
     const [podcasts, setPodcasts] = useState<PodcastModel[]>([]);
     const [podcastSorted, setPodcastSorted] = useState<PodcastModel[]>([]);
+    const [search, setSearch] = useState("")
+    const [searching, setSearching] = useState(false)
+
 
     const [podcastLoaded, setPodcastLoaded] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -416,9 +419,10 @@ const PodcastTable = () => {
     const [selectedFilter, setSelectedFilter] = useState(filters[0]);
     const [selectedStatusFilter, setSelectedStatusFilter] = useState(statusFilter[0]);
 
-    const handleGetPodcast = async (page?: number) => {
+    const handleGetPodcast = async (page?: number, title = "") => {
         try {
-            const response = await APICall(isArchive ? getPodcastArchive : getPodcasts, page ? page : currentPage);
+            setSearch(title);
+            const response = await APICall(isArchive ? getPodcastArchive : getPodcasts, [title, page ? page : currentPage, 15]);
             setPodcasts(response.data.data.data);
             setTotalContent(response.data.data.total);
             setPodcastLoaded(true);
@@ -432,8 +436,8 @@ const PodcastTable = () => {
     }
 
     const handlePageClick = (event: any) => {
-        console.log(event)
-        setCurrentPage(++event.selected + 1);
+        console.log(event);
+        setCurrentPage(++event.selected);
         handleGetPodcast((event.selected + 1))
     };
 
@@ -527,7 +531,7 @@ const PodcastTable = () => {
                                     return <Listbox.Option className={"cursor-pointer"} key={filter.name} value={filter}>
                                         {({ active, selected }) => (
                                             <div
-                                                className={`py-[0.63rem] px-2 rounded-lg ${active || (selectedStatusFilter.id == filter.id) ? 'bg-[#1D2939]' : ""}`}
+                                                className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939]`}
                                             >
                                                 {filter.name}
                                             </div>
@@ -555,7 +559,7 @@ const PodcastTable = () => {
                                         return <Listbox.Option className={"cursor-pointer"} key={filter.name} value={filter}>
                                             {({ active, selected }) => (
                                                 <div
-                                                    className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
+                                                    className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] `}
                                                 >
                                                     {filter.name}
                                                 </div>
@@ -569,7 +573,7 @@ const PodcastTable = () => {
                                 <Listbox.Option className={"cursor-pointer"} value={filters[3]}>
                                     {({ active, selected }) => (
                                         <div
-                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
+                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] `}
                                         >
                                             {filters[3].name}
                                         </div>
@@ -578,7 +582,7 @@ const PodcastTable = () => {
                                 <Listbox.Option className={"cursor-pointer"} value={filters[4]}>
                                     {({ active, selected }) => (
                                         <div
-                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] ${active || selected ? 'bg-[#1D2939]' : ""}`}
+                                            className={`py-[0.63rem] px-2 rounded-lg hover:bg-[#1D2939] `}
                                         >
                                             {filters[4].name}
 
@@ -615,7 +619,9 @@ const PodcastTable = () => {
                                         <path d="M17.5 17.5L14.5834 14.5833M16.6667 9.58333C16.6667 13.4954 13.4954 16.6667 9.58333 16.6667C5.67132 16.6667 2.5 13.4954 2.5 9.58333C2.5 5.67132 5.67132 2.5 9.58333 2.5C13.4954 2.5 16.6667 5.67132 16.6667 9.58333Z" stroke="#98A2B3" strokeWidth="1.66667" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                 </div>
-                                <input type="text" placeholder="Search" className="text-lg w-[292px] placeholder:text-[#98A2B3] pl-10 pr-3 py-2 rounded-lg border border-gray-300 bg-transparent" />
+                                <input value={search} onChange={(e) => {
+                                    handleGetPodcast(1, e.target.value)
+                                }} type="text" placeholder="Search" className="text-lg w-[292px] placeholder:text-[#98A2B3] pl-10 pr-3 py-2 rounded-lg border border-gray-300 bg-transparent" />
                             </div>
                         </div>
                     </div>
@@ -657,6 +663,7 @@ const PodcastTable = () => {
                                                     </div>
                                                 }
                                                 onPageChange={handlePageClick}
+                                                forcePage={(currentPage - 1)}
                                                 pageRangeDisplayed={5}
                                                 pageCount={Math.ceil(totalContent / 15)}
                                                 nextLabel={
@@ -690,10 +697,12 @@ const PodcastTable = () => {
                                         </defs>
                                     </svg>
                                     <div className="text-lg font-medium mt-4">
-                                        Create your first podcast
+                                        {isArchive ? "There are no archived podcast" : "Create your first podcast"}
                                     </div>
                                     <div className="mt-4">
-                                        <Button onClick={() => navigate.push("/podcast/create-podcast")} className='text-sm'>Create new podcast</Button>
+                                        <Button onClick={() => { isArchive ? setSelectedStatusFilter(statusFilter[0]) : navigate.push("/podcast/create-podcast") }} className='text-sm'>
+                                            {isArchive ? "Go to Active Podcast" : "Create new podcast"}
+                                        </Button>
                                     </div>
                                 </div>
                         }
@@ -728,7 +737,9 @@ const Episodes = () => {
     }
 
     const handlePageClick = (event: any) => {
-        setCurrentPage(++event.selected + 1);
+        console.log(event);
+
+        setCurrentPage(++event.selected);
         handleGetEpisodes((event.selected + 1))
     };
 
@@ -746,6 +757,7 @@ const Episodes = () => {
             <EpisodeView
                 episodes={episodes}
                 isArchive={isArchive}
+                view='table'
                 setIsArchive={(value) => setIsArchive(value)}
                 setEpisodes={(episodes: EpisodeModel[], page?: number) => {
                     setEpidoes(episodes);
@@ -772,6 +784,7 @@ const Episodes = () => {
                             </div>
                         }
                         onPageChange={handlePageClick}
+                        forcePage={(currentPage - 1)}
                         pageRangeDisplayed={5}
                         pageCount={Math.ceil(totalContent / 15)}
                         nextLabel={

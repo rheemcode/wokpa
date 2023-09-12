@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation";
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Tag } from "@/app/(dashboard)/components/Tag";
 import Link from "next/link";
+import { loadingBarRef } from "@/app/layout";
 
 
 const ReplaceAudioTab = ({ episode }: { episode: EpisodeModel }) => {
@@ -240,15 +241,15 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("This field is required"),
-        season: Yup.string().required("This field is required"),
-        number: Yup.string().required("This field is required"),
-        type: Yup.string().required("This field is required"),
-        description: Yup.string().required("This field is required"),
-        transcript_type: Yup.string().required("This field is required"),
-        transcript_url: Yup.string().required("This field is required"),
-        visibility: Yup.string().required("This field is required"),
+        season: Yup.string(),
+        number: Yup.string(),
+        type: Yup.string(),
+        description: Yup.string(),
+        transcript_type: Yup.string(),
+        transcript_url: Yup.string(),
+        visibility: Yup.string(),
         status: Yup.string(),
-        explicit: Yup.boolean().required("This field is required"),
+        explicit: Yup.boolean(),
 
     });
 
@@ -292,15 +293,14 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
     useEffect(() => {
         (async () => {
             try {
-                // const podcastResponse = await getPodcastsById(params.episodeId[0]);
-                // setPodcast(podcastResponse.data.data);
 
+                loadingBarRef.current?.continuousStart();
                 const episodesResponse = params.episodeId[2] ? await getArchivedEpisodeById(params.episodeId[0], params.episodeId[1]) : await getPodcastEpisode(params.episodeId[0], params.episodeId[1]);
                 setEpidoe(episodesResponse.data.data);
-
-
+                loadingBarRef.current?.complete();
 
             } catch (error) {
+                loadingBarRef.current?.complete();
 
             }
         })()
@@ -322,7 +322,7 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
             }
 
             const response = await APICall(updateEpisode, [episode?.podcast_id, episode?.id, data], true);
-            router.push(`/podcast-view/${params.episodeId[0]}`)
+            router.push(`/podcast-view/${params.episodeId[0]}/table`)
 
             setSubmitting(false);
 
@@ -456,7 +456,7 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
                                         description: episode?.description,
                                         transcript_type: episode?.transcript_type,
                                         transcript_url: episode?.transcript_url,
-                                        explicit: episode?.explicit,
+                                        explicit: episode?.explicit ? true : false,
                                         visibility: episode?.visibility,
                                         status: episode?.status,
                                     }}
@@ -522,14 +522,14 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
                                                             <label htmlFor="season" className="text-sm font-medium">
                                                                 Season number
                                                             </label>
-                                                            <Field type="text" name="season" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                            <Field type="number" name="season" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                             <ErrorMessage name="season" component={"div"} className="text-red-600 text-sm text-left" />
                                                         </div>
                                                         <div className="flex-1">
                                                             <label htmlFor="number" className="text-sm font-medium">
                                                                 Episode number
                                                             </label>
-                                                            <Field type="text" name="number" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                            <Field type="number" name="number" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                             <ErrorMessage name="number" component={"div"} className="text-red-600 text-sm text-left" />
                                                         </div>
                                                         <div className="flex-1">
@@ -732,7 +732,7 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {Object.values(errors).map((e) => e)}
+                                                
                                                 <div className="text-right space-x-4">
                                                     <Link href="/podcast/create-podcast">
                                                         <Button type="button" className="!text-sm  !from-transparent !to-transparent !text-white border font-semibold">

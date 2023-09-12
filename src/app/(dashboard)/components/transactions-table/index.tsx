@@ -80,7 +80,7 @@ const TransactionsTable: React.FC<{ showFilter?: boolean }> = ({ showFilter }) =
     }
 
     const handlePageClick = (event: any) => {
-        setCurrentPage(++event.selected + 1);
+        setCurrentPage(++event.selected);
         handleGetTransactions((event.selected + 1))
     };
 
@@ -262,6 +262,7 @@ const TransactionsTable: React.FC<{ showFilter?: boolean }> = ({ showFilter }) =
                         }
                         onPageChange={handlePageClick}
                         pageRangeDisplayed={5}
+                        forcePage={(currentPage - 1)}
                         pageCount={Math.ceil(totalContent / 15)}
                         nextLabel={
                             <div className='flex items-center gap-2'>

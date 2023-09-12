@@ -55,7 +55,7 @@ const DistributionPage
                                 <div className="flex justify-between items-center px-6 py-4">
                                     <div className="flex items-center gap-4">
                                         <div>
-                                            <img className="w-16 h-16 rounded-xl" src={getIcon("podcast.png")} alt="" />
+                                            <img className="w-16 h-16 rounded-xl" src={("/icons/podcast.png")} alt="" />
                                         </div>
                                         <div className="text-left">
                                             <div className="text-lg font-bold">

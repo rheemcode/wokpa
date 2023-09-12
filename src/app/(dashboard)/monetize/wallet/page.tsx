@@ -648,7 +648,7 @@ const WalletPage = () => {
                         </svg>
                     </div>
                     <div className="text-sm font-medium">
-                        Monitize
+                        Monetize
                     </div>
                     <div>
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -665,7 +665,7 @@ const WalletPage = () => {
                     </div>
                     <div>
                         <p className="text-sm">
-                            We monitize your podcast so you don't have to.
+                            We monetize your podcast so you don't have to.
                         </p>
                     </div>
                 </div>
@@ -791,7 +791,7 @@ const WalletPage = () => {
                     <div className="font-semibold text-lg">
                         Most recent transactions
                     </div>
-                    <Link href="/monitize/payment-history" className="text-sm font-semibold text-[#4FFFEB]">
+                    <Link href="/monetize/payment-history" className="text-sm font-semibold text-[#4FFFEB]">
                         View transaction history
                     </Link>
                 </div>

@@ -1,12 +1,12 @@
 import { API_URL } from "@/utils";
 import axios from "axios";
 
-export const getPodcasts = async (page = 1, perPage = 15) => axios.get(`${API_URL}/publishers/podcasts?page=${page}&per_page=${perPage}`);
+export const getPodcasts = async (title = "", page = 1, perPage = 15) => axios.get(`${API_URL}/publishers/podcasts?title=${title}&page=${page}&per_page=${perPage}`);
 export const getPodcastsById = async (id: number | string) => axios.get(`${API_URL}/publishers/podcasts/${id}`);
 export const getArchivePodcastsById = async (id: number | string) => axios.get(`${API_URL}/publishers/archives/podcasts/${id}`);
 
 export const getPodcastEpisodes = async (id: number | string, page = 1, perPage = 10) => axios.get(`${API_URL}/publishers/podcasts/${id}/episodes?page=${page}&per_page=${perPage}`);
-export const getEpisodes = async (page = 1, perPage = 10) => axios.get(`${API_URL}/publishers/episodes?page=${page}&per_page=${perPage}`);
+export const getEpisodes = async (page = 1, perPage = 10, title = "") => axios.get(`${API_URL}/publishers/episodes?page=${page}&per_page=${perPage}&title=${title}`);
 export const getArchivedEpisodes = async (page = 1, perPage = 10) => axios.get(`${API_URL}/publishers/archives/episodes?page=${page}&per_page=${perPage}`);
 export const getArchivedEpisodeById = async (podcastId: number | string, episodeId: number | string) => axios.get(`${API_URL}/publishers/archives/podcasts/${podcastId}/episodes/${episodeId}`);
 
@@ -82,7 +82,7 @@ export const getEpisodesArchive = async (podcastId: string | number, page = 1, p
 
 export const archivePodcast = async (podcastId: string | number) => axios.post(`${API_URL}/publishers/podcasts/${podcastId}/archives`);
 export const removeArchivePodcasts = async (podcastId: string | number) => axios.delete(`${API_URL}/publishers/podcasts/${podcastId}/archives`);
-export const getPodcastArchive = async (page = 1, perPage = 15) => axios.get(`${API_URL}/publishers/archives/podcasts?page=${page}&per_page=${perPage}`);
+export const getPodcastArchive = async (title = "", page = 1, perPage = 15) => axios.get(`${API_URL}/publishers/archives/podcasts?title=${title}&page=${page}&per_page=${perPage}`);
 
 
 export const initiatePodcastImport = async (url: string) => axios.post(`${API_URL}/publishers/podcasts/import/verification`, { url });
