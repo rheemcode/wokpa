@@ -422,7 +422,7 @@ const PodcastTable = () => {
     const handleGetPodcast = async (page?: number, title = "") => {
         try {
             setSearch(title);
-            const response = await APICall(isArchive ? getPodcastArchive : getPodcasts, [title, page ? page : currentPage, 15]);
+            const response = await APICall(isArchive ? getPodcastArchive : getPodcasts, [page ? page : currentPage, 15, title]);
             setPodcasts(response.data.data.data);
             setTotalContent(response.data.data.total);
             setPodcastLoaded(true);

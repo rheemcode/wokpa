@@ -35,7 +35,6 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
         language: Yup.string().required("This field is required"),
         podcast_category: Yup.string().required("This field is required"),
         description: Yup.string().required("This field is required"),
-        tips_and_donations_amount: Yup.string().required("This field is required"),
         email: Yup.string().email("Invalid email").required("This field is required"),
     });
 
@@ -365,8 +364,8 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                                                     setInputValue(e.target.value);
                                                                 }}
                                                                 onBlur={addTag}
-                                                                className="focus:outline-0 focus:border-0 text-sm p-0 text-gray-500 outline-0 border-0"
-                                                                placeholder="Add a tag by with comma" />
+                                                                className="focus:outline-0 focus:border-0 text-sm p-0 text-gray-500 outline-0 border-0 w-64"
+                                                                placeholder="Add a tag with comma" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -630,8 +629,8 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                                                     setInputValue(e.target.value);
                                                                 }}
                                                                 onBlur={addTag}
-                                                                className="focus:outline-0 focus:border-0 text-sm p-0 text-gray-500 outline-0 border-0"
-                                                                placeholder="Add a tag by with comma" />
+                                                                className="focus:outline-0 focus:border-0 text-sm p-0 text-gray-500 outline-0 border-0 w-64"
+                                                                placeholder="Add a tag with comma" />
                                                         </div>
                                                     </div>
                                                 </div>

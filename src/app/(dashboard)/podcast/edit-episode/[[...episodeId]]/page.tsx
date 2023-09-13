@@ -222,7 +222,7 @@ const EpisodePlayer = ({ episode }: { episode: EpisodeModel }) => {
     )
 }
 
-const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
+const EditEpisodePage = ({ params }: { params: { episodeId: string[] } }) => {
     const user = useAppSelector(state => state.auth.user);
     const dispatch = useAppDispatch();
 
@@ -232,12 +232,14 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
     const [podcast, setPodcast] = useState<PodcastModel | null>(null);
     const [episode, setEpidoe] = useState<EpisodeModel | null>(null);
     const [showEditModal, setShowEditModal] = useState(false);
+    
     const [scale, setScale] = useState(1);
     const [editedImage, setEditedImage] = useState<File | null>(null);
     const [editedImageURL, setEditedImageURL] = useState<string>("");
     const router = useRouter();
     const [tags, setTags] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState('');
+    
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("This field is required"),
@@ -322,7 +324,7 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
             }
 
             const response = await APICall(updateEpisode, [episode?.podcast_id, episode?.id, data], true);
-            router.push(`/podcast-view/${params.episodeId[0]}/table`)
+            router.push(`/podcast/podcast-view/${params.episodeId[0]}/table`)
 
             setSubmitting(false);
 
@@ -732,7 +734,7 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div className="text-right space-x-4">
                                                     <Link href="/podcast/create-podcast">
                                                         <Button type="button" className="!text-sm  !from-transparent !to-transparent !text-white border font-semibold">
@@ -800,4 +802,4 @@ const EditPodcastPage = ({ params }: { params: { episodeId: string[] } }) => {
     )
 }
 
-export default EditPodcastPage
+export default EditEpisodePage

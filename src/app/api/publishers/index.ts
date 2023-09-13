@@ -1,7 +1,7 @@
 import { API_URL } from "@/utils";
 import axios from "axios";
 
-export const getPodcasts = async (q = "", page = 1, perPage = 15) => axios.get(`${API_URL}/publishers/podcasts?q=${q}&page=${page}&per_page=${perPage}`);
+export const getPodcasts = async (page = 1, perPage = 15, q= "") => axios.get(`${API_URL}/publishers/podcasts?q=${q}&page=${page}&per_page=${perPage}`);
 export const getPodcastsById = async (id: number | string) => axios.get(`${API_URL}/publishers/podcasts/${id}`);
 export const getArchivePodcastsById = async (id: number | string) => axios.get(`${API_URL}/publishers/archives/podcasts/${id}`);
 

@@ -123,7 +123,7 @@ export const EpisodeItem: React.FC<{ mode: "list" | "card", episode: EpisodeMode
                                             </svg>
 
                                             <div className="text-sm">
-
+{/* {episode.category} */}
                                             </div>
 
                                             <svg width="4" height="5" viewBox="0 0 4 5" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -655,13 +655,11 @@ export const EpisodeView: React.FC<{
                             {
                                 episodes.map((episode) => {
                                     return <EpisodeItem key={episode.id + "ep"} episode={episode} mode={viewMode} isArchive={isArchive} />
-
                                 })
                             }
                         </div> :
                             <>
                                 <EpisodeTable episodes={episodes} isArchive={isArchive} />
-
                             </>}
                     </> :
                         <div className="text-center py-12">
