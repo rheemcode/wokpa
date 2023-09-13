@@ -7,6 +7,7 @@ import { useAppSelector, useAppDispatch } from "@/hooks";
 import { PodcastModel } from "@/models/podcast";
 import { APICall, getIcon } from "@/utils";
 import { Disclosure, Switch } from "@headlessui/react";
+import Link from "next/link";
 import { useState } from "react";
 import { useEffectOnce } from "react-use";
 
@@ -46,7 +47,12 @@ const DistributionPage = ({ params }: { params: { podcastId: string[] } }) => {
                         </svg>
                     </div>
                     <div className="text-sm font-medium">
-                        Emax podcast
+                        {
+                            podcast && <Link href={`podcast/podcast-view/${podcast?.id}`}>
+                                {podcast?.title}
+                            </Link>
+                        }
+
                     </div>
                     <div>
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
