@@ -48,7 +48,7 @@ const DistributionPage = ({ params }: { params: { podcastId: string[] } }) => {
                     </div>
                     <div className="text-sm font-medium">
                         {
-                            podcast && <Link href={`podcast/podcast-view/${podcast?.id}`}>
+                            podcast && <Link href={`/podcast/podcast-view/${podcast?.id}`}>
                                 {podcast?.title}
                             </Link>
                         }
