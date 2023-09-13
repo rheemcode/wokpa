@@ -91,7 +91,7 @@ export default function SignUpPage() {
             if (response.data.data.user.podcast_goal_updated_at) {
                 navigate.push("/dashboard")
             } else {
-                navigate.push("onboarding/one");
+                navigate.push("/onboarding/one");
             }
 
             // loadingBarRef.current?.complete();
@@ -287,7 +287,7 @@ export default function SignUpPage() {
                                                             <label htmlFor="phone" className="text-sm">
                                                                 Date of birth *
                                                             </label>
-                                                            <Field type="date" name="date_of_birth"  className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
+                                                            <Field type="date" name="date_of_birth" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`} />
                                                             <ErrorMessage name="date_of_birth" component={"div"} className="text-red-600 text-sm text-left" />
                                                         </div>
                                                     </div>

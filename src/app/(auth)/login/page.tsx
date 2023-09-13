@@ -53,7 +53,7 @@ export default function Login() {
             if (response.data.data.user.podcast_goal_updated_at) {
                 navigate.push("/dashboard")
             } else {
-                navigate.push("onboarding/one");
+                navigate.push("/onboarding/one");
                 return;
             }
 
@@ -87,7 +87,7 @@ export default function Login() {
             if (response.data.data.user.podcast_goal_updated_at) {
                 navigate.push("/dashboard")
             } else {
-                navigate.push("onboarding/one");
+                navigate.push("/onboarding/one");
             }
             setSubmitting(false);
         } catch (error) {
