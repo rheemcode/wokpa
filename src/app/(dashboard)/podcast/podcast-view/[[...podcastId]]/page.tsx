@@ -36,7 +36,7 @@ const PodcastView = ({ params }: { params: { podcastId: string[] } }) => {
     const handleGetEpisodes = async (page?: number) => {
         try {
             console.log(page)
-            const response = await APICall(isArchive ? getEpisodesArchive : getPodcastEpisodes, [params.podcastId[0], page ? page : currentPage, 15]);
+            const response = await APICall(getPodcastEpisodes, [params.podcastId[0], page ? page : currentPage, 15, isArchive]);
             setEpidoes(response.data.data.data);
             setTotalContent(response.data.data.total);
 

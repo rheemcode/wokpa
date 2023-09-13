@@ -26,6 +26,8 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Tag } from "@/app/(dashboard)/components/Tag";
 import Link from "next/link";
 import { loadingBarRef } from "@/app/layout";
+import "react-datetime/css/react-datetime.css";
+import Datetime from "react-datetime";
 
 
 const ReplaceAudioTab = ({ episode }: { episode: EpisodeModel }) => {
@@ -232,26 +234,28 @@ const EditEpisodePage = ({ params }: { params: { episodeId: string[] } }) => {
     const [podcast, setPodcast] = useState<PodcastModel | null>(null);
     const [episode, setEpidoe] = useState<EpisodeModel | null>(null);
     const [showEditModal, setShowEditModal] = useState(false);
-    
+    const [publishLater, setPublishLater] = useState(false);
+
     const [scale, setScale] = useState(1);
     const [editedImage, setEditedImage] = useState<File | null>(null);
     const [editedImageURL, setEditedImageURL] = useState<string>("");
     const router = useRouter();
     const [tags, setTags] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState('');
-    
+
 
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("This field is required"),
         season: Yup.string(),
         number: Yup.string(),
         type: Yup.string(),
-        description: Yup.string(),
+        description: Yup.string().required("This field is required"),
         transcript_type: Yup.string(),
         transcript_url: Yup.string(),
-        visibility: Yup.string(),
-        status: Yup.string(),
-        explicit: Yup.boolean(),
+        visibility: Yup.string().required("This field is required"),
+        status: Yup.string().required("This field is required"),
+        publish_later_at: Yup.date(),
+        explicit: Yup.boolean().required("This field is required"),
 
     });
 
@@ -460,6 +464,8 @@ const EditEpisodePage = ({ params }: { params: { episodeId: string[] } }) => {
                                         transcript_url: episode?.transcript_url,
                                         explicit: episode?.explicit ? true : false,
                                         visibility: episode?.visibility,
+                                        shares: [],
+                                        publish_later_at: "",
                                         status: episode?.status,
                                     }}
                                     validationSchema={validationSchema}
@@ -712,6 +718,68 @@ const EditEpisodePage = ({ params }: { params: { episodeId: string[] } }) => {
                                                     </div>
                                                     <div className="flex gap-5">
                                                         <div className="md:w-6/12">
+                                                            <label htmlFor="password" className="text-sm font-medium">
+                                                                Automatic shares
+                                                            </label>
+                                                            <div className="text-sm font-medium">
+                                                                Enable this option if your recording contains explicit content. This <br /> information is also exported to your RSS / iTunes feeds.
+                                                            </div>
+                                                            <div className="flex gap-10">
+                                                                <div className="flex gap-4 items-center">
+                                                                    <Field type="checkbox" name="shares" value="whatsapp" id="" />
+                                                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <g opacity="0.5">
+                                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M16 31C23.732 31 30 24.732 30 17C30 9.26801 23.732 3 16 3C8.26801 3 2 9.26801 2 17C2 19.5109 2.661 21.8674 3.81847 23.905L2 31L9.31486 29.3038C11.3014 30.3854 13.5789 31 16 31ZM16 28.8462C22.5425 28.8462 27.8462 23.5425 27.8462 17C27.8462 10.4576 22.5425 5.15385 16 5.15385C9.45755 5.15385 4.15385 10.4576 4.15385 17C4.15385 19.5261 4.9445 21.8675 6.29184 23.7902L5.23077 27.7692L9.27993 26.7569C11.1894 28.0746 13.5046 28.8462 16 28.8462Z" fill="#BFC8D0" />
+                                                                            <path d="M28 16C28 22.6274 22.6274 28 16 28C13.4722 28 11.1269 27.2184 9.19266 25.8837L5.09091 26.9091L6.16576 22.8784C4.80092 20.9307 4 18.5589 4 16C4 9.37258 9.37258 4 16 4C22.6274 4 28 9.37258 28 16Z" fill="url(#paint0_linear_5831_19683)" />
+                                                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M16 30C23.732 30 30 23.732 30 16C30 8.26801 23.732 2 16 2C8.26801 2 2 8.26801 2 16C2 18.5109 2.661 20.8674 3.81847 22.905L2 30L9.31486 28.3038C11.3014 29.3854 13.5789 30 16 30ZM16 27.8462C22.5425 27.8462 27.8462 22.5425 27.8462 16C27.8462 9.45755 22.5425 4.15385 16 4.15385C9.45755 4.15385 4.15385 9.45755 4.15385 16C4.15385 18.5261 4.9445 20.8675 6.29184 22.7902L5.23077 26.7692L9.27993 25.7569C11.1894 27.0746 13.5046 27.8462 16 27.8462Z" fill="white" />
+                                                                            <path d="M12.5 9.50038C12.1672 8.8318 11.6565 8.89099 11.1407 8.89099C10.2188 8.89099 8.78125 9.99527 8.78125 12.0504C8.78125 13.7348 9.52345 15.5785 12.0244 18.3366C14.438 20.9984 17.6094 22.3753 20.2422 22.3284C22.875 22.2816 23.4167 20.0159 23.4167 19.2508C23.4167 18.9117 23.2062 18.7425 23.0613 18.6965C22.1641 18.2659 20.5093 17.4636 20.1328 17.3129C19.7563 17.1622 19.5597 17.366 19.4375 17.477C19.0961 17.8023 18.4193 18.7613 18.1875 18.977C17.9558 19.1926 17.6103 19.0835 17.4665 19.0019C16.9374 18.7896 15.5029 18.1516 14.3595 17.0431C12.9453 15.6723 12.8623 15.2006 12.5959 14.7808C12.3828 14.4449 12.5392 14.2389 12.6172 14.1488C12.9219 13.7973 13.3426 13.2545 13.5313 12.9848C13.7199 12.715 13.5702 12.3055 13.4803 12.0504C13.0938 10.9535 12.7663 10.0352 12.5 9.50038Z" fill="white" />
+                                                                        </g>
+                                                                        <defs>
+                                                                            <linearGradient id="paint0_linear_5831_19683" x1="26.5" y1="7" x2="4" y2="28" gradientUnits="userSpaceOnUse">
+                                                                                <stop stop-color="#5BD066" />
+                                                                                <stop offset="1" stop-color="#27B43E" />
+                                                                            </linearGradient>
+                                                                        </defs>
+                                                                    </svg>
+
+
+                                                                </div>
+                                                                <div className="flex gap-4 items-center">
+                                                                    <Field type="checkbox" name="shares" value="whatsapp" id="" />
+                                                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <g opacity="0.5">
+                                                                            <circle cx="16" cy="16" r="14" fill="url(#paint0_linear_5831_19691)" />
+                                                                            <path d="M22.9866 10.2088C23.1112 9.40332 22.3454 8.76755 21.6292 9.082L7.36482 15.3448C6.85123 15.5703 6.8888 16.3483 7.42147 16.5179L10.3631 17.4547C10.9246 17.6335 11.5325 17.541 12.0228 17.2023L18.655 12.6203C18.855 12.4821 19.073 12.7665 18.9021 12.9426L14.1281 17.8646C13.665 18.3421 13.7569 19.1512 14.314 19.5005L19.659 22.8523C20.2585 23.2282 21.0297 22.8506 21.1418 22.1261L22.9866 10.2088Z" fill="white" />
+                                                                        </g>
+                                                                        <defs>
+                                                                            <linearGradient id="paint0_linear_5831_19691" x1="16" y1="2" x2="16" y2="30" gradientUnits="userSpaceOnUse">
+                                                                                <stop stop-color="#37BBFE" />
+                                                                                <stop offset="1" stop-color="#007DBB" />
+                                                                            </linearGradient>
+                                                                        </defs>
+                                                                    </svg>
+
+                                                                </div>
+                                                                <div className="flex gap-4 items-center">
+                                                                    <Field type="checkbox" name="shares" value="whatsapp" id="" />
+                                                                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                        <g opacity="0.5" clip-path="url(#clip0_5831_19697)">
+                                                                            <path d="M32 16C32 7.16344 24.8366 0 16 0C7.16344 0 0 7.16344 0 16C0 23.9859 5.85094 30.6053 13.5 31.8056V20.625H9.4375V16H13.5V12.475C13.5 8.465 15.8888 6.25 19.5434 6.25C21.2934 6.25 23.125 6.5625 23.125 6.5625V10.5H21.1075C19.12 10.5 18.5 11.7334 18.5 13V16H22.9375L22.2281 20.625H18.5V31.8056C26.1491 30.6053 32 23.9859 32 16Z" fill="#1877F2" />
+                                                                            <path d="M22.2281 20.625L22.9375 16H18.5V13C18.5 11.7347 19.12 10.5 21.1075 10.5H23.125V6.5625C23.125 6.5625 21.2941 6.25 19.5434 6.25C15.8888 6.25 13.5 8.465 13.5 12.475V16H9.4375V20.625H13.5V31.8056C15.1566 32.0648 16.8434 32.0648 18.5 31.8056V20.625H22.2281Z" fill="white" />
+                                                                        </g>
+                                                                        <defs>
+                                                                            <clipPath id="clip0_5831_19697">
+                                                                                <rect width="32" height="32" fill="white" />
+                                                                            </clipPath>
+                                                                        </defs>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                            <ErrorMessage name="transcript_type" component={"div"} className="text-red-600 text-sm text-left" />
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex gap-5">
+                                                        <div className="md:w-6/12">
                                                             <label htmlFor="password" className="text-lg font-medium">
                                                                 Explicit content
                                                             </label>
@@ -719,12 +787,12 @@ const EditEpisodePage = ({ params }: { params: { episodeId: string[] } }) => {
                                                                 <Switch
                                                                     checked={Boolean(values.explicit)}
                                                                     onChange={(val) => { setFieldValue("explicit", val) }}
-                                                                    className={`${values.explicit ? 'bg-[#21A79C]' : 'bg-slate-600'} relative inline-flex h-[18px] w-[32px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                                                                    className={`${values.explicit ? 'bg-[#21A79C]' : 'bg-[#F2F4F7]'} relative inline-flex h-[18.5px] w-[32px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
                                                                 >
                                                                     <span className="sr-only">Use setting</span>
                                                                     <span
                                                                         aria-hidden="true"
-                                                                        className={`${values.explicit ? 'translate-x-[0.82rem]' : 'translate-x-0'} pointer-events-none inline-block h-[16px] w-[16px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                                                                        className={`${values.explicit ? 'translate-x-[0.82rem]' : 'translate-x-0'} pointer-events-none inline-block h-[16px] w-[16px] transform rounded-full bg-white border-slate-600 border shadow-lg ring-0 transition duration-200 ease-in-out`}
                                                                     />
                                                                 </Switch>
                                                                 <div className="text-sm font-medium">
@@ -733,6 +801,42 @@ const EditEpisodePage = ({ params }: { params: { episodeId: string[] } }) => {
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div className="flex gap-5">
+                                                        <div className="md:w-6/12">
+                                                            <label htmlFor="password" className="text-lg font-medium">
+                                                                Publish later
+                                                            </label>
+                                                            <div className="flex  gap-2 mt-4">
+                                                                <Switch
+                                                                    checked={publishLater}
+                                                                    onChange={setPublishLater}
+                                                                    className={`${publishLater ? 'bg-[#21A79C]' : 'bg-[#F2F4F7]'} relative inline-flex h-[18.5px] w-[32px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                                                                >
+                                                                    <span className="sr-only">Use setting</span>
+                                                                    <span
+                                                                        aria-hidden="true"
+                                                                        className={`${publishLater ? 'translate-x-[0.82rem]' : 'translate-x-0'} pointer-events-none inline-block h-[16px] w-[16px] transform rounded-full bg-white border-slate-600 border shadow-lg ring-0 transition duration-200 ease-in-out`}
+                                                                    />
+                                                                </Switch>
+                                                                <div className="text-sm font-medium">
+                                                                    Enable this option if you want this episode automatically published on a specific date and time.
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {publishLater && <div className="flex gap-5">
+                                                        <div className="md:w-6/12">
+                                                            <div className="text-lg font-medium">
+                                                                Date
+                                                            </div>
+                                                            <Datetime
+                                                                className="w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500"
+                                                                value={values.publish_later_at}
+                                                                onChange={(m) => { setFieldValue("publish_later_at", m) }}
+                                                            />
+
+                                                        </div>
+                                                    </div>}
                                                 </div>
 
                                                 <div className="text-right space-x-4">

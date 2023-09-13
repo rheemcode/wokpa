@@ -18,6 +18,23 @@ a:hover {
     text-decoration: none;
 }
 
+.react-datetime-picker__wrapper {
+    border: none !important;
+}
+
+.react-calendar__navigation {
+    display: flex;
+    justify-content: space-between;
+}
+
+.react-datetime-picker__inputGroup {
+    display: flex;
+}
+
+.react-datetime-picker__inputGroup input {
+    
+}
+
 *::-webkit-scrollbar {
     width: 1px;
     height: 2px;

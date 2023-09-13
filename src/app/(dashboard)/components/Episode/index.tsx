@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { usePopper } from 'react-popper'
+import ShowMoreText from "react-show-more-text";
 
 
 export const EpisodeItem: React.FC<{ mode: "list" | "card", episode: EpisodeModel, isArchive: boolean }> = ({ mode, episode, isArchive }) => {
@@ -81,145 +82,134 @@ export const EpisodeItem: React.FC<{ mode: "list" | "card", episode: EpisodeMode
                 </div>
             </Modal>
             {
-                mode == "list" ?
-                    <div className="flex items-center gap-4">
-                        <div>
-                            <div className='cursor-pointer !w-[120px] !h-[120px]'>
-                                <img className="object-cover rounded-lg" src={episode.picture_url} alt="" />
-                            </div>
+
+                <div className="flex gap-4">
+                    <div>
+                        <div className='cursor-pointer !w-[120px] !h-[120px] py-5'>
+                            <img className="object-cover rounded-lg" src={episode.picture_url} alt="" />
                         </div>
-                        <div className="w-full flex justify-between items-center py-6">
-                            <div className="flex gap-4">
-                                <div className="h-full">
-                                    <div className="flex justify-between flex-col gap-2">
-                                        <div>
-                                            <div className="text-sm font-medium">
-                                                Published:  {moment(episode.created_at).format("DD MMM, YYYY")}
-                                            </div>
+                    </div>
+                    <div className="w-full flex gap-6 justify-between items-center py-5 self-center">
+                        <div className="flex gap-4">
+                            <div className="h-full">
+                                <div className="flex justify-between flex-col gap-2">
+                                    <div>
+                                        <div className="text-sm font-medium uppercase">
+                                            {moment(episode.created_at).format("dddd Do MMM, YYYY")}
                                         </div>
-                                        <div>
-                                            <div className="font-semibold text-lg">
-                                                {
-                                                    episode.title
-                                                }
-                                            </div>
+                                    </div>
+                                    <div>
+                                        <div className="font-semibold text-lg">
+                                            {
+                                                episode.title
+                                            }
                                         </div>
-                                        <div className="flex gap-2 items-center text-[#D0D5DD]">
-                                            <div className="flex gap-1 items-center">
-                                                <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M9 13.6195L13.635 16.417L12.405 11.1445L16.5 7.59699L11.1075 7.13949L9 2.16699L6.8925 7.13949L1.5 7.59699L5.595 11.1445L4.365 16.417L9 13.6195Z" fill="#D0D5DD" />
-                                                </svg>
-                                                <div className="text-sm font-semibold">
-                                                    {
-                                                        Number(episode.average_rating)
-                                                    }
-                                                    <span className="font-normal ml-1">
-                                                        ({Number(episode.rating_count)})
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <svg width="4" height="5" viewBox="0 0 4 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="2" cy="2.66699" r="2" fill="#D0D5DD" />
-                                            </svg>
+                                    </div>
+                                    <div>
+                                        <ShowMoreText
+                                            /* Default options */
+                                            lines={1}
+                                            more="Show more"
+                                            less="Show less"
+                                            className="text-xs"
+                                            anchorClass="show-more-less-clickable"
+                                            // onClick={this.executeOnClick}
+                                            expanded={false}
+                                            // width={280}
+                                            truncatedEndingComponent={"... "}
+                                        >
 
-                                            <div className="text-sm">
-{/* {episode.category} */}
-                                            </div>
+                                            {
+                                                episode.description
+                                            }
+                                        </ShowMoreText>
 
-                                            <svg width="4" height="5" viewBox="0 0 4 5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <circle cx="2" cy="2.66699" r="2" fill="#D0D5DD" />
-                                            </svg>
+                                    </div>
 
-                                            <div className="text-sm">
-                                                Weekly
-                                            </div>
-
-                                        </div>
-                                        <div className="flex gap-4 items-center">
-                                            {/* <div className="">
+                                    <div className="flex gap-4 items-center">
+                                        {/* <div className="">
                                             <div className="text-[8px] text-[#0D0D0D] font-semibold bg-white rounded-full py-2 px-4">
                                                 20 Episodes
                                             </div>
                                         </div> */}
-                                            <div className="flex items-center gap-1 text-sm">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M6.66675 13.3337H9.33341V2.66699H6.66675V13.3337ZM2.66675 13.3337H5.33341V8.00033H2.66675V13.3337ZM10.6667 6.00033V13.3337H13.3334V6.00033H10.6667Z" fill="#E5F5F4" />
-                                                </svg>
+                                        <div className="flex items-center gap-1 text-sm">
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M6.66675 13.3337H9.33341V2.66699H6.66675V13.3337ZM2.66675 13.3337H5.33341V8.00033H2.66675V13.3337ZM10.6667 6.00033V13.3337H13.3334V6.00033H10.6667Z" fill="#E5F5F4" />
+                                            </svg>
 
-                                                <div>
-                                                    {episode.play_count} Plays
-                                                </div>
+                                            <div>
+                                                {episode.play_count} Plays
                                             </div>
-                                            <div className="flex items-center gap-1 text-sm">
-                                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M15.1333 7.66667L13.8004 9L12.4666 7.66667M13.9634 8.66667C13.9876 8.44778 14 8.22534 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C9.88484 14 11.5667 13.1309 12.6667 11.7716M8 4.66667V8L10 9.33333" stroke="#E5F5F4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                                </svg>
-                                                <div>
-                                                    {formatTimeW(episode.duration)}
+                                        </div>
+                                        <div className="flex items-center gap-1 text-sm">
+                                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M15.1333 7.66667L13.8004 9L12.4666 7.66667M13.9634 8.66667C13.9876 8.44778 14 8.22534 14 8C14 4.68629 11.3137 2 8 2C4.68629 2 2 4.68629 2 8C2 11.3137 4.68629 14 8 14C9.88484 14 11.5667 13.1309 12.6667 11.7716M8 4.66667V8L10 9.33333" stroke="#E5F5F4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                            </svg>
+                                            <div>
+                                                {formatTimeW(episode.duration)}
 
-                                                </div>
                                             </div>
-                                            <div className="flex items-center gap-1 text-sm">
-                                                <div>
-                                                    ₦
-                                                </div>
-                                                <div>
-                                                    0
-                                                </div>
+                                        </div>
+                                        <div className="flex items-center gap-1 text-sm">
+                                            <div>
+                                                ₦
+                                            </div>
+                                            <div>
+                                                0
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
 
-                            {/* action buttons */}
-                            <div className="flex gap-4">
-                                <div className="text-center">
-                                    <Link className="inline-block" href={`/podcast/edit-episode/${episode.podcast_id}/${episode.id}`}>
-                                        <div>
-                                            <svg className="inline" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M11 4.00023H6.8C5.11984 4.00023 4.27976 4.00023 3.63803 4.32721C3.07354 4.61483 2.6146 5.07377 2.32698 5.63826C2 6.27999 2 7.12007 2 8.80023V17.2002C2 18.8804 2 19.7205 2.32698 20.3622C2.6146 20.9267 3.07354 21.3856 3.63803 21.6732C4.27976 22.0002 5.11984 22.0002 6.8 22.0002H15.2C16.8802 22.0002 17.7202 22.0002 18.362 21.6732C18.9265 21.3856 19.3854 20.9267 19.673 20.3622C20 19.7205 20 18.8804 20 17.2002V13.0002M7.99997 16.0002H9.67452C10.1637 16.0002 10.4083 16.0002 10.6385 15.945C10.8425 15.896 11.0376 15.8152 11.2166 15.7055C11.4184 15.5818 11.5914 15.4089 11.9373 15.063L21.5 5.50023C22.3284 4.6718 22.3284 3.32865 21.5 2.50023C20.6716 1.6718 19.3284 1.6718 18.5 2.50022L8.93723 12.063C8.59133 12.4089 8.41838 12.5818 8.29469 12.7837C8.18504 12.9626 8.10423 13.1577 8.05523 13.3618C7.99997 13.5919 7.99997 13.8365 7.99997 14.3257V16.0002Z" stroke="#EAECF0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                            </svg>
-                                        </div>
-                                        <div className="text-xs mt-1">
-                                            Edit
-                                        </div>
-                                    </Link>
-                                </div>
-                                <div className="text-center">
-                                    <button>
-                                        <div>
-                                            <svg className="inline" width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M21.5 9.00001L21.5 3.00001M21.5 3.00001H15.5M21.5 3.00001L12.5 12M10.5 3H8.3C6.61984 3 5.77976 3 5.13803 3.32698C4.57354 3.6146 4.1146 4.07354 3.82698 4.63803C3.5 5.27976 3.5 6.11984 3.5 7.8V16.2C3.5 17.8802 3.5 18.7202 3.82698 19.362C4.1146 19.9265 4.57354 20.3854 5.13803 20.673C5.77976 21 6.61984 21 8.3 21H16.7C18.3802 21 19.2202 21 19.862 20.673C20.4265 20.3854 20.8854 19.9265 21.173 19.362C21.5 18.7202 21.5 17.8802 21.5 16.2V14" stroke="#EAECF0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                            </svg>
-                                        </div>
-                                        <div className="text-xs mt-1">
-                                            Share
-                                        </div>
-                                    </button>
-                                </div>
-                                <div>
-                                    <button onClick={() => {
-                                        setSelectedEpisode(episode);
-                                        setShowArchiveModal(true);
-                                    }}>
-                                        <div>
-                                            <svg className="inline" width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                <path d="M4.5 7.9966C4.33599 7.99236 4.2169 7.98287 4.10982 7.96157C3.31644 7.80376 2.69624 7.18356 2.53843 6.39018C2.5 6.19698 2.5 5.96466 2.5 5.5C2.5 5.03534 2.5 4.80302 2.53843 4.60982C2.69624 3.81644 3.31644 3.19624 4.10982 3.03843C4.30302 3 4.53534 3 5 3H20C20.4647 3 20.697 3 20.8902 3.03843C21.6836 3.19624 22.3038 3.81644 22.4616 4.60982C22.5 4.80302 22.5 5.03534 22.5 5.5C22.5 5.96466 22.5 6.19698 22.4616 6.39018C22.3038 7.18356 21.6836 7.80376 20.8902 7.96157C20.7831 7.98287 20.664 7.99236 20.5 7.9966M10.5 13H14.5M4.5 8H20.5V16.2C20.5 17.8802 20.5 18.7202 20.173 19.362C19.8854 19.9265 19.4265 20.3854 18.862 20.673C18.2202 21 17.3802 21 15.7 21H9.3C7.61984 21 6.77976 21 6.13803 20.673C5.57354 20.3854 5.1146 19.9265 4.82698 19.362C4.5 18.7202 4.5 17.8802 4.5 16.2V8Z" stroke="#EAECF0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                            </svg>
-                                        </div>
-                                        <div className="text-xs mt-1">
-                                            {isArchive ? "Unarchive" : "Archive"}
-                                        </div>
-                                    </button>
-                                </div>
+                        </div>
 
+                        {/* action buttons */}
+                        <div className="flex gap-12 self-center">
+                            <div className="text-center">
+                                <Link className="inline-block" href={`/podcast/edit-episode/${episode.podcast_id}/${episode.id}`}>
+                                    <div>
+                                        <svg className="inline" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M11 4.00023H6.8C5.11984 4.00023 4.27976 4.00023 3.63803 4.32721C3.07354 4.61483 2.6146 5.07377 2.32698 5.63826C2 6.27999 2 7.12007 2 8.80023V17.2002C2 18.8804 2 19.7205 2.32698 20.3622C2.6146 20.9267 3.07354 21.3856 3.63803 21.6732C4.27976 22.0002 5.11984 22.0002 6.8 22.0002H15.2C16.8802 22.0002 17.7202 22.0002 18.362 21.6732C18.9265 21.3856 19.3854 20.9267 19.673 20.3622C20 19.7205 20 18.8804 20 17.2002V13.0002M7.99997 16.0002H9.67452C10.1637 16.0002 10.4083 16.0002 10.6385 15.945C10.8425 15.896 11.0376 15.8152 11.2166 15.7055C11.4184 15.5818 11.5914 15.4089 11.9373 15.063L21.5 5.50023C22.3284 4.6718 22.3284 3.32865 21.5 2.50023C20.6716 1.6718 19.3284 1.6718 18.5 2.50022L8.93723 12.063C8.59133 12.4089 8.41838 12.5818 8.29469 12.7837C8.18504 12.9626 8.10423 13.1577 8.05523 13.3618C7.99997 13.5919 7.99997 13.8365 7.99997 14.3257V16.0002Z" stroke="#EAECF0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    </div>
+                                    <div className="text-xs mt-1">
+                                        Edit
+                                    </div>
+                                </Link>
                             </div>
+                            <div className="text-center">
+                                <button>
+                                    <div>
+                                        <svg className="inline" width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M21.5 9.00001L21.5 3.00001M21.5 3.00001H15.5M21.5 3.00001L12.5 12M10.5 3H8.3C6.61984 3 5.77976 3 5.13803 3.32698C4.57354 3.6146 4.1146 4.07354 3.82698 4.63803C3.5 5.27976 3.5 6.11984 3.5 7.8V16.2C3.5 17.8802 3.5 18.7202 3.82698 19.362C4.1146 19.9265 4.57354 20.3854 5.13803 20.673C5.77976 21 6.61984 21 8.3 21H16.7C18.3802 21 19.2202 21 19.862 20.673C20.4265 20.3854 20.8854 19.9265 21.173 19.362C21.5 18.7202 21.5 17.8802 21.5 16.2V14" stroke="#EAECF0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    </div>
+                                    <div className="text-xs mt-1">
+                                        Share
+                                    </div>
+                                </button>
+                            </div>
+                            <div>
+                                <button onClick={() => {
+                                    setSelectedEpisode(episode);
+                                    setShowArchiveModal(true);
+                                }}>
+                                    <div>
+                                        <svg className="inline" width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M4.5 7.9966C4.33599 7.99236 4.2169 7.98287 4.10982 7.96157C3.31644 7.80376 2.69624 7.18356 2.53843 6.39018C2.5 6.19698 2.5 5.96466 2.5 5.5C2.5 5.03534 2.5 4.80302 2.53843 4.60982C2.69624 3.81644 3.31644 3.19624 4.10982 3.03843C4.30302 3 4.53534 3 5 3H20C20.4647 3 20.697 3 20.8902 3.03843C21.6836 3.19624 22.3038 3.81644 22.4616 4.60982C22.5 4.80302 22.5 5.03534 22.5 5.5C22.5 5.96466 22.5 6.19698 22.4616 6.39018C22.3038 7.18356 21.6836 7.80376 20.8902 7.96157C20.7831 7.98287 20.664 7.99236 20.5 7.9966M10.5 13H14.5M4.5 8H20.5V16.2C20.5 17.8802 20.5 18.7202 20.173 19.362C19.8854 19.9265 19.4265 20.3854 18.862 20.673C18.2202 21 17.3802 21 15.7 21H9.3C7.61984 21 6.77976 21 6.13803 20.673C5.57354 20.3854 5.1146 19.9265 4.82698 19.362C4.5 18.7202 4.5 17.8802 4.5 16.2V8Z" stroke="#EAECF0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                        </svg>
+                                    </div>
+                                    <div className="text-xs mt-1">
+                                        {isArchive ? "Unarchive" : "Archive"}
+                                    </div>
+                                </button>
+                            </div>
+
                         </div>
                     </div>
-                    :
-                    <></>
+                </div>
+
             }
         </>
     )
@@ -642,7 +632,7 @@ export const EpisodeView: React.FC<{
                                 <input value={search} onChange={(e) => {
                                     handleGetEpisodes(e.target.value, 1)
                                 }} type="text" placeholder="Search" className="text-lg w-[292px] placeholder:text-[#98A2B3] pl-10 pr-3 py-2 rounded-lg border border-gray-300 bg-transparent" />
-                             
+
                             </div>
                         </div>
                     </div>
