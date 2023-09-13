@@ -60,7 +60,7 @@ const DistributionPage = ({ params }: { params: { podcastId: string[] } }) => {
                         </svg>
                     </div>
                     <div className="text-sm font-medium text-[#66C6BF]">
-                        Episodes
+                        Distribution
                     </div>
                 </div>
             </div>
