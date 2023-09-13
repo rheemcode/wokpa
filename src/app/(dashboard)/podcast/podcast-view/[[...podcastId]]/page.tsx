@@ -278,9 +278,9 @@ const PodcastView = ({ params }: { params: { podcastId: string[] } }) => {
                                         <Link href={`/podcast/edit-podcast/${podcast?.id}`} className="rounded-[40px] px-5 font-medium inline-block bg-transparent text-sm !text-white border !border-[#042946] !py-2">Edit podcast</Link>
                                         <Button onClick={() => setShowTippingModal(true)} className="!from-white !to-white text-sm !text-[#042946] !py-2 font-semibold">Copy tipping link</Button>
                                         <Button className="text-sm !border-[#042946] !py-2">View live</Button>
-                                        <Link href={`/podcast/distribution/${podcast?.id}`} className="rounded-[40px] px-5 font-medium inline-block bg-white text-sm !text-[#042946] !py-2">Distribution</Link>
-                                        <Link href={`/podcast/social-distribution/${podcast?.id}`} className="rounded-[40px] px-5 font-medium inline-block bg-transparent text-sm !text-white border !border-[#042946] !py-2">Social Distribution </Link>
-                                        <Link href={`/podcast/embedded-player/${podcast?.id}`} className="rounded-[40px] px-5 font-medium inline-block bg-gradient-to-r from-[#083F62] to-[#25AEA4] text-sm !text-white border !border-[#042946] !py-2">Embeded Player</Link>
+                                        <Link href={`/podcast/distribution/${podcast?.id}/${isArchive ? "archive" : ""}`} className="rounded-[40px] px-5 font-medium inline-block bg-white text-sm !text-[#042946] !py-2">Distribution</Link>
+                                        <Link href={`/podcast/social-distribution/${podcast?.id}/${isArchive ? "archive" : ""}`} className="rounded-[40px] px-5 font-medium inline-block bg-transparent text-sm !text-white border !border-[#042946] !py-2">Social Distribution </Link>
+                                        <Link href={`/podcast/embedded-player/${podcast?.id}/${isArchive ? "archive" : ""}`} className="rounded-[40px] px-5 font-medium inline-block bg-gradient-to-r from-[#083F62] to-[#25AEA4] text-sm !text-white border !border-[#042946] !py-2">Embeded Player</Link>
 
                                     </div>
                                 </div>

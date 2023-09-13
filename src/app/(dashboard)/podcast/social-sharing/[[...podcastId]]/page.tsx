@@ -39,7 +39,9 @@ const SocialSharingPage = ({ params }: { params: { podcastId: string[] } }) => {
             <div className="relative">
                 <div className="flex gap-3 items-center">
                     <div className="text-sm font-medium">
-                        All Podcasts
+                        <Link href={`/dashboard`}>
+                            All Podcasts
+                        </Link>
                     </div>
                     <div>
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
