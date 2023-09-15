@@ -3,9 +3,9 @@
 import Button from "@/components/button";
 import { useAppSelector, useAppDispatch } from "@/hooks";
 import { Switch } from "@headlessui/react";
+import Link from "next/link";
 import { useState } from "react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ResponsiveContainer, BarChart, Bar, AreaChart, Area, Pie, PieChart, Cell } from 'recharts';
-
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ResponsiveContainer, BarChart, Bar, AreaChart, Area, Pie, PieChart, Cell } from 'recharts'
 
 const data = [
     {
@@ -209,7 +209,7 @@ const TransactionsTable = () => {
     )
 }
 
-const WokpaAdsPage = () => {
+const TipsAndDonations = () => {
     const user = useAppSelector(state => state.auth.user);
     const dispatch = useAppDispatch();
 
@@ -218,7 +218,9 @@ const WokpaAdsPage = () => {
             <div className="relative">
                 <div className="flex gap-3 items-center">
                     <div className="text-sm font-medium">
-                        Emax podcast
+                        <Link href="/dashboard">
+                            Dashboard
+                        </Link>
                     </div>
                     <div>
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -226,7 +228,9 @@ const WokpaAdsPage = () => {
                         </svg>
                     </div>
                     <div className="text-sm font-medium">
-                        Monetize
+                        <Link href="/monetize/wallet">
+                            Monetize
+                        </Link>
                     </div>
                     <div>
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -234,82 +238,37 @@ const WokpaAdsPage = () => {
                         </svg>
                     </div>
                     <div className="text-sm font-medium text-[#66C6BF]">
-                        Wokpa Ads
+                        Tips and donations
                     </div>
                 </div>
                 <div className="pr-5 mt-5">
                     <div className={`font-semibold text-xl pb-2`}>
-                        Wokpa Ads
+                        Tips and donations
                     </div>
                     <div>
                         <p className="text-sm">
-                            We monetize your podcast so you don't have to.
+                            Your revenue will grow along with your audience and it's all automatic with direct tips and donations from your listeners.
                         </p>
                     </div>
                 </div>
             </div>
+
             <div className="mt-8">
-                <div className="py-4 px-6 rounded-xl bg-grayTrue">
-                    <div className="space-y-5">
-                        <div className="flex items-center gap-2">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7.5 12L10.5 15L16.5 9M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="#12B76A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-
-                            <div className="text-sm">
-                                Fully control where you want your ads inserted
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7.5 12L10.5 15L16.5 9M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="#12B76A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-
-                            <div className="text-sm">
-                                No need to find sponsors, we take care of this
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7.5 12L10.5 15L16.5 9M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="#12B76A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-
-                            <div className="text-sm">
-                                Earn from every listen: no matter the listener's app or location
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7.5 12L10.5 15L16.5 9M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="#12B76A" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-
-                            <div className="text-sm">
-                                Generate money from your entire catalog
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-2 py-2">
-                            <Switch
-                                checked={true}
-                                onChange={() => { }}
-                                className={`${true ? 'bg-[#21A79C]' : 'bg-teal-700'} relative inline-flex h-[18px] w-[32px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
-                            >
-                                <span className="sr-only">Use setting</span>
-                                <span
-                                    aria-hidden="true"
-                                    className={`${true ? 'translate-x-[0.82rem]' : 'translate-x-0'} pointer-events-none inline-block h-[16px] w-[16px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
-                                />
-                            </Switch>
-                            <div className="text-sm font-medium">
-                                Ads exchange activation
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <Button className="!from-transparent !to-transparent text-sm font-semibold border bg-gradient-to-r bg-clip-text py-2">
-                                    Learn more about wokpa ads
-                                </Button>
-                            </div>
-                        </div>
+                <div>Tips</div>
+                <div className="flex items-center gap-2 py-2">
+                    <Switch
+                        checked={true}
+                        onChange={() => { }}
+                        className={`${true ? 'bg-[#21A79C]' : 'bg-teal-700'} relative inline-flex h-[18px] w-[32px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+                    >
+                        <span className="sr-only">Use setting</span>
+                        <span
+                            aria-hidden="true"
+                            className={`${true ? 'translate-x-[0.82rem]' : 'translate-x-0'} pointer-events-none inline-block h-[16px] w-[16px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+                        />
+                    </Switch>
+                    <div className="text-sm font-medium">
+                        Activate tips and donations
                     </div>
                 </div>
             </div>
@@ -318,7 +277,7 @@ const WokpaAdsPage = () => {
                 <div className="py-6 px-6 rounded-xl bg-grayTrue">
                     <div className="flex justify-between">
                         <div className="text-lg font-medium">
-                            Ads exchange stats
+                            Tips and donation stats
                         </div>
                         <div>
                             <Button className="!from-white !to-white text-sm !text-[#042946] font-semibold py-2">
@@ -327,27 +286,7 @@ const WokpaAdsPage = () => {
                         </div>
                     </div>
                     <div className="grid grid-cols-3 gap-4">
-                        <div className="py-6 px-6 rounded-xl bg-white">
-                            <div className="flex gap-4">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M8 13V17M16 11V17M12 7V17M7.8 21H16.2C17.8802 21 18.7202 21 19.362 20.673C19.9265 20.3854 20.3854 19.9265 20.673 19.362C21 18.7202 21 17.8802 21 16.2V7.8C21 6.11984 21 5.27976 20.673 4.63803C20.3854 4.07354 19.9265 3.6146 19.362 3.32698C18.7202 3 17.8802 3 16.2 3H7.8C6.11984 3 5.27976 3 4.63803 3.32698C4.07354 3.6146 3.6146 4.07354 3.32698 4.63803C3 5.27976 3 6.11984 3 7.8V16.2C3 17.8802 3 18.7202 3.32698 19.362C3.6146 19.9265 4.07354 20.3854 4.63803 20.673C5.27976 21 6.11984 21 7.8 21Z" stroke="#BA24D5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-
-                                <div>
-                                    <div className="text-sm font-medium text-[#344054]">Last 30 days impressions</div>
-                                </div>
-                            </div>
-                            <div className="mt-4 flex justify-between font-">
-                                <div className="text-xl font-bold font-raleway text-[#101828]">4,000</div>
-                                <span className="text-sm font-medium bg-green-100 py-1 px-3 rounded-full inline-flex items-center gap-1 font-inter text-green-600">
-                                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                        <path d="M6 9.5V2.5M6 2.5L2.5 6M6 2.5L9.5 6" stroke="#12B76A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                    </svg>
-                                    <span>7.2%</span>
-                                </span>
-
-                            </div>
-                        </div>
+                    
                         <div className="py-6 px-6 rounded-xl bg-white">
                             <div className="flex gap-4">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -355,11 +294,11 @@ const WokpaAdsPage = () => {
                                 </svg>
 
                                 <div>
-                                    <div className="text-sm font-medium text-[#344054]">Last 30 days revenue</div>
+                                    <div className="text-sm font-medium text-[#344054]">Last 30 days revenue in cash</div>
                                 </div>
                             </div>
                             <div className="mt-4 flex justify-between font-">
-                                <div className="text-xl font-bold font-raleway text-[#101828]"><span className="font-medium">₦</span> 4,000</div>
+                                <div className="text-2xl font-bold font-raleway text-[#101828]"><span className="font-bold">₦</span> 4,000</div>
                                 <span className="text-sm font-medium bg-green-100 py-1 px-3 rounded-full inline-flex items-center gap-1 font-inter text-green-600">
                                     <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M6 9.5V2.5M6 2.5L2.5 6M6 2.5L9.5 6" stroke="#12B76A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -372,51 +311,119 @@ const WokpaAdsPage = () => {
                     </div>
                     <Chart />
                 </div>
-                <div className="my-4">
-                    <div className="font-medium">
-                        Activate your episodes to receive ads on it. Don't miss out on any monetization opportunity!
+                <div>
+                    <div className="my-4">
+                        <div className="font-medium">
+                            Tips and donations history
+                        </div>
+                    </div>
+                    <div>
+                        <div className="overflow-x-auto mt-4 md:h-auto h-96 rounded-lg">
+                            <table className="border-collapse table-auto w-full whitespace-nowrap">
+                                <thead className="ext-left border-none">
+                                    <tr>
+                                        <th className="py-4 pl-10 font-medium text-lg">Name of user</th>
+                                        <th className="py-4 pl-6 font-medium text-lg">Episode title</th>
+                                        <th className="py-4 pl-6 font-medium text-lg">Amount</th>
+                                        <th className="py-4 pl-6 font-medium text-lg">Date and time</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody className="">
+                                    {
+                                        [1, 2, 3, 4, 5,].map(() => {
+                                            return <tr>
+                                                <td className="py-3 pl-10 font-medium border-b-4 border-dark bg-[#141414] rounded-l-xl text-sm">
+                                                    <div className="">
+                                                        <span className="ml-2">Josepht Emmanuel</span>
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 pl-6  font-medium border-b-4 border-dark bg-[#141414] text-sm">
+                                                    <div className="">
+                                                        Episode title 1 sample
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 pl-6  font-medium border-b-4 border-dark bg-[#141414] text-sm">
+                                                    <div className="flex items-center gap-1">
+                                                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <g clip-path="url(#clip0_3572_103109)">
+                                                                <path d="M8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16Z" fill="#F1B32B" />
+                                                                <path d="M7.875 2C4.63 2 2 4.63 2 7.875C2 11.12 4.63 13.75 7.875 13.75C11.12 13.75 13.75 11.12 13.75 7.875C13.75 6.31685 13.131 4.82252 12.0293 3.72075C10.9275 2.61897 9.43315 2 7.875 2ZM7.875 12.285C6.7054 12.285 5.58369 11.8204 4.75666 10.9933C3.92962 10.1663 3.465 9.0446 3.465 7.875C3.465 6.7054 3.92962 5.58369 4.75666 4.75666C5.58369 3.92962 6.7054 3.465 7.875 3.465C9.0446 3.465 10.1663 3.92962 10.9933 4.75666C11.8204 5.58369 12.285 6.7054 12.285 7.875C12.285 9.0446 11.8204 10.1663 10.9933 10.9933C10.1663 11.8204 9.0446 12.285 7.875 12.285ZM6.41 7.88L7.88 10.08L9.34 7.88L7.88 5.675L6.41 7.88Z" fill="white" />
+                                                            </g>
+                                                            <defs>
+                                                                <clipPath id="clip0_3572_103109">
+                                                                    <rect width="16" height="16" fill="white" />
+                                                                </clipPath>
+                                                            </defs>
+                                                        </svg>
+                                                        <span>
+                                                            40
+                                                        </span>
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 pl-6  font-medium border-b-4 border-dark bg-[#141414] text-sm">
+                                                    <div className="">
+                                                        06 May 2023, 9:00AM
+                                                    </div>
+                                                </td>
+                                          
+
+                                            </tr>
+                                        })
+                                    }
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <div>
-                    <div className="overflow-x-auto mt-8 md:h-auto h-96 rounded-lg">
-                        <table className="border-collapse table-auto w-full whitespace-nowrap">
-                            <thead className="ext-left border-none">
-                                <tr>
-                                    <th className="py-4 pl-10 font-medium text-lg">Episode title</th>
-                                    <th className="py-4 pl-6 font-medium text-lg">Activation status</th>
-                                    <th className="py-4 pl-6 font-medium text-lg">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="">
-                                {
-                                    [1, 2, 3, 4, 5,].map(() => {
-                                        return <tr>
-                                            <td className="py-3 pl-10 font-medium border-b-4 border-dark bg-[#141414] rounded-l-xl">
-                                                <div className="">
-                                                    <span className="ml-2">Episode sample title</span>
-                                                </div>
-                                            </td>
-                                            <td className="py-3 pl-6  font-medium border-b-4 border-dark bg-[#141414]">
-                                                <div className="">
-                                                    <Button className="!from-white !to-white text-sm font-semibold !text-[#042946]">
-                                                        Inactive
-                                                    </Button>
-                                                </div>
-                                            </td>
-                                            <td className="py-3 pl-6 font-medium border-b-4 border-dark bg-[#141414] rounded-r-xl">
-                                                <div>
-                                                    <Button className="text-sm font-semibold">
-                                                        Active
-                                                    </Button>
-                                                </div>
-                                            </td>
+                    <div className="mt-8">
+                        <div className="font-medium">
+                            Activate your episodes to receive ads on it. Don't miss out on any monetization opportunity!
+                        </div>
+                    </div>
+                    <div>
+                        <div className="overflow-x-auto mt-4 md:h-auto h-96 rounded-lg">
+                            <table className="border-collapse table-auto w-full whitespace-nowrap">
+                                <thead className="ext-left border-none">
+                                    <tr>
+                                        <th className="py-4 pl-10 font-medium text-lg">Episode title</th>
+                                        <th className="py-4 pl-6 font-medium text-lg">Activation status</th>
+                                        <th className="py-4 pl-6 font-medium text-lg">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="">
+                                    {
+                                        [1, 2, 3, 4, 5,].map(() => {
+                                            return <tr>
+                                                <td className="py-3 pl-10 font-medium border-b-4 border-dark bg-[#141414] rounded-l-xl text-sm">
+                                                    <div className="">
+                                                        <span className="ml-2">Episode sample title</span>
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 pl-6  font-medium border-b-4 border-dark bg-[#141414] text-sm">
+                                                    <div className="">
+                                                        <Button className="!from-white !to-white text-sm font-semibold !text-[#042946]">
+                                                            Inactive
+                                                        </Button>
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 pl-6 font-medium border-b-4 border-dark bg-[#141414] rounded-r-xl">
+                                                    <div>
+                                                        <Button className="text-sm font-semibold">
+                                                            Active
+                                                        </Button>
+                                                    </div>
+                                                </td>
 
-                                        </tr>
-                                    })
-                                }
+                                            </tr>
+                                        })
+                                    }
 
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -426,4 +433,4 @@ const WokpaAdsPage = () => {
     )
 }
 
-export default WokpaAdsPage
+export default TipsAndDonations

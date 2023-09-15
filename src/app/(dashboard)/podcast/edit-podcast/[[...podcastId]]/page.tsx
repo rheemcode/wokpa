@@ -11,6 +11,7 @@ import { PodcastModel } from "@/models/podcast";
 import { APICall } from "@/utils";
 import { Switch } from "@headlessui/react";
 import { Formik, Form, ErrorMessage, Field } from "formik";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -117,7 +118,9 @@ const UpdatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
             <div className="relative">
                 <div className="flex gap-3 items-center">
                     <div className="text-sm font-medium">
-                        Dashboard
+                        <Link href={"/dashboard"}>
+                            Dashboard
+                        </Link>
                     </div>
                     <div>
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -337,7 +340,7 @@ const UpdatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                                 </div>
                                             </div>
                                         </div>
-                                       
+
                                         <div className="flex">
                                             <div className="md:w-6/12">
                                                 <label htmlFor="email" className="text-sm font-medium">
