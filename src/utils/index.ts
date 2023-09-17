@@ -4,6 +4,14 @@ import { loadingBarRef } from "@/app/layout";
 import { useRef, useEffect } from "react";
 import { toast } from "react-toastify";
 
+type voidFn = () => void
+
+let resetState: voidFn = () => { }
+
+export const handleUnauth = (fn: voidFn) => {
+    resetState = fn;
+}
+
 export function getAbsoluteUrl(path: string) {
     return process.env.PUBLIC_URL + path;
 }
@@ -44,10 +52,10 @@ export const handleRequestAnimationFrame = (callback: (timestamp: number) => voi
     }
 }
 
-export const APICall = async (fn: (...args: any) => Promise<any>, args?: any, showSuccessToast?: boolean) => {
+export const APICall = async (fn: (...args: any) => Promise<any>, args?: any, showSuccessToast?: boolean,) => {
     try {
         loadingBarRef.current?.continuousStart();
-        const response = args && typeof args[Symbol.iterator] === 'function' && ! (typeof args == "string") ? await fn(...args) : await fn(args)
+        const response = args && typeof args[Symbol.iterator] === 'function' && !(typeof args == "string") ? await fn(...args) : await fn(args)
         if (showSuccessToast)
             toast(response.data.message, { type: "success" });
         loadingBarRef.current?.complete();
@@ -55,6 +63,11 @@ export const APICall = async (fn: (...args: any) => Promise<any>, args?: any, sh
     } catch (error: any) {
         if (error.response) {
             toast(error.response.data.message, { type: "error" });
+
+            if (error.response.status == 401) {
+                resetState();
+
+            }
         }
         loadingBarRef.current?.complete();
         throw error;

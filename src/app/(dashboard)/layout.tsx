@@ -9,16 +9,31 @@ import Sidebar from "@/partials/sidebar";
 import { PropsWithChildren, useEffect, useState } from "react";
 import ReduxProvider from '../redux-provider';
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import { useAppSelector } from '@/hooks';
+import { useAppDispatch, useAppSelector } from '@/hooks';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { useEffectOnce } from 'react-use';
+import { handleUnauth } from '@/utils';
+import { resetAnalytics } from '@/redux/analytics';
+import { resetAuth } from '@/redux/auth';
+import { resetPodcast } from '@/redux/podcast';
 
 const AuthValidator = () => {
     const navigate = useRouter();
     const auth = useAppSelector(state => state.auth);
-
+const dispatch = useAppDispatch();
     const pathName = usePathname();
+
+    const resetState = () => {
+        dispatch(resetAuth());
+        dispatch(resetAnalytics())
+        dispatch(resetPodcast())
+    }
+
+    useEffectOnce(() => {
+        handleUnauth(resetState)
+    })
 
     useEffect(() => {
         if (!auth.token || !auth.user) {
