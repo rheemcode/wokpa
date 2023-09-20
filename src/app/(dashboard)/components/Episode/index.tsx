@@ -119,9 +119,7 @@ export const EpisodeItem: React.FC<{ mode: "list" | "card", episode: EpisodeMode
                                             truncatedEndingComponent={"... "}
                                         >
 
-                                            {
-                                                episode.description
-                                            }
+                                            <p className="" dangerouslySetInnerHTML={{ __html: episode.description }}></p>
                                         </ShowMoreText>
 
                                     </div>

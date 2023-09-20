@@ -455,18 +455,18 @@ const EditEpisodePage = ({ params }: { params: { episodeId: string[] } }) => {
                                 </div>
                                 {episode && <Formik
                                     initialValues={{
-                                        title: episode?.title,
-                                        season: episode?.season,
-                                        number: episode?.number,
-                                        type: episode?.type,
-                                        description: episode?.description,
-                                        transcript_type: episode?.transcript_type,
-                                        transcript_url: episode?.transcript_url,
+                                        title: episode?.title ?  episode?.title : "",
+                                        season: episode?.season ?  episode?.season : "",
+                                        number: episode?.number ?  episode?.number : "",
+                                        type: episode?.type ?  episode?.type : "",
+                                        description: episode?.description ?  episode?.description : "",
+                                        transcript_type: episode?.transcript_type ?  episode?.transcript_type : "",
+                                        transcript_url: episode?.transcript_url ?  episode?.transcript_url : "",
                                         explicit: episode?.explicit ? true : false,
-                                        visibility: episode?.visibility,
+                                        visibility: episode?.visibility ? episode?.visibility : "",
                                         shares: [],
                                         publish_later_at: "",
-                                        status: episode?.status,
+                                        status: episode?.status ? episode?.status : "",
                                     }}
                                     validationSchema={validationSchema}
                                     onSubmit={(values, { setSubmitting }) => {
@@ -718,10 +718,10 @@ const EditEpisodePage = ({ params }: { params: { episodeId: string[] } }) => {
                                                     </div>
                                                     <div className="flex gap-5">
                                                         <div className="md:w-6/12">
-                                                            <label htmlFor="password" className="text-sm font-medium">
+                                                            <label htmlFor="password" className="text-lg font-medium">
                                                                 Automatic shares
                                                             </label>
-                                                            <div className="text-sm font-medium">
+                                                            <div className="text-sm font-medium mt-4">
                                                                 Enable this option if your recording contains explicit content. This <br /> information is also exported to your RSS / iTunes feeds.
                                                             </div>
                                                             <div className="flex gap-10">

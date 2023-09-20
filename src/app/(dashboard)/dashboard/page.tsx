@@ -757,7 +757,7 @@ const Episodes = () => {
             <EpisodeView
                 episodes={episodes}
                 isArchive={isArchive}
-                view='table'
+                view='list'
                 setIsArchive={(value) => setIsArchive(value)}
                 setEpisodes={(episodes: EpisodeModel[], page?: number) => {
                     setEpidoes(episodes);

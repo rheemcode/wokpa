@@ -464,7 +464,6 @@ const TipsAndDonations = () => {
                                         <th className="py-4 pl-6 font-medium text-lg">Episode title</th>
                                         <th className="py-4 pl-6 font-medium text-lg">Amount</th>
                                         <th className="py-4 pl-6 font-medium text-lg">Date and time</th>
-
                                     </tr>
                                 </thead>
                                 <tbody className="">

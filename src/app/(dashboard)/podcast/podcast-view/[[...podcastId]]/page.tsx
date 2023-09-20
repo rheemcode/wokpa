@@ -18,6 +18,8 @@ import ReactPaginate from "react-paginate";
 import { refreshPodcasts } from "@/redux/podcast";
 import { EpisodeView } from "@/app/(dashboard)/components/Episode";
 import { formatTimeW } from "@/utils/audio-player";
+import ShowMoreText from "react-show-more-text";
+
 
 const PodcastView = ({ params }: { params: { podcastId: string[] } }) => {
     const user = useAppSelector(state => state.auth.user);
@@ -189,20 +191,32 @@ const PodcastView = ({ params }: { params: { podcastId: string[] } }) => {
                                     </div>
                                 </div>
                                 <div className="text-sm text-[#D0D5DD]">
-                                    {
-                                        podcast?.description ? <p dangerouslySetInnerHTML={{ __html: podcast?.description as string }} /> :
-                                            <div className="grid grid-cols-4 gap-y-4 gap-x-2 mt-4">
-                                                <div className="h-2 bg-slate-100 animate-pulse rounded col-span-2"></div>
-                                                <div className="h-2 bg-slate-100 animate-pulse rounded col-span-1"></div>
-                                                <div className="h-2 bg-slate-100 animate-pulse rounded w-16"></div>
-                                                <div className="h-2 bg-slate-100 animate-pulse rounded col-span-2"></div>
-                                                <div className="h-2 bg-slate-100 animate-pulse rounded col-span-2"></div>
-                                                <div className="h-2 bg-slate-100 animate-pulse rounded col-span-3"></div>
-                                                <div className="h-2 bg-slate-100 animate-pulse rounded w-28"></div>
-                                                <div className="h-2 bg-slate-100 animate-pulse rounded"></div>
-                                                <div className="h-2 bg-slate-100 animate-pulse rounded col-span-3"></div>
+                                    {podcast?.description ? <ShowMoreText
+                                        /* Default options */
+                                        lines={4}
+                                        more="Show more"
+                                        less="Show less"
+                                        className="text-xs"
+                                        anchorClass="show-more-less-clickable"
+                                        // onClick={this.executeOnClick}
+                                        expanded={false}
+                                        // width={280}
+                                        truncatedEndingComponent={"... "}
+                                    >
 
-                                            </div>
+                                        <p className="" dangerouslySetInnerHTML={{ __html: podcast?.description as string }}></p>
+                                    </ShowMoreText> : <div className="grid grid-cols-4 gap-y-4 gap-x-2 mt-4">
+                                        <div className="h-2 bg-slate-100 animate-pulse rounded col-span-2"></div>
+                                        <div className="h-2 bg-slate-100 animate-pulse rounded col-span-1"></div>
+                                        <div className="h-2 bg-slate-100 animate-pulse rounded w-16"></div>
+                                        <div className="h-2 bg-slate-100 animate-pulse rounded col-span-2"></div>
+                                        <div className="h-2 bg-slate-100 animate-pulse rounded col-span-2"></div>
+                                        <div className="h-2 bg-slate-100 animate-pulse rounded col-span-3"></div>
+                                        <div className="h-2 bg-slate-100 animate-pulse rounded w-28"></div>
+                                        <div className="h-2 bg-slate-100 animate-pulse rounded"></div>
+                                        <div className="h-2 bg-slate-100 animate-pulse rounded col-span-3"></div>
+
+                                    </div>
                                     }
 
 
@@ -279,7 +293,7 @@ const PodcastView = ({ params }: { params: { podcastId: string[] } }) => {
                                         <Button onClick={() => setShowTippingModal(true)} className="!from-white !to-white text-sm !text-[#042946] !py-2 font-semibold">Copy tipping link</Button>
                                         <Button className="text-sm !border-[#042946] !py-2">View live</Button>
                                         <Link href={`/podcast/distribution/${podcast?.id}/${isArchive ? "archive" : ""}`} className="rounded-[40px] px-5 font-medium inline-block bg-white text-sm !text-[#042946] !py-2">Distribution</Link>
-                                        <Link href={`/podcast/social-distribution/${podcast?.id}/${isArchive ? "archive" : ""}`} className="rounded-[40px] px-5 font-medium inline-block bg-transparent text-sm !text-white border !border-[#042946] !py-2">Social Distribution </Link>
+                                        <Link href={`/podcast/social-sharing/${podcast?.id}/${isArchive ? "archive" : ""}`} className="rounded-[40px] px-5 font-medium inline-block bg-transparent text-sm !text-white border !border-[#042946] !py-2">Social Distribution </Link>
                                         <Link href={`/podcast/embedded-player/${podcast?.id}/${isArchive ? "archive" : ""}`} className="rounded-[40px] px-5 font-medium inline-block bg-gradient-to-r from-[#083F62] to-[#25AEA4] text-sm !text-white border !border-[#042946] !py-2">Embeded Player</Link>
 
                                     </div>

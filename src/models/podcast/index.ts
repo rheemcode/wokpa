@@ -12,7 +12,6 @@ export interface PodcastModel {
     created_at: string;
     updated_at: string;
     tips_and_donations_activated: string;
-    tips_and_donations_amount: string;
     email: string;
     episode_count: string;
     play_count: string;

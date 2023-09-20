@@ -159,7 +159,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                 language: podcast?.language,
                                 podcast_category: podcast?.category_name,
                                 description: podcast?.description,
-                                tips_and_donations_amount: podcast?.tips_and_donations_amount,
+                                
                                 email: podcast?.email,
                             }}
                             validationSchema={validationSchema}
@@ -206,7 +206,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                                         Category
                                                     </label>
                                                     <Field as="select" type="text" name="podcast_category" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`}>
-                                                        <option value=""></option>
+                                                        <option value="">Select a category</option>
                                                         {
                                                             categories.map((category) => {
                                                                 return (
@@ -425,7 +425,6 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                 language: "",
                                 podcast_category: "",
                                 description: "",
-                                tips_and_donations_amount: "",
                                 email: "",
                             }}
                             validationSchema={validationSchema}
@@ -472,7 +471,7 @@ const CreatePodcastPage = ({ params }: { params: { podcastId: string[] } }) => {
                                                         Category
                                                     </label>
                                                     <Field as="select" type="text" name="podcast_category" className={`w-full px-3.5 py-2.5 bg-white rounded-lg shadow border border-gray-300 text-gray-500`}>
-                                                        <option value=""></option>
+                                                        <option value="">Select a category</option>
                                                         {
                                                             categories.map((category) => {
                                                                 return (
