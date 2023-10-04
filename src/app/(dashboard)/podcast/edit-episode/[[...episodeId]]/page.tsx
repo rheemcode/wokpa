@@ -243,7 +243,6 @@ const EditEpisodePage = ({ params }: { params: { episodeId: string[] } }) => {
     const [tags, setTags] = useState<string[]>([]);
     const [inputValue, setInputValue] = useState('');
 
-
     const validationSchema = Yup.object().shape({
         title: Yup.string().required("This field is required"),
         season: Yup.string(),
@@ -842,7 +841,7 @@ const EditEpisodePage = ({ params }: { params: { episodeId: string[] } }) => {
                                                 <div className="text-right space-x-4">
                                                     <Link href="/podcast/create-podcast">
                                                         <Button type="button" className="!text-sm  !from-transparent !to-transparent !text-white border font-semibold">
-                                                            Create new Podcast
+                                                            Update episode
                                                         </Button>
                                                     </Link>
                                                     <Button type="submit" className="!text-sm !from-white !to-white !text-[#063150] font-semibold">
@@ -864,25 +863,28 @@ const EditEpisodePage = ({ params }: { params: { episodeId: string[] } }) => {
                                                         }
 
                                                     </Button>
-                                                    <Button type="submit" className="!text-sm">
-                                                        {
-                                                            isSubmitting ?
-                                                                <svg className="w-5 h-5" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                                                                    viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
-                                                                    <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
-                                                                        <animateTransform
-                                                                            attributeName="transform"
-                                                                            attributeType="XML"
-                                                                            type="rotate"
-                                                                            dur="1s"
-                                                                            from="0 50 50"
-                                                                            to="360 50 50"
-                                                                            repeatCount="indefinite" />
-                                                                    </path>
-                                                                </svg> : "Publish now"
-                                                        }
+                                                    {
+                                                        episode.status.toLowerCase() == "unpublished" ? <Button type="submit" className="!text-sm">
+                                                            {
+                                                                isSubmitting ?
+                                                                    <svg className="w-5 h-5" version="1.1" id="L9" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                                                        viewBox="0 0 100 100" enableBackground="new 0 0 0 0" xmlSpace="preserve">
+                                                                        <path fill="#fff" d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50">
+                                                                            <animateTransform
+                                                                                attributeName="transform"
+                                                                                attributeType="XML"
+                                                                                type="rotate"
+                                                                                dur="1s"
+                                                                                from="0 50 50"
+                                                                                to="360 50 50"
+                                                                                repeatCount="indefinite" />
+                                                                        </path>
+                                                                    </svg> : "Publish now"
+                                                            }
 
-                                                    </Button>
+                                                        </Button>: <></>
+                                                    }
+                                                 
                                                 </div>
                                             </div>
                                         </Form>)}
